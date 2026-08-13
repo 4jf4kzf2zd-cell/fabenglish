@@ -76,7 +76,8 @@ function renderDialogue(root, item, ctx) {
   const stepsEl = div({ class: 'steps' });
   const playerHost = div({});
   const bodyHost = div({});
-  append(root, stepsEl, playerHost, bodyHost,
+  const backHost = div({});
+  append(root, stepsEl, playerHost, bodyHost, backHost,
     el('a', { class: 'btn block ghost', href: '#/listen', style: 'margin-top:16px' }, '← 回列表'));
 
   paint();
@@ -91,6 +92,11 @@ function renderDialogue(root, item, ctx) {
     subtitles = step >= 2;
     playerHost.replaceChildren(player());
     bodyHost.replaceChildren(body());
+    // 走錯步驟可以退回去（答過的選項與聽寫結果都留著）
+    backHost.replaceChildren(step > 0
+      ? el('button', { class: 'block ghost', style: 'margin-top:8px', onClick: () => { step--; paint(); } },
+          `← 回上一步（${STEPS[step - 1]}）`)
+      : div({}));
     window.scrollTo(0, 0);
   }
 

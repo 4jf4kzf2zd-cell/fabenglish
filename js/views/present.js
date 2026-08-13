@@ -86,7 +86,7 @@ function sentenceRow(item) {
       el('div', { class: 'small dim', text: item.zh }),
     ),
     div({ style: 'flex:0 0 auto;display:flex;gap:4px;align-items:center' },
-      best != null ? el('span', { class: 'pill a', text: `${best}` }) : null,
+      best != null ? el('span', { class: 'pill a', text: '練過' }) : null,
       play,
       item.shadow ? el('button', {
         class: 'icon-btn ghost',
@@ -140,12 +140,9 @@ function renderDeck(root, items, ctx) {
     });
 
     const nextBtn = el('button', {
-      class: 'block',
+      class: 'primary',
       onClick: () => { idx++; step(); },
-    }, idx === deck.length - 1 ? '看總分' : '下一句 →');
-    nextBtn.disabled = true;
-
-    const skip = el('button', { class: 'block ghost', onClick: () => { idx++; step(); } }, '跳過這句');
+    }, idx === deck.length - 1 ? '看結果' : '下一句 →');
 
     host.append(
       div({ class: 'qbar' }, el('i', { style: `width:${Math.round(idx / deck.length * 100)}%` })),
@@ -154,25 +151,24 @@ function renderDeck(root, items, ctx) {
         el('div', { class: 'small dim', text: item.zh }),
         openShadow.el,
       ),
-      nextBtn,
-      skip,
+      div({ class: 'row' },
+        idx > 0 ? el('button', { class: 'ghost', onClick: () => { idx--; step(); } }, '← 上一句') : null,
+        nextBtn,
+      ),
     );
   }
 
   function summary() {
     const done = scores.filter(s => typeof s === 'number');
-    const avg = done.length ? Math.round(done.reduce((a, b) => a + b, 0) / done.length) : 0;
     host.append(
       card(
         el('h3', { text: '模擬簡報完成' }),
         div({ class: 'today-grid' },
-          statBox(`${avg}`, '平均分'),
           statBox(`${done.length}`, '已跟讀'),
-          statBox(`${done.filter(s => s >= 80).length}`, '80 分以上'),
+          statBox(`${deck.length - done.length}`, '跳過'),
+          statBox(`${deck.length}`, '總句數'),
         ),
-        p(avg >= 80 ? '這份簡報稿唸得夠穩，可以直接上場。'
-          : avg >= 60 ? '大致順，把分數低的句子單獨再練幾次。'
-          : '先放慢速度，逐句聽一次再跟讀。', 'small dim center'),
+        p('把自己覺得卡住的句子回到列表單獨再唸幾次。', 'small dim center'),
       ),
       el('button', { class: 'block primary', onClick: () => { idx = 0; scores.length = 0; step(); } }, '再來一份'),
     );

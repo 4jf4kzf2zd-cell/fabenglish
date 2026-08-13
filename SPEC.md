@@ -46,13 +46,14 @@ fabenglish/
 │   ├── badge.js          # PWA 圖示待複習數（App Badging API，不支援時靜默）
 │   ├── content.js        # content/*.json 載入與快取
 │   ├── dom.js            # 極簡 DOM 建構工具（避免 innerHTML 拼字串）
-│   └── views/            # 每個模組一個 view 檔（home / vocab / reading / email / present / listen / progress / settings）
+│   └── views/            # 每個模組一個 view 檔（home / vocab / reading / email / present / listen / interview / loop / progress / settings）
 ├── content/
 │   ├── vocab.json
 │   ├── readings.json
 │   ├── email_patterns.json
 │   ├── presentation.json
-│   └── listening.json
+│   ├── listening.json
+│   └── interview.json    # 面試常見問題（M4）
 ├── icons/                # PWA 圖示（由 scripts/make-icons.mjs 產生，勿手改）
 ├── scripts/
 │   ├── validate.js       # node 腳本：驗證 content/*.json 符合 schema（commit 前必跑）
@@ -74,7 +75,7 @@ fabenglish/
 
 ## 3. 內容資料 Schema（`content/*.json`）
 
-所有內容檔頂層都有 `{"version": 1, "items": [...]}`。id 規則：`v001`（vocab）、`r001`（reading）、`e001`（email）、`p001`（presentation）、`l001`（listening）。
+所有內容檔頂層都有 `{"version": 1, "items": [...]}`。id 規則：`v001`（vocab）、`r001`（reading）、`e001`（email）、`p001`（presentation）、`l001`（listening）、`i001`（interview）。
 
 ### 3.1 vocab.json — 單字（目標 600 筆：A 層專業 200 / B 層商務 250 / C 層片語 150）
 
@@ -165,11 +166,38 @@ fabenglish/
 
 `dictation.focus` 枚舉：`numbers` / `workweek` / `spec` / `percentage`——聽寫題**只考數字、週次、規格值**這類會議裡最不能聽錯的資訊。
 
+### 3.6 interview.json — 面試常見問題（目標 40 題）
+
+```json
+{
+  "id": "i001",
+  "category": "self_intro",
+  "category_zh": "自我介紹",
+  "q": "Tell me about yourself.",
+  "q_zh": "請自我介紹。",
+  "intent_zh": "面試官要的是 60 秒版本的「我是誰＋做過什麼＋為什麼坐在這裡」，不是履歷復誦。",
+  "outline_zh": ["一句話定位：職稱＋年資＋領域", "一個可量化的代表作", "為什麼想要這個職位"],
+  "answer": "I'm a device engineer with six years in NAND flash yield analysis. ...",
+  "answer_zh": "（全文繁中翻譯）",
+  "core": "I'm a device engineer with six years in NAND flash yield analysis.",
+  "key_phrases": [{"en": "My main job is to ...", "zh": "我主要負責⋯"}],
+  "follow_ups": [{"en": "What made you choose yield analysis?", "zh": "你為什麼選良率分析這條路？"}],
+  "dont": {"en": "I was born in Taichung and I graduated in 2015...", "why_zh": "從出生講起會用掉全部時間，只講與這份工作有關的事。"},
+  "shadow": true
+}
+```
+
+`category` 枚舉：`self_intro` / `experience` / `technical` / `behavioral` / `motivation` / `salary_logistics` / `ask_them`。
+
+- `answer` 是完整範答（60–90 字，逐句 ≤ 25 字），供閱讀與整段 TTS。
+- **`core` 必須是 `answer` 裡實際出現的一個句子**且 ≤ 28 字——跟讀引擎只吃單句
+  （SPEC §5-6：iOS 的 STT 停頓 1–2 秒就結束，整段跟讀必失敗）。`validate.js` 會強制檢查。
+
 ## 4. 模組規格
 
 ### 4.0 Shell / 路由 / 首頁
 
-- Hash routing：`#/home` `#/vocab` `#/reading` `#/email` `#/present` `#/listen` `#/progress` `#/settings`。底部 tab bar（手機優先）。
+- Hash routing：`#/home` `#/vocab` `#/reading` `#/email` `#/present` `#/listen` `#/interview` `#/progress` `#/settings`。底部 tab bar（手機優先）。
 - 首頁 = 今日待辦：今日 SRS 到期字數、建議行程（週一單字+聽力、週三 email、週五跟讀⋯可硬編碼）、連續天數 streak。
 
 ### 4.1 單字 SRS（Leitner 5 盒）
@@ -199,14 +227,26 @@ fabenglish/
 - 對話播放器：逐句 TTS，兩個 speaker 用不同 voice；語速三檔 0.8×/1.0×/1.2×（`utterance.rate`，iOS 上實測 0.8–1.2 之外會失真）；支援單句重播、顯示/隱藏字幕。
 - 流程：先盲聽 → 答理解題 → 開字幕重聽 → 聽寫題。
 - 聽寫題：播放 `text`，使用者輸入聽到的數字/週次（自由格式），比對規則：抽出數字序列比對（"92.5" 對 "ninety-two point five"），不要求整句。
+- 四個步驟之間可以**回上一步**（已答的選項與聽寫結果保留）。
+
+#### 4.5.1 循環聽（`#/loop`）
+
+把常用句一直重複播放，通勤或做別的事時開著洗耳朵。只用 TTS，離線也能跑。
+
+- 句源可切換：簡報句型 / Email 常用句 / 面試關鍵句（`key_phrases` ＋ `core`）/ 單字例句（優先只放學過的字）/ 全部混合。
+- 參數：每句重複 1–3 次、句間停頓 0–3 秒、顯示或隱藏中文、照順序或隨機；重複次數與停頓存進 settings。
+- 控制：▶/⏸、⏮ 上一句、⏭ 下一句；播到最後一句自動回到第一句，直到手動停止。
+- 有 `navigator.wakeLock` 就用，沒有就算了；頁面提示 iPhone 鎖屏會停止朗讀。
 
 ### 4.6 跟讀評分引擎（`scoring.js` + `speech.js`）
 
-- 流程：播放目標句 → 倒數 → 啟動 `webkitSpeechRecognition`（`lang='en-US'`, `continuous=false`, `interimResults=true`）→ 使用者跟讀 → 取最終 transcript。
+- 流程：倒數 → 啟動 `webkitSpeechRecognition`（`lang='en-US'`, `continuous=false`, `interimResults=true`）→ 使用者跟讀 → 取最終 transcript。
+  **預設不先播範讀**（要聽的人自己按「🔊 聽一次」）；設定裡的 `playBeforeShadow` 打開才會先播再倒數。
 - 正規化：小寫、去標點、數字統一轉英文字（實作一個 `numToWords`，反向比對也接受阿拉伯數字）。
 - 對齊：目標句與 transcript 做 token 級 LCS（最長共同子序列）；分數 = matched/target_tokens × 100。
-- 呈現：目標句逐字上色（綠=命中、紅=漏掉），另列出多說的字；≥80 綠、60–79 黃、<60 紅，附「再試一次」。
-- 每句保留最佳分數，寫入進度。
+- 呈現：目標句逐字上色（綠＝命中、紅＝漏掉），另列出多說的字與辨識到的整句，附「再唸一次」。
+- **不顯示分數**：Web Speech 對非母語腔調誤差過大，一個看似精確的數字會誤導使用者。
+  分數仍在內部計算並保留最佳值（供「練過沒」與弱點清單排序用），但**任何 UI 都不得呈現數字或等第**。
 
 ### 4.7 進度與備份（`store.js`）
 
@@ -220,6 +260,7 @@ localStorage key：`fabenglish.v1`，單一 JSON：
   "cloze": {"e001": {"passed": true}},
   "shadow": {"p001": {"best": 86}},
   "listening": {"l001": {"quiz": 0.8, "dictation": 0.5}},
+  "interview": {"i001": {"ok": true, "tries": 2}},
   "streak": {"current": 4, "best": 12, "lastDay": "2026-08-13"},
   "settings": {"newPerDay": 10, "voice": "auto", "rate": 1.0}
 }
@@ -231,6 +272,18 @@ localStorage key：`fabenglish.v1`，單一 JSON：
 ### 4.8 設定
 
 - TTS voice 選擇（列出裝置上的 `en-*` voices，預設 auto）、語速、每日新字量、清除進度（雙重確認）。
+- `playBeforeShadow`（預設 false）：跟讀前要不要先播一次範讀。
+- `loopRepeat` / `loopGap`：循環聽的每句重複次數與句間停頓，由循環聽頁面直接寫入。
+
+### 4.9 面試常見問題
+
+- 依 category 分組瀏覽；每題摺疊展開後依序顯示：**面試官在問什麼**（intent）→ **回答骨架**（outline）→
+  範答（🔊 播整段）→ 核心句跟讀（叫用 4.6 引擎，只跟 `core` 單句）→ 關鍵句型 → 別這樣說 → 可能的追問。
+- 預設收合，避免一眼看到答案；點「先自己答一次」會先播問題並隱藏範答。
+- **模擬面試模式**（`#/interview/mock`）：依 self_intro→experience→technical→behavioral→motivation 抽 6 題，
+  每題播問題 → 使用者出聲回答（App 不評分自由回答，SPEC §0 邊界）→ 自評「答得出來／卡住」→ 攤開範答並可跟讀核心句。
+  最後顯示卡住的題目清單。自評結果寫進 `store.interview[id] = {ok: bool, tries: n}`。
+- 頁尾固定提示：「想練完整對答？用 SPEAKING.md 的場景在 Claude Project 語音練。」
 
 ## 5. Web Speech API — iOS Safari 實作備忘（重要，全部集中在 `speech.js`）
 
@@ -281,6 +334,22 @@ localStorage key：`fabenglish.v1`，單一 JSON：
 
 > Badge 的限制：iOS 只有在「加到主畫面」後才支援，且需要通知權限；不支援時
 > `js/badge.js` 全程靜默不報錯，設定頁會說明原因。
+
+### M4 — 面試題、循環聽與跟讀改版
+範圍：`content/interview.json` 40 題、`js/views/interview.js`（分類瀏覽＋模擬面試）、
+`js/views/loop.js`（循環聽）、跟讀改為直接錄音且不顯示分數、各練習可回上一題。
+
+驗收：
+- [x] 40 題涵蓋七個 category，`validate.js` 通過（含 `core` 必須是 `answer` 的實際句子）　←　0 警告
+- [x] 模擬面試抽 6 題、自評寫入進度、結束顯示卡住清單　←　smoke [10] 自動驗證
+- [x] 弱點清單匯出的 markdown 含「面試答不出來的題目」段落　←　smoke [9] 自動驗證
+- [x] 循環聽可連播、可換句源、重複次數與停頓生效　←　smoke [10] 驗到句源與換句（連播需真實 TTS）
+- [x] 跟讀面板按下去直接進錄音（不先播範讀），且畫面上找不到任何分數　←　smoke [10] 驗證 UI 無分數
+- [x] 單字、Email 填空、簡報模式、聽力、模擬面試都能回上一題　←　smoke [10] 驗證模擬面試往返
+- [ ] iPhone 實機：循環聽連續播放不中斷、核心句跟讀可辨識　←　**待實機驗**
+
+> 邊界提醒（附錄 B 仍然有效）：App **不評分自由回答**。模擬面試只播題目、計時、讓使用者自評，
+> 真正的對答練習仍在 Claude Project 用語音做（`SPEAKING.md`）。
 
 ## 8. 測試清單（每個里程碑都要在 iPhone 實機過一遍）
 

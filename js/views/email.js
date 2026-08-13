@@ -123,7 +123,7 @@ function renderDrill(root, items, ctx) {
     const checkBtn = el('button', { class: 'block primary', onClick: check }, '對答案');
     const feedback = div({});
 
-    host.append(
+    append(host,
       div({ class: 'qbar' }, el('i', { style: `width:${Math.round(idx / queue.length * 100)}%` })),
       p(`${idx + 1} / ${queue.length}　·　${item.scenario_zh}`, 'small dim center'),
       card(
@@ -132,6 +132,9 @@ function renderDrill(root, items, ctx) {
       ),
       checkBtn,
       feedback,
+      idx > 0
+        ? el('button', { class: 'block ghost', style: 'margin-top:8px', onClick: () => { idx--; step(); } }, '← 上一題')
+        : null,
     );
     inputs[0]?.focus();
 

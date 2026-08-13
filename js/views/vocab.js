@@ -103,6 +103,12 @@ export async function render(root, ctx) {
         el('button', { class: 'block', onClick: () => grade(item, false) }, '不認得'),
         el('button', { class: 'block primary', onClick: () => grade(item, true) }, '認得'),
       ),
+      session.idx > 0
+        ? el('button', {
+            class: 'block ghost', style: 'margin-top:8px',
+            onClick: () => { session.idx--; session.answered = Math.max(0, session.answered - 1); draw(); },
+          }, '← 上一張（會重新作答）')
+        : null,
     );
   }
 
@@ -143,7 +149,7 @@ export async function render(root, ctx) {
         shadowHost.replaceChildren(openShadow.el);
         shadowHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       },
-    }, best != null ? `🎤 跟讀例句（最佳 ${best}）` : '🎤 跟讀例句');
+    }, best != null ? '🎤 跟讀例句（練過）' : '🎤 跟讀例句');
 
     return div({},
       card(

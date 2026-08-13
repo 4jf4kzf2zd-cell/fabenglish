@@ -17,8 +17,12 @@ export function buildReport(content) {
   const st = store.get();
   const today = srs.today();
 
+  const interviewItems = content.interview || [];
   const weakVocab = pickWeakVocab(content.vocab, st);
-  const weakShadow = pickWeakShadow([...content.presentation, ...content.vocab], st);
+  const weakShadow = pickWeakShadow([...content.presentation, ...content.vocab, ...interviewItems], st);
+  const stuckInterview = interviewItems
+    .map(item => ({ item, rec: st.interview?.[item.id] }))
+    .filter(x => x.rec && x.rec.ok === false);
   const weakReading = (content.readings || [])
     .map(r => ({ item: r, rec: st.readings[r.id] }))
     .filter(x => x.rec?.done && (x.rec.score ?? 1) < READING_WEAK)
@@ -36,6 +40,7 @@ export function buildReport(content) {
     reading: weakReading.length,
     listening: weakListening.length,
     cloze: failedCloze.length,
+    interview: stuckInterview.length,
   };
   const empty = Object.values(counts).every(n => n === 0);
 
@@ -65,10 +70,12 @@ export function buildReport(content) {
   }
 
   if (weakShadow.length) {
-    lines.push('## 二、唸不好的句子（跟讀最佳分數偏低）');
+    lines.push('## 二、想再練的句子（跟讀時比對落差較大）');
     lines.push('');
-    for (const { item, best } of weakShadow) {
-      lines.push(`- **${best} 分** — ${sentenceOf(item)}`);
+    lines.push('> 語音辨識本身就有誤差，這裡不放分數，只當成「值得再唸幾次」的清單。');
+    lines.push('');
+    for (const { item } of weakShadow) {
+      lines.push(`- ${sentenceOf(item)}`);
       const zh = item.zh || item.example_zh;
       if (zh) lines.push(`  - 中譯：${zh}`);
     }
@@ -104,13 +111,25 @@ export function buildReport(content) {
     lines.push('');
   }
 
+  if (stuckInterview.length) {
+    lines.push('## 六、面試答不出來的題目');
+    lines.push('');
+    for (const { item } of stuckInterview) {
+      lines.push(`- **${item.q}**（${item.category_zh}）`);
+      lines.push(`  - 中文：${item.q_zh}`);
+      lines.push(`  - 回答骨架：${(item.outline_zh || []).join('／')}`);
+    }
+    lines.push('');
+  }
+
   lines.push('---');
   lines.push('');
   lines.push('## 給 Claude 的指令（直接複製這段）');
   lines.push('');
   lines.push('> 以上是我的英文弱點清單。請針對「一、記不住的單字」，用 NAND 原廠的真實工作情境重寫例句，');
   lines.push('> 每個字給兩句不同場景（一句 email、一句會議口說），句長 20 字以內、TOEIC 600–750 難度；');
-  lines.push('> 針對「二、唸不好的句子」，指出我可能唸錯的音節與連音位置；');
+  lines.push('> 針對「二、想再練的句子」，指出我可能唸錯的音節與連音位置；');
+  lines.push('> 針對「六、面試答不出來的題目」，用我的實際經歷幫我各寫一個 60 秒版本的答案，並標出關鍵句型；');
   lines.push('> 最後出五題口說問答，逼我把這些字用出來。');
   lines.push('');
 

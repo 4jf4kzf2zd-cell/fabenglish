@@ -50,6 +50,12 @@ export async function render(root, ctx) {
     onChange: e => { store.setSetting('dev', e.target.checked); },
   });
 
+  /* --- 跟讀前是否先播範讀 --- */
+  const preplayChk = el('input', {
+    type: 'checkbox', checked: !!s.playBeforeShadow,
+    onChange: e => { store.setSetting('playBeforeShadow', e.target.checked); },
+  });
+
   append(root,
     h2('語音'),
     card(
@@ -73,6 +79,14 @@ export async function render(root, ctx) {
         newInput,
         el('span', { class: 'small dim', text: '複習永遠優先，額度只限制「新字」。' }),
       ),
+      el('label', { class: 'field', style: 'display:flex;align-items:flex-start;gap:10px' },
+        preplayChk,
+        el('span', { style: 'margin:0' },
+          el('div', { text: '跟讀前先播一次範讀' }),
+          el('div', { class: 'small dim', text: '預設關閉：按🎤直接開始錄音。要先聽的話按「🔊 聽一次」就好。' }),
+        ),
+      ),
+      p('跟讀不會給分數——語音辨識對非母語腔調誤差太大，分數會誤導。畫面只呈現逐字比對與辨識結果。', 'small dim'),
     ),
 
     h2('提醒'),
@@ -88,7 +102,7 @@ export async function render(root, ctx) {
       el('button', { class: 'block danger', onClick: reset }, '清除所有進度'),
     ),
 
-    p(`FabEnglish · M1 · schema v${store.get().schemaVersion}`, 'small dim center'),
+    p(`FabEnglish · M4 · schema v${store.get().schemaVersion}`, 'small dim center'),
   );
 
   function reset() {

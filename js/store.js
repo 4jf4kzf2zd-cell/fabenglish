@@ -8,7 +8,10 @@ export const DEFAULT_SETTINGS = {
   newPerDay: 10,
   voice: 'auto',
   rate: 1.0,
-  badge: true,     // PWA 圖示上顯示待複習數
+  badge: true,              // PWA 圖示上顯示待複習數
+  playBeforeShadow: false,  // 跟讀前先播一次範讀（預設關：直接錄音比較快）
+  loopRepeat: 2,            // 循環聽：每句重複次數
+  loopGap: 1,               // 循環聽：句間停頓秒數
   dev: false,
 };
 
@@ -20,6 +23,7 @@ function blank() {
     cloze: {},      // e001: {passed:true}                （M2）
     shadow: {},     // p001: {best:86}                    （M2）
     listening: {},  // l001: {quiz:0.8, dictation:0.5}    （M2）
+    interview: {},  // i001: {ok:true, tries:2}            （M4）
     streak: { current: 0, best: 0, lastDay: null },
     settings: { ...DEFAULT_SETTINGS },
     dev: { dayOffset: 0 },   // 時間旅行（僅 dev 模式，見 SPEC §7 M1 驗收）
@@ -33,7 +37,7 @@ let writable = true;   // localStorage 是否可寫（無痕模式 / 配額用�
 function migrate(raw) {
   const s = blank();
   if (!raw || typeof raw !== 'object') return s;
-  for (const k of ['srs', 'readings', 'cloze', 'shadow', 'listening']) {
+  for (const k of ['srs', 'readings', 'cloze', 'shadow', 'listening', 'interview']) {
     if (raw[k] && typeof raw[k] === 'object') s[k] = raw[k];
   }
   if (raw.streak) Object.assign(s.streak, raw.streak);

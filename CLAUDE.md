@@ -20,29 +20,33 @@ npm run serve      # http://localhost:8080（localhost 會自動進 dev 模式�
 npm run validate   # 驗證 content/*.json
 npm test           # scoring.js 單元測試
 npm run icons      # 重新產生 icons/（改圖案時才需要）
-PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 66 項無頭測試（選用）
+PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 95 項無頭測試（選用）
 ```
 
 > ES modules 與 fetch 不能用 `file://` 開，一定要走 http。
 
 ## 目前進度
 
-**M1 / M2 / M3 全部完成**，SPEC 第 7 節的自動化驗收項目都已打勾，只剩需要 iPhone 實機的三項。
+**M1 / M2 / M3 / M4 全部完成**，SPEC 第 7 節的自動化驗收項目都已打勾，只剩需要 iPhone 實機的項目。
 
 - M1：Shell/路由/首頁、單字 SRS、閱讀、進度＋匯出匯入、TTS、設定、PWA
-- M2：跟讀評分（`js/scoring.js` ＋ `js/shadow.js`）、Email 句型（cloze）、簡報句型（含簡報模式）、聽力（四階段＋數字聽寫）
+- M2：跟讀（`js/scoring.js` ＋ `js/shadow.js`）、Email 句型（cloze）、簡報句型（含簡報模式）、聽力（四階段＋數字聽寫）
 - M3：內容補滿、streak 提示（首頁卡片＋`js/badge.js` PWA 圖示數字）、弱點清單匯出 markdown（`js/weakness.js`）
-- 內容：vocab **600**（A200/B250/C150）／readings **30**／email **30**／presentation **40**／listening **15**
+- M4：面試常見問題（`js/views/interview.js`＋模擬面試）、循環聽（`js/views/loop.js`）、
+  跟讀改成直接錄音且**不顯示分數**、各練習可回上一題
+- 內容：vocab **600**（A200/B250/C150）／readings **30**／email **30**／presentation **40**／listening **15**／interview **40**
 
 往後主要是加內容與微調，不要再擴功能（附錄 B 的邊界仍然有效）。
 
-## 四個關鍵不變條件
+## 六個關鍵不變條件
 
 1. `scoring.js` 是純函式，不准 import 任何瀏覽器 API —— 這樣才能用 node 直接測。
 2. 聽寫題的 `answer_display` 必須能被 `checkDictation` 判對，`validate.js` 會強制檢查。
    寫題目時避開會被誤判成數字的字（句首的 "One"、機台代號 F02、8D 這種英數混排）。
 3. `badge.js` 在不支援的環境要全程靜默，不可以在 UI 上報錯。
 4. **不要用 PowerShell 的字串取代去改含中文的檔案**，會把 UTF-8 毀成亂碼；一律用 Edit 工具。
+5. **跟讀分數不准出現在任何 UI**（辨識誤差太大會誤導）。分數只在內部保留，用來排弱點順序。
+6. 面試題的 `core` 必須是 `answer` 裡真的出現的句子且 ≤ 28 字，否則跟讀對不上；`validate.js` 會擋。
 
 ## 邊界（附錄 B）
 

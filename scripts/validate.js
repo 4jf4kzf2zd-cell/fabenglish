@@ -159,6 +159,41 @@ const SCHEMAS = {
       });
     },
   },
+
+  interview: {
+    idPrefix: 'i',
+    target: { M4: 40 },
+    check(it) {
+      req(it, 'category', oneOf(['self_intro', 'experience', 'technical', 'behavioral', 'motivation', 'salary_logistics', 'ask_them']), '不在枚舉內');
+      req(it, 'category_zh', str, '必須是非空字串');
+      req(it, 'q', str, '必須是非空字串');
+      req(it, 'q_zh', str, '必須是非空字串');
+      req(it, 'intent_zh', str, '必須是非空字串');
+      req(it, 'outline_zh', v => Array.isArray(v) && v.length >= 2 && v.every(str), '至少 2 個回答骨架步驟');
+      req(it, 'answer', str, '必須是非空字串');
+      req(it, 'answer_zh', str, '必須是非空字串');
+      req(it, 'core', str, '必須是非空字串');
+      req(it, 'key_phrases', v => Array.isArray(v) && v.length > 0, '至少一組');
+      (it.key_phrases || []).forEach((k, i) => {
+        if (!str(k.en) || !str(k.zh)) bad(`key_phrases[${i}] 需要 en 與 zh`);
+      });
+      req(it, 'follow_ups', v => Array.isArray(v) && v.length > 0, '至少一個追問');
+      (it.follow_ups || []).forEach((f, i) => {
+        if (!str(f.en) || !str(f.zh)) bad(`follow_ups[${i}] 需要 en 與 zh`);
+      });
+      req(it, 'dont', v => v && str(v.en) && str(v.why_zh), '需要 {en, why_zh}');
+      req(it, 'shadow', v => typeof v === 'boolean', '必須是 boolean');
+
+      // core 必須是 answer 裡真的出現的句子，跟讀時才不會唸到範答裡沒有的句子（SPEC §3.6）
+      if (str(it.answer) && str(it.core)) {
+        const flat = s => s.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+        if (!flat(it.answer).includes(flat(it.core))) bad('core 不是 answer 裡的句子（跟讀會對不上）');
+        const n = it.core.split(/\s+/).length;
+        if (n > 28) bad(`core 有 ${n} 字，超過 28 字；iOS 的 STT 停頓就結束，整段跟讀必定失敗`);
+      }
+      if (str(it.answer) && it.answer.split(/\s+/).length > 110) warn('answer 超過 110 字，面試範答偏長');
+    },
+  },
 };
 
 /* ------------------------------ 執行 ------------------------------ */

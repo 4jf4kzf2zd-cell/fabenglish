@@ -64,16 +64,16 @@ export function createShadow(text, opts = {}) {
 
     statusEl.className = 'shadow-status small dim';
     statusEl.textContent = bestLine();
+    // 預設直接錄音，不強制先播範讀；要先聽的人自己按「🔊 聽一次」
     actionsEl.append(el('button', {
       class: 'primary',
       onClick: () => start(true),
-    }, lastScore === null ? '🎤 跟讀' : '🎤 再試一次'));
+    }, lastScore === null ? '🎤 直接跟讀' : '🎤 再唸一次'));
   }
 
   function bestLine() {
-    if (!id) return '播放後跟著唸一次，系統會逐字比對。';
-    const best = store.get().shadow[id]?.best;
-    return best != null ? `最佳分數 ${best} 分` : '播放後跟著唸一次，系統會逐字比對。';
+    if (id && store.get().shadow[id]?.best != null) return '這句練過了，想再唸就直接按。';
+    return '直接按🎤開始唸；想先聽範讀再按「🔊 聽一次」。';
   }
 
   function setStatus(txt, cls = 'small dim') {
@@ -84,7 +84,8 @@ export function createShadow(text, opts = {}) {
   /* ---------------- 流程 ---------------- */
 
   /**
-   * SPEC §4.6：播放目標句 → 倒數 → 啟動辨識。
+   * SPEC §4.6：倒數 → 啟動辨識。
+   * 預設**不先播範讀**（設定裡可打開），要聽的人按「🔊 聽一次」。
    * @param {boolean} fromGesture 由使用者點擊觸發（iOS 需要）
    */
   function start(fromGesture) {
@@ -99,11 +100,15 @@ export function createShadow(text, opts = {}) {
       el('button', { class: 'ghost', onClick: () => { cleanup(); paintIdle(); } }, '取消'),
     );
 
-    setStatus('▶ 播放中⋯');
-    speech.speak(text, { lang }).then(() => {
-      if (destroyed) return;
-      countdown(2);
-    });
+    if (store.settings().playBeforeShadow) {
+      setStatus('▶ 播放中⋯');
+      speech.speak(text, { lang }).then(() => {
+        if (destroyed) return;
+        countdown(2);
+      });
+    } else {
+      countdown(1);
+    }
   }
 
   function countdown(n) {
@@ -154,18 +159,17 @@ export function createShadow(text, opts = {}) {
     }
     onScore?.(result.score);
 
-    const g = scoring.grade(result.score);
+    // 不顯示分數：語音辨識（尤其非母語腔調）誤差大，數字會誤導。
+    // 只呈現逐字比對與辨識到的內容，讓使用者自己判斷。
     resultEl.replaceChildren(
-      div({ class: `shadow-score g-${g}` },
-        el('span', { class: 'n', text: String(result.score) }),
-        el('span', { class: 'u', text: `分　${result.matched}/${result.total} 字命中` }),
-      ),
+      div({ class: 'small dim' }, '辨識到：', el('i', { text: transcript })),
       result.extra.length
         ? div({ class: 'small dim' }, '多說的字：', el('i', { text: result.extra.join(' ') }))
         : null,
-      div({ class: 'small dim', style: 'margin-top:4px' }, '你說的：', el('i', { text: transcript })),
+      div({ class: 'small dim', style: 'margin-top:4px' },
+        '綠色＝有對上、紅色＝沒對上。語音辨識常會聽錯，紅字不一定是你唸錯。'),
     );
-    setStatus(g === 'good' ? '很好，這句過關了。' : g === 'ok' ? '接近了，紅字的部分再唸一次。' : '差距較大，先聽一次再跟。');
+    setStatus('比對完成');
     paintActionsAfterResult();
   }
 
@@ -175,7 +179,7 @@ export function createShadow(text, opts = {}) {
     speech.bindPlayButton(playBtn, () => text, { lang });
     actionsEl.append(
       playBtn,
-      el('button', { class: 'primary', onClick: () => start(true) }, '🎤 再試一次'),
+      el('button', { class: 'primary', onClick: () => start(true) }, '🎤 再唸一次'),
     );
   }
 

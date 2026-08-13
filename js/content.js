@@ -32,6 +32,7 @@ export const readings = () => items('readings');
 export const emails = () => items('email_patterns');
 export const presentation = () => items('presentation');
 export const listening = () => items('listening');
+export const interview = () => items('interview');
 
 export function byId(list, id) {
   return list.find(x => x.id === id) || null;

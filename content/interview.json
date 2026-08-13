@@ -1,0 +1,849 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "i001",
+      "category": "self_intro",
+      "category_zh": "自我介紹",
+      "q": "Tell me about yourself.",
+      "q_zh": "請自我介紹。",
+      "intent_zh": "面試官要的是 60 秒版本的「我是誰＋做過什麼＋為什麼坐在這裡」，不是履歷復誦。",
+      "outline_zh": ["一句話定位：職稱＋年資＋領域", "一個可量化的代表作", "為什麼想要這個職位（接到下一題）"],
+      "answer": "I'm a device engineer with six years in NAND flash yield analysis. My main job is to find why wafers fail at sort and to close the issue with the fab. Last year I led the root cause analysis for a program disturb excursion that cost us three points of yield. I'm now looking for a role where I can work more directly with overseas customers.",
+      "answer_zh": "我是元件工程師，在 NAND flash 良率分析領域六年。我主要負責找出晶圓在 sort 失效的原因，並和廠端一起把問題收掉。去年我主導了一次 program disturb 異常的根因分析，那次事件讓我們掉了三個百分點的良率。我現在想找一個能更直接面對海外客戶的職位。",
+      "core": "I'm a device engineer with six years in NAND flash yield analysis.",
+      "key_phrases": [
+        {"en": "My main job is to ...", "zh": "我主要負責⋯"},
+        {"en": "Last year I led the root cause analysis for ...", "zh": "去年我主導了⋯的根因分析"},
+        {"en": "I'm now looking for a role where I can ...", "zh": "我現在想找一個能⋯的職位"}
+      ],
+      "follow_ups": [
+        {"en": "What made you choose yield analysis?", "zh": "你為什麼選良率分析這條路？"}
+      ],
+      "dont": {"en": "I was born in Taichung and I graduated from a national university in 2015...", "why_zh": "從出生講起會用掉全部時間；面試的自我介紹只講與這份工作有關的事。"},
+      "shadow": true
+    },
+    {
+      "id": "i002",
+      "category": "self_intro",
+      "category_zh": "自我介紹",
+      "q": "Walk me through your resume.",
+      "q_zh": "請帶我看一遍你的履歷。",
+      "intent_zh": "面試官要的是「每一次轉換的邏輯」，不是時間軸復述。",
+      "outline_zh": ["最早的職位一句話帶過", "每次轉換都給一個理由", "停在現在，接到為什麼想來"],
+      "answer": "I started as a process engineer in the etch module in 2019. After two years I moved to yield analysis because I wanted to see the whole line, not one step. Since 2022 I have owned sort yield for two NAND products. In the last two years I also handled customer 8D reports, which is why this role interests me.",
+      "answer_zh": "我 2019 年從蝕刻模組的製程工程師開始。兩年後轉到良率分析，因為我想看整條線，而不是單一站別。2022 年起我負責兩個 NAND 產品的 sort yield。最近兩年我也處理客戶的 8D 報告，這也是我對這個職位有興趣的原因。",
+      "core": "After two years I moved to yield analysis because I wanted to see the whole line, not one step.",
+      "key_phrases": [
+        {"en": "I started as ... in ...", "zh": "我最早是在⋯做⋯"},
+        {"en": "Since 2022 I have owned ...", "zh": "2022 年起我負責⋯"},
+        {"en": "which is why this role interests me", "zh": "這也是我對這個職位有興趣的原因"}
+      ],
+      "follow_ups": [
+        {"en": "Why did you leave the process side?", "zh": "你為什麼離開製程端？"}
+      ],
+      "dont": {"en": "Then I changed to another department, and then I changed again.", "why_zh": "只講換過什麼、不講為什麼換，會被讀成待不住。"},
+      "shadow": true
+    },
+    {
+      "id": "i003",
+      "category": "self_intro",
+      "category_zh": "自我介紹",
+      "q": "Can you describe your current team and your role in it?",
+      "q_zh": "可以描述一下你現在的團隊，以及你在裡面的角色嗎？",
+      "intent_zh": "確認你的實際位置：負責多大範圍、對誰負責、是不是關鍵人。",
+      "outline_zh": ["團隊規模與守備範圍", "你個人 own 的部分", "出事時你扮演什麼角色"],
+      "answer": "My team has eight engineers and we cover sort yield for all NAND products in the fab. I own two product families and I'm the contact window for customer quality issues. When there is an excursion, I lead the analysis and I report the status every day to the program manager.",
+      "answer_zh": "我的團隊有八個工程師，負責廠內所有 NAND 產品的 sort yield。我負責兩個產品家族，也是客戶品質問題的對外窗口。發生異常時，由我主導分析，並每天向 program manager 回報進度。",
+      "core": "When there is an excursion, I lead the analysis and I report the status every day to the program manager.",
+      "key_phrases": [
+        {"en": "My team has eight engineers and we cover ...", "zh": "我的團隊有八個工程師，負責⋯"},
+        {"en": "I'm the contact window for ...", "zh": "我是⋯的對外窗口"}
+      ],
+      "follow_ups": [
+        {"en": "How much of that is your own decision?", "zh": "其中有多少是你自己能決定的？"}
+      ],
+      "dont": {"en": "I just do what my manager assigns to me.", "why_zh": "把自己講成純執行者，面試官會認為你沒有 ownership。"},
+      "shadow": true
+    },
+    {
+      "id": "i004",
+      "category": "self_intro",
+      "category_zh": "自我介紹",
+      "q": "How would your colleagues describe you?",
+      "q_zh": "你的同事會怎麼形容你？",
+      "intent_zh": "用第三人稱說優點比自誇可信；同時在測你有沒有自我認知。",
+      "outline_zh": ["一個具體的形容（別用 hard-working）", "用一個行為證明它", "加一句合作面的評價"],
+      "answer": "They would say I'm the person who asks for the raw data. I don't accept a conclusion until I see the wafer map myself. My module colleagues also say I'm easy to work with, because I bring evidence first and I don't blame their process before I check my own analysis.",
+      "answer_zh": "他們大概會說我是那種一定會要原始資料的人。在我自己看過晶圓圖之前，我不會接受任何結論。模組端的同事也說我很好合作，因為我先拿證據出來，而且在檢查完自己的分析之前不會先怪他們的製程。",
+      "core": "I don't accept a conclusion until I see the wafer map myself.",
+      "key_phrases": [
+        {"en": "They would say I'm the person who ...", "zh": "他們大概會說我是那種會⋯的人"},
+        {"en": "My colleagues say I'm easy to work with, because ...", "zh": "同事說我很好合作，因為⋯"}
+      ],
+      "follow_ups": [
+        {"en": "And what would they say you need to improve?", "zh": "那他們會說你需要改進什麼？"}
+      ],
+      "dont": {"en": "They say I am hard-working and responsible.", "why_zh": "每個人都這樣講等於沒講；要給行為證據。"},
+      "shadow": true
+    },
+    {
+      "id": "i005",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "Tell me about the project you are most proud of.",
+      "q_zh": "講一個你最引以為傲的專案。",
+      "intent_zh": "看你能不能把專案講成「問題 → 行動 → 可量化結果」，而不是流水帳。",
+      "outline_zh": ["一句話講問題與衝擊（帶數字）", "你做的關鍵動作", "結果與後續影響（制度化／省了多少）"],
+      "answer": "Last year we lost three points of sort yield on our main product. I found the failures came from one furnace tube by overlaying lot history on the wafer maps. We changed the tube recipe and recovered the yield in three weeks. The fix is now part of the standard control plan.",
+      "answer_zh": "去年我們主力產品掉了三個百分點的 sort yield。我把批次履歷疊到晶圓圖上，找出失效來自其中一支爐管。我們改了該爐管的配方，三週內把良率救回來。這個對策現在已經納入標準管制計畫。",
+      "core": "We changed the tube recipe and recovered the yield in three weeks.",
+      "key_phrases": [
+        {"en": "We lost three points of sort yield on ...", "zh": "我們在⋯掉了三個百分點的 sort yield"},
+        {"en": "I found the failures came from ... by ...", "zh": "我用⋯找出失效來自⋯"},
+        {"en": "The fix is now part of the standard control plan.", "zh": "這個對策已經納入標準管制計畫。"}
+      ],
+      "follow_ups": [
+        {"en": "What would you do differently if it happened again?", "zh": "如果再發生一次，你會怎麼做不一樣？"}
+      ],
+      "dont": {"en": "I did many projects, all of them are important.", "why_zh": "不挑一個講細節，面試官無法判斷你的深度。"},
+      "shadow": true
+    },
+    {
+      "id": "i006",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "Describe the most difficult yield issue you have solved.",
+      "q_zh": "描述一個你解過最難的良率問題。",
+      "intent_zh": "難在哪、你怎麼在資訊不足時逼近答案。",
+      "outline_zh": ["為什麼難（訊號弱／不可重現／跨部門）", "你用什麼方法縮小範圍", "花多久、根因是什麼"],
+      "answer": "The hardest one was an intermittent bit failure that only appeared after high temperature stress. The failure rate was too low for normal SPC to catch. I built a query to pull two years of test logs and found the failures clustered on wafers from one implanter. The root cause was a slow drift in the tilt angle.",
+      "answer_zh": "最難的一次是間歇性的 bit 失效，只有在高溫應力之後才出現。失效率太低，一般的 SPC 抓不到。我寫了一個查詢把兩年的測試 log 拉出來，發現失效集中在同一台離子佈植機的晶圓上。根因是傾角的緩慢飄移。",
+      "core": "The failure rate was too low for normal SPC to catch.",
+      "key_phrases": [
+        {"en": "It only appeared after high temperature stress.", "zh": "它只在高溫應力後才出現。"},
+        {"en": "I built a query to pull two years of test logs.", "zh": "我寫了一個查詢把兩年的測試 log 拉出來。"},
+        {"en": "The root cause was a slow drift in ...", "zh": "根因是⋯的緩慢飄移。"}
+      ],
+      "follow_ups": [
+        {"en": "How did you keep the team patient for four months?", "zh": "四個月裡你怎麼維持團隊的耐心？"}
+      ],
+      "dont": {"en": "It was difficult because many people were involved.", "why_zh": "人多不是技術難度；面試官要聽的是資料與推理上的困難。"},
+      "shadow": true
+    },
+    {
+      "id": "i007",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "What exactly was your contribution to that project?",
+      "q_zh": "那個專案裡，具體哪些是你做的？",
+      "intent_zh": "追問你在團隊功勞裡的實際份額；模糊回答＝扣分。",
+      "outline_zh": ["直接說哪幾件事是你做的", "誠實說別人做了什麼", "收在你對外負責的部分"],
+      "answer": "The data pipeline and the root cause hypothesis were mine. I wrote the script that joined test data with equipment history, and I proposed the implanter as the suspect. The module engineer ran the confirmation experiment. I owned the 8D report and presented it to the customer.",
+      "answer_zh": "資料管線與根因假設是我做的。我寫了把測試資料與機台履歷併起來的腳本，也是我提出離子佈植機是嫌疑者。確認實驗是模組工程師跑的。8D 報告由我負責，也是我對客戶簡報。",
+      "core": "I wrote the script that joined test data with equipment history.",
+      "key_phrases": [
+        {"en": "The data pipeline and the hypothesis were mine.", "zh": "資料管線與假設是我做的。"},
+        {"en": "I owned the 8D report and presented it to the customer.", "zh": "8D 報告由我負責，也是我對客戶簡報。"}
+      ],
+      "follow_ups": [
+        {"en": "What part could you not have done alone?", "zh": "哪一部分是你一個人做不到的？"}
+      ],
+      "dont": {"en": "We did everything together as a team.", "why_zh": "全部推給團隊，面試官會認為你沒有可驗證的個人能力。"},
+      "shadow": true
+    },
+    {
+      "id": "i008",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "How do you handle a customer complaint about quality?",
+      "q_zh": "客戶客訴品質問題時，你怎麼處理？",
+      "intent_zh": "看你懂不懂「先止血再破案」，以及對客戶溝通的節奏感。",
+      "outline_zh": ["先圍堵：確認範圍、hold 住同批", "24 小時內先給暫時回覆", "再走 8D 與定期更新"],
+      "answer": "First I confirm the scope and put the sister lots on hold, so the problem does not get bigger. Then I give the customer a containment answer within twenty four hours, even if I don't have the root cause yet. After that I follow the 8D flow and send a status update every week.",
+      "answer_zh": "我會先確認範圍並把同批貨 hold 住，避免問題擴大。接著在 24 小時內先給客戶圍堵對策的回覆，即使根因還沒找到。之後照 8D 流程走，並每週發出進度更新。",
+      "core": "I give the customer a containment answer within twenty four hours.",
+      "key_phrases": [
+        {"en": "First I confirm the scope and put the sister lots on hold.", "zh": "我先確認範圍並把同批貨 hold 住。"},
+        {"en": "I send a status update every week until the report is closed.", "zh": "我每週發進度更新直到報告結案。"}
+      ],
+      "follow_ups": [
+        {"en": "What if you still have no root cause after four weeks?", "zh": "如果四週後還找不到根因呢？"}
+      ],
+      "dont": {"en": "I wait until I find the root cause, then I reply to the customer.", "why_zh": "客戶要的是先看到控制動作；等你破案，客訴早就升級了。"},
+      "shadow": true
+    },
+    {
+      "id": "i009",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "Tell me about a time you worked with people outside your team.",
+      "q_zh": "講一次你和其他部門合作的經驗。",
+      "intent_zh": "跨部門協作能力；重點在你建立了什麼機制，不是你多努力。",
+      "outline_zh": ["情境：牽涉哪些部門、衝突在哪", "你建立的機制（單一真相、短會議）", "結果"],
+      "answer": "During a qualification for a new customer I had to work with process, test, and the sales team at the same time. Each side wanted a different priority. I set up one shared tracking sheet and a fifteen minute call every morning. We closed the qualification two weeks before the deadline.",
+      "answer_zh": "在一個新客戶的認證案裡，我必須同時和製程、測試與業務三邊合作，每一方想要的優先順序都不一樣。我建了一份共用的追蹤表，加上每天早上十五分鐘的會議。我們比期限提前兩週完成認證。",
+      "core": "I set up one shared tracking sheet and a fifteen minute call every morning.",
+      "key_phrases": [
+        {"en": "Each side wanted a different priority.", "zh": "每一方想要的優先順序都不一樣。"},
+        {"en": "We closed the qualification two weeks before the deadline.", "zh": "我們提前兩週完成認證。"}
+      ],
+      "follow_ups": [
+        {"en": "Who was the hardest to align, and why?", "zh": "誰最難拉齊？為什麼？"}
+      ],
+      "dont": {"en": "I sent many emails to push everyone.", "why_zh": "發信不是方法；面試官想看的是你設計了什麼流程。"},
+      "shadow": true
+    },
+    {
+      "id": "i010",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "Have you ever led a project without being a manager?",
+      "q_zh": "你有沒有在沒有職權的情況下帶過專案？",
+      "intent_zh": "沒有職權的領導力，是升遷與外商面試最愛問的一題。",
+      "outline_zh": ["說有，給規模（幾人、跨幾個部門）", "坦白沒有職權，所以你用什麼取代", "結果"],
+      "answer": "Yes. I led the excursion task force last year with five people from three departments. I had no authority over them, so I ran it with clear owners and dates on every action item. I also made sure everyone saw the same daily dashboard. The team stayed together until we closed the case.",
+      "answer_zh": "有。去年我帶了異常處理的任務小組，五個人來自三個部門。我對他們沒有職權，所以我用「每個行動項都有負責人與日期」的方式來推。我也確保所有人看到同一份每日儀表板。整個小組一直撐到案子結掉。",
+      "core": "I had no authority over them, so I ran it with clear owners and dates.",
+      "key_phrases": [
+        {"en": "I led the task force with five people from three departments.", "zh": "我帶了跨三個部門、五個人的任務小組。"},
+        {"en": "clear owners and dates on every action item", "zh": "每個行動項都有負責人與日期"}
+      ],
+      "follow_ups": [
+        {"en": "What did you do when someone missed a date?", "zh": "有人沒趕上日期時你怎麼處理？"}
+      ],
+      "dont": {"en": "No, I am not a manager, so I never led anything.", "why_zh": "把 leadership 等同職稱，等於自己放棄這一題。"},
+      "shadow": true
+    },
+    {
+      "id": "i011",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "What tools do you use in your daily work?",
+      "q_zh": "你日常工作用哪些工具？",
+      "intent_zh": "確認你的工具深度，也在看你會不會誠實劃界線。",
+      "outline_zh": ["統計工具與資料查詢", "自動化與程式語言", "誠實說到哪裡為止"],
+      "answer": "I use JMP for statistics and SQL to pull test data from the yield database. For repeated analysis I write Python scripts, mostly pandas for data cleaning. For wafer level patterns I use our in-house map viewer. I'm not a software engineer, but I automate anything I have to do more than twice.",
+      "answer_zh": "統計我用 JMP，資料則用 SQL 從良率資料庫拉。重複性的分析我寫 Python，主要是用 pandas 清資料。晶圓層級的圖案我用公司內部的 map viewer。我不是軟體工程師，但只要一件事要做兩次以上，我就會把它自動化。",
+      "core": "I'm not a software engineer, but I automate anything I have to do more than twice.",
+      "key_phrases": [
+        {"en": "I use SQL to pull test data from the yield database.", "zh": "我用 SQL 從良率資料庫拉測試資料。"},
+        {"en": "For repeated analysis I write Python scripts.", "zh": "重複性的分析我寫 Python 腳本。"}
+      ],
+      "follow_ups": [
+        {"en": "How would you find a correlation in that data?", "zh": "你會怎麼在那些資料裡找相關性？"}
+      ],
+      "dont": {"en": "I know Python, Java, C++, R, and machine learning.", "why_zh": "列一長串會被逐一追問，講不出深度反而扣分。"},
+      "shadow": true
+    },
+    {
+      "id": "i012",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "Tell me about a time your analysis turned out to be wrong.",
+      "q_zh": "講一次你的分析後來被證明是錯的。",
+      "intent_zh": "誠實度加反省力；答「我沒錯過」是最糟的答案。",
+      "outline_zh": ["承認一個真實的錯誤", "代價是什麼", "你之後改變了什麼做法"],
+      "answer": "I once blamed a cleaning step for a particle issue. The correlation looked strong, so we changed the recipe, but the failure rate did not drop. I went back and found the real source was a new wafer carrier. I learned to check whether a correlation can be explained physically before I ask anyone to change a recipe.",
+      "answer_zh": "我曾經把一個微粒問題歸咎於某個清洗站。相關性看起來很強，所以我們改了配方，但失效率沒有下降。我回頭查，發現真正的來源是新的晶圓載具。我學到的是：在要求別人改配方之前，要先確認這個相關性在物理上解釋得通。",
+      "core": "The correlation looked strong, so we changed the recipe, but the failure rate did not drop.",
+      "key_phrases": [
+        {"en": "I went back and found the real source was ...", "zh": "我回頭查，發現真正的來源是⋯"},
+        {"en": "whether a correlation can be explained physically", "zh": "這個相關性在物理上是否解釋得通"}
+      ],
+      "follow_ups": [
+        {"en": "How did you tell your manager about it?", "zh": "你怎麼跟主管說這件事？"}
+      ],
+      "dont": {"en": "I cannot remember any analysis that was wrong.", "why_zh": "沒有人沒錯過；這樣答只會被讀成不誠實或沒在反省。"},
+      "shadow": true
+    },
+    {
+      "id": "i013",
+      "category": "technical",
+      "category_zh": "技術深挖",
+      "q": "Explain what you do to someone who is not an engineer.",
+      "q_zh": "請用非工程師聽得懂的方式解釋你的工作。",
+      "intent_zh": "對非技術聽眾（HR、高階主管、客戶採購）解釋的能力。",
+      "outline_zh": ["用日常語言講你的產品", "一句話講你的工作", "講你怎麼跟別人合作"],
+      "answer": "Every wafer we make has thousands of memory chips on it. Some of them fail the test, and my job is to find out why. I look at where the failures sit on the wafer, because the pattern tells me the cause. One pattern means a machine problem, another means a process step. Then I work with the process team to fix it.",
+      "answer_zh": "我們做的每一片晶圓上有數千顆記憶體晶片。其中有些會測試失敗，而我的工作就是找出原因。我會看失效落在晶圓上的什麼位置，因為分布圖案會告訴我是哪一台機台、哪一個站別造成的。接著我和製程團隊一起把它修好。",
+      "core": "I look at where the failures sit on the wafer, because the pattern tells me the cause.",
+      "key_phrases": [
+        {"en": "My job is to find out why.", "zh": "我的工作就是找出原因。"},
+        {"en": "the pattern tells me which machine or which step caused them", "zh": "分布圖案會告訴我是哪台機台或哪個站別造成的"}
+      ],
+      "follow_ups": [
+        {"en": "Why can't the machine tell you by itself?", "zh": "機台自己不會告訴你嗎？"}
+      ],
+      "dont": {"en": "I do yield analysis on 3D NAND using SPC and DOE methodology.", "why_zh": "對非技術聽眾丟術語，等於沒有溝通。"},
+      "shadow": true
+    },
+    {
+      "id": "i014",
+      "category": "technical",
+      "category_zh": "技術深挖",
+      "q": "What is a yield excursion, and how do you find the root cause?",
+      "q_zh": "什麼是良率異常？你怎麼找根因？",
+      "intent_zh": "基本功：要能定義清楚，並講出可操作的流程。",
+      "outline_zh": ["定義，並與一般變異區隔", "第一步：signature 與晶圓圖", "縮小範圍的方法（commonality）"],
+      "answer": "An excursion is a sudden yield drop outside the normal baseline, not the slow variation we see every day. I start from the failure signature and the wafer map pattern. Then I split the lots by process step and equipment to find a common tool. Commonality analysis usually points to one chamber within a day.",
+      "answer_zh": "所謂 excursion 是指突然掉出正常基線的良率下降，不是我們每天都看得到的緩慢變異。我會從失效特徵與晶圓圖案開始，接著把批次依站別與機台切開，找出共同的機台。共通性分析通常一天之內就能指向某一個腔體。",
+      "core": "An excursion is a sudden yield drop outside the normal baseline.",
+      "key_phrases": [
+        {"en": "I start from the failure signature and the wafer map pattern.", "zh": "我從失效特徵與晶圓圖案開始。"},
+        {"en": "Commonality analysis usually points to one chamber.", "zh": "共通性分析通常會指向某一個腔體。"}
+      ],
+      "follow_ups": [
+        {"en": "What if two tools show the same signal?", "zh": "如果兩台機台都出現同樣的訊號呢？"}
+      ],
+      "dont": {"en": "Yield excursion means the yield is bad.", "why_zh": "定義不精確會讓面試官懷疑你的基礎。"},
+      "shadow": true
+    },
+    {
+      "id": "i015",
+      "category": "technical",
+      "category_zh": "技術深挖",
+      "q": "Walk me through how you run an 8D.",
+      "q_zh": "請說明你怎麼跑一份 8D。",
+      "intent_zh": "看你是真的跑過 8D，還是只背過名詞。",
+      "outline_zh": ["用時間軸講 D1–D3（要快）", "D4 根因（最花時間）", "D5–D8 驗證與制度化"],
+      "answer": "D1 to D3 happen in the first two days: form the team, describe the problem with data, and contain the risk. D4 is the root cause, which takes the most time. In D5 and D6 we verify the fix on real lots before we release it. D7 is prevention, and in D8 we close with the customer.",
+      "answer_zh": "D1 到 D3 在頭兩天完成：組隊、用資料描述問題、圍堵風險。D4 是根因，最花時間。D5、D6 我們在真實批次上驗證對策，確認有效才放行。D7 是預防，D8 與客戶結案。",
+      "core": "In D5 and D6 we verify the fix on real lots before we release it.",
+      "key_phrases": [
+        {"en": "D1 to D3 happen in the first two days.", "zh": "D1 到 D3 在頭兩天完成。"},
+        {"en": "D4 is the root cause, which takes the most time.", "zh": "D4 是根因，最花時間。"}
+      ],
+      "follow_ups": [
+        {"en": "Which D do most teams do badly?", "zh": "多數團隊哪一個 D 做得最差？"}
+      ],
+      "dont": {"en": "8D is an eight step problem solving method from the automotive industry.", "why_zh": "背定義而不講你怎麼跑，面試官會判斷你沒實際做過。"},
+      "shadow": true
+    },
+    {
+      "id": "i016",
+      "category": "technical",
+      "category_zh": "技術深挖",
+      "q": "How do you decide whether to scrap a lot or ship it with a waiver?",
+      "q_zh": "你怎麼決定一批貨要報廢還是特採出貨？",
+      "intent_zh": "商業判斷與底線；他們在看你會不會為了出貨賭風險。",
+      "outline_zh": ["先講判斷依據（失效模式而非金額）", "可靠度風險就報廢", "可特採的條件與你的底線"],
+      "answer": "It depends on the failure mode, not on the value of the lot. If the failure is a reliability risk, we scrap, because a field return costs far more. If it only affects a non-critical parameter and the customer accepts it, I prepare a waiver with data and a clear boundary. I never ship a lot I cannot explain.",
+      "answer_zh": "取決於失效模式，不是這批貨值多少錢。如果是可靠度風險就報廢，因為市場退貨的代價高得多。如果只影響非關鍵參數而客戶也接受，我會準備附資料與明確界線的特採申請。我不會出任何一批我解釋不了的貨。",
+      "core": "It depends on the failure mode, not on the value of the lot.",
+      "key_phrases": [
+        {"en": "a field return costs far more", "zh": "市場退貨的代價高得多"},
+        {"en": "I prepare a waiver with data and a clear boundary.", "zh": "我會準備附資料與明確界線的特採申請。"}
+      ],
+      "follow_ups": [
+        {"en": "Has a manager ever pushed you to ship anyway?", "zh": "有主管硬逼你出貨過嗎？"}
+      ],
+      "dont": {"en": "I follow whatever my manager decides.", "why_zh": "這題問的就是你的判斷；把球丟回去等於沒有判斷力。"},
+      "shadow": true
+    },
+    {
+      "id": "i017",
+      "category": "technical",
+      "category_zh": "技術深挖",
+      "q": "How do you separate a real signal from normal noise?",
+      "q_zh": "你怎麼分辨真訊號和一般雜訊？",
+      "intent_zh": "統計素養與工程判斷力。",
+      "outline_zh": ["用歷史分布當基準", "sigma 與樣本數的門檻", "獨立量測交叉驗證"],
+      "answer": "I first ask how big the change is compared to the normal distribution of the last three months. If it is inside two sigma, I usually wait for more lots. I also check whether the same signal appears in an independent measurement. One lot is never enough to start an investigation.",
+      "answer_zh": "我會先問這個變化跟最近三個月的常態分布相比有多大。如果落在兩個標準差之內，我通常會再等幾批。我也會確認同樣的訊號是否出現在另一個獨立的量測上。單一批次永遠不足以啟動調查。",
+      "core": "One lot is never enough to start an investigation.",
+      "key_phrases": [
+        {"en": "compared to the normal distribution of the last three months", "zh": "跟最近三個月的常態分布相比"},
+        {"en": "whether the same signal appears in an independent measurement", "zh": "同樣的訊號是否出現在獨立量測上"}
+      ],
+      "follow_ups": [
+        {"en": "What if the customer asks for an answer after one lot?", "zh": "如果客戶只看到一批就要答案呢？"}
+      ],
+      "dont": {"en": "If the number looks bad, I report it immediately.", "why_zh": "把每個雜訊都當事件，會讓整條線疲於奔命。"},
+      "shadow": true
+    },
+    {
+      "id": "i018",
+      "category": "technical",
+      "category_zh": "技術深挖",
+      "q": "How do you make sure a fix really works before it goes to production?",
+      "q_zh": "對策上線前，你怎麼確認它真的有效？",
+      "intent_zh": "驗證的嚴謹度；很多人只看良率數字回來就宣布結案。",
+      "outline_zh": ["樣本數與對照組", "看 signature 不只看數字", "寫進管制計畫避免復發"],
+      "answer": "I run the fix on at least three lots and compare them with a control group from the same time window. I also check that the failure signature is gone, not only that the yield number is higher. If the fix passes, I ask the process team to write it into the control plan so it cannot drift back.",
+      "answer_zh": "我至少會在三批上跑對策，並和同一時間窗的對照組比較。我也會確認失效特徵消失了，而不是只看良率數字變高。如果通過，我會請製程團隊把它寫進管制計畫，避免慢慢飄回去。",
+      "core": "I also check that the failure signature is gone, not only that the yield number is higher.",
+      "key_phrases": [
+        {"en": "compare them with a control group from the same time window", "zh": "和同一時間窗的對照組比較"},
+        {"en": "write it into the control plan so it cannot drift back", "zh": "寫進管制計畫，避免它慢慢飄回去"}
+      ],
+      "follow_ups": [
+        {"en": "How many lots is enough for you?", "zh": "你認為幾批算足夠？"}
+      ],
+      "dont": {"en": "If the yield goes up, the fix works.", "why_zh": "良率回升可能只是別的因素；沒看 signature 等於沒驗證。"},
+      "shadow": true
+    },
+    {
+      "id": "i019",
+      "category": "technical",
+      "category_zh": "技術深挖",
+      "q": "What do you do when the data does not give you a clear answer?",
+      "q_zh": "當資料給不出明確結論時，你怎麼辦？",
+      "intent_zh": "面對不確定性的誠實與結構化能力。",
+      "outline_zh": ["先承認不確定", "把已知／已排除／未決講清楚", "提出一個能分辨假設的實驗"],
+      "answer": "I say so early instead of forcing a story. I list what we know, what we ruled out, and what is still open. Then I propose one experiment that can separate the two remaining hypotheses. If the experiment costs too much, I tell the team the risk of each option and let the owner decide.",
+      "answer_zh": "我會早點講出來，而不是硬掰一套說法。我會列出：我們知道什麼、已經排除什麼、還有什麼沒有結論。接著提出一個能區分剩下兩個假設的實驗。如果實驗成本太高，我會把每個選項的風險講清楚，讓負責人決定。",
+      "core": "I list what we know, what we ruled out, and what is still open.",
+      "key_phrases": [
+        {"en": "I say so early instead of forcing a story.", "zh": "我會早點講，而不是硬掰一套說法。"},
+        {"en": "one experiment that can separate the two remaining hypotheses", "zh": "一個能區分剩下兩個假設的實驗"}
+      ],
+      "follow_ups": [
+        {"en": "How do you report that to a customer?", "zh": "這種狀況你怎麼對客戶報告？"}
+      ],
+      "dont": {"en": "I keep looking until I find something to report.", "why_zh": "為了交差硬找關聯，遲早會出更大的事。"},
+      "shadow": true
+    },
+    {
+      "id": "i020",
+      "category": "technical",
+      "category_zh": "技術深挖",
+      "q": "How do you keep up with new technology in this industry?",
+      "q_zh": "你怎麼跟上這個產業的新技術？",
+      "intent_zh": "學習習慣是可驗證的；來源與頻率比「我很愛學習」有用。",
+      "outline_zh": ["外部來源與頻率", "公司內部的學習管道", "從客戶身上學到的東西"],
+      "answer": "I read the IEDM and IRPS papers that are related to my failure modes, usually two or three a month. Inside the company I join the design review when a new generation starts, even when it is not my product. I also learn a lot from customer questions, because they test our parts in ways we do not.",
+      "answer_zh": "我讀和我負責的失效模式相關的 IEDM、IRPS 論文，大概一個月兩三篇。公司內部，新世代開案時我會去參加設計審查，即使那不是我的產品。我也從客戶的問題學到很多，因為他們測我們的產品的方式跟我們不一樣。",
+      "core": "I also learn a lot from customer questions, because they test our parts in ways we do not.",
+      "key_phrases": [
+        {"en": "usually two or three a month", "zh": "大概一個月兩三篇"},
+        {"en": "I join the design review when a new generation starts.", "zh": "新世代開案時我會參加設計審查。"}
+      ],
+      "follow_ups": [
+        {"en": "Tell me about the last paper you read.", "zh": "講一下你最近讀的一篇論文。"}
+      ],
+      "dont": {"en": "I always keep learning new things every day.", "why_zh": "沒有來源與頻率的學習宣言，面試官不會採信。"},
+      "shadow": true
+    },
+    {
+      "id": "i021",
+      "category": "behavioral",
+      "category_zh": "行為問題",
+      "q": "Tell me about a time you disagreed with your manager.",
+      "q_zh": "講一次你和主管意見不合的經驗。",
+      "intent_zh": "看你能不能有原則地反對，而不是硬碰硬或全盤服從。",
+      "outline_zh": ["分歧點是什麼（對事不對人）", "你用什麼證據溝通", "結果，含你願意付出的成本"],
+      "answer": "My manager wanted to release a fix based on one good lot. I thought the sample was too small, so I showed him the historical variation of that parameter. I asked for two more lots and offered to run them over the weekend. He agreed, and the third lot did fail, so we avoided shipping a bad fix.",
+      "answer_zh": "我主管想憑一批好的結果就放行對策。我認為樣本太小，所以我給他看那個參數的歷史變異。我要求再跑兩批，並主動說我週末來跑。他同意了，而第三批確實失敗，我們因此避免放行一個沒效的對策。",
+      "core": "I asked for two more lots and offered to run them over the weekend.",
+      "key_phrases": [
+        {"en": "I thought the sample was too small, so I showed him ...", "zh": "我認為樣本太小，所以我給他看⋯"},
+        {"en": "we avoided shipping a bad fix", "zh": "我們避免了放行一個沒效的對策"}
+      ],
+      "follow_ups": [
+        {"en": "What if he had said no?", "zh": "如果他還是說不呢？"}
+      ],
+      "dont": {"en": "I never disagree with my manager.", "why_zh": "在外商這是負面訊號，代表你不會主動提出風險。"},
+      "shadow": true
+    },
+    {
+      "id": "i022",
+      "category": "behavioral",
+      "category_zh": "行為問題",
+      "q": "Describe a time you worked under a very tight deadline.",
+      "q_zh": "描述一次你在極短期限下工作的經驗。",
+      "intent_zh": "時間壓力下的取捨與溝通，不是「我加班到很晚」。",
+      "outline_zh": ["期限被壓到多短", "你怎麼平行化與取捨", "主動溝通與交付結果"],
+      "answer": "A customer needed our 8D in five days instead of the usual thirty. I split the work: the module team ran the experiment while I prepared the data and the report at the same time. I also told the customer on day two what we already knew. We delivered on day five with a clear open item list.",
+      "answer_zh": "客戶要求五天內給 8D，而不是平常的三十天。我把工作拆開：模組團隊跑實驗，同時我準備資料與報告。我也在第二天就先告訴客戶我們已經知道的部分。第五天交件，並附上明確的未結項清單。",
+      "core": "I also told the customer on day two what we already knew.",
+      "key_phrases": [
+        {"en": "I split the work so two things could run at the same time.", "zh": "我把工作拆開，讓兩件事同時進行。"},
+        {"en": "We delivered on day five with a clear open item list.", "zh": "我們第五天交件，並附上明確的未結項清單。"}
+      ],
+      "follow_ups": [
+        {"en": "What did you drop to make it in time?", "zh": "為了趕上，你捨棄了什麼？"}
+      ],
+      "dont": {"en": "I worked until midnight every day and finished it.", "why_zh": "用工時證明能力，面試官只會擔心你不會安排優先順序。"},
+      "shadow": true
+    },
+    {
+      "id": "i023",
+      "category": "behavioral",
+      "category_zh": "行為問題",
+      "q": "Tell me about a mistake you made at work.",
+      "q_zh": "講一個你在工作上犯過的錯。",
+      "intent_zh": "看你怎麼處理錯誤，而不是有沒有犯錯。",
+      "outline_zh": ["承認一個真實但不致命的錯", "你多快、怎麼補救", "你留下了什麼制度"],
+      "answer": "I once sent a customer report with the wrong lot numbers in the summary table. The customer found it before I did. I corrected the file within the hour, explained what happened, and added a rule that a second engineer checks every number before a report goes out. It has not happened again in two years.",
+      "answer_zh": "我曾經寄出一份客戶報告，摘要表裡的批號是錯的，而且是客戶先發現的。我在一小時內更正檔案、說明事情經過，並加了一條規則：報告發出前由第二位工程師覆核每一個數字。兩年來沒有再發生過。",
+      "core": "The customer found it before I did.",
+      "key_phrases": [
+        {"en": "I corrected the file within the hour and explained what happened.", "zh": "我在一小時內更正檔案並說明經過。"},
+        {"en": "a second engineer checks every number before a report goes out", "zh": "報告發出前由第二位工程師覆核每個數字"}
+      ],
+      "follow_ups": [
+        {"en": "How did the customer react?", "zh": "客戶的反應是什麼？"}
+      ],
+      "dont": {"en": "My mistake is that I work too hard and care too much.", "why_zh": "包裝成優點的假錯誤，面試官一聽就知道你在閃。"},
+      "shadow": true
+    },
+    {
+      "id": "i024",
+      "category": "behavioral",
+      "category_zh": "行為問題",
+      "q": "How do you work under pressure when the line is down?",
+      "q_zh": "產線停線的壓力下，你怎麼工作？",
+      "intent_zh": "壓力下的行為模式；他們要聽到可複製的做法，不是個性宣稱。",
+      "outline_zh": ["你的固定順序", "第一小時做什麼", "你為什麼不會慌（機制而非個性）"],
+      "answer": "I keep the sequence fixed: contain first, then communicate, then investigate. In the first hour I stop the risk and tell the program manager what is on hold. I don't start deep analysis until the bleeding stops. Having a fixed sequence is what keeps me calm, not being naturally calm.",
+      "answer_zh": "我的順序是固定的：先圍堵、再溝通、最後才調查。第一個小時我先止住風險，並告訴 program manager 有哪些貨被 hold。止血之前我不會開始深入分析。讓我保持冷靜的是這個固定順序，不是我天生冷靜。",
+      "core": "Having a fixed sequence is what keeps me calm, not being naturally calm.",
+      "key_phrases": [
+        {"en": "contain first, then communicate, then investigate", "zh": "先圍堵、再溝通、最後才調查"},
+        {"en": "I don't start deep analysis until the bleeding stops.", "zh": "止血之前我不會開始深入分析。"}
+      ],
+      "follow_ups": [
+        {"en": "Who do you call first?", "zh": "你第一個通知誰？"}
+      ],
+      "dont": {"en": "I am a calm person, pressure does not affect me.", "why_zh": "個性宣稱無法驗證；講流程才可信。"},
+      "shadow": true
+    },
+    {
+      "id": "i025",
+      "category": "behavioral",
+      "category_zh": "行為問題",
+      "q": "Tell me about a time you had to persuade someone who did not report to you.",
+      "q_zh": "講一次你必須說服不歸你管的人。",
+      "intent_zh": "影響力；重點在你有沒有站在對方的 KPI 想事情。",
+      "outline_zh": ["你要的東西為什麼對方不想給", "你怎麼換成對方在意的語言", "你加碼降低對方成本，結果"],
+      "answer": "I needed the module team to stop a tool for two days, which hurt their output target. Instead of asking for the tool, I showed them the cost of the scrap we would take if we kept running. I also offered to run the qualification wafers myself. They agreed the same afternoon.",
+      "answer_zh": "我需要模組團隊把一台機台停兩天，那會影響他們的產出目標。我沒有直接要機台，而是給他們看：如果繼續跑，我們要吃下多少報廢成本。我也主動說認證片由我來跑。他們當天下午就答應了。",
+      "core": "Instead of asking for the tool, I showed them the cost of the scrap we would take.",
+      "key_phrases": [
+        {"en": "which hurt their output target", "zh": "那會影響他們的產出目標"},
+        {"en": "I also offered to run the qualification wafers myself.", "zh": "我也主動說由我來跑認證片。"}
+      ],
+      "follow_ups": [
+        {"en": "What if they had refused?", "zh": "如果他們拒絕呢？"}
+      ],
+      "dont": {"en": "I escalated to my manager to push them.", "why_zh": "第一步就升級，代表你沒有影響力、只有靠山。"},
+      "shadow": true
+    },
+    {
+      "id": "i026",
+      "category": "behavioral",
+      "category_zh": "行為問題",
+      "q": "Tell me about a time you had to say no.",
+      "q_zh": "講一次你必須說「不行」的經驗。",
+      "intent_zh": "有沒有原則，以及會不會用「不行，但可以這樣」的方式拒絕。",
+      "outline_zh": ["對方要什麼、為什麼不行", "用風險語言解釋", "給替代方案"],
+      "answer": "Sales asked me to sign a waiver for a lot with a marginal retention result. I said no, and I explained that retention affects data in the field, not only the test number. I offered a different option: ship the lots that passed and rescreen the rest. We lost two days but we did not take a field risk.",
+      "answer_zh": "業務要我簽一批 retention 結果在邊緣的特採。我拒絕了，並解釋 retention 影響的是產品在客戶端的資料保存，不只是測試數字。我給了另一個選項：先出過關的批，其餘重篩。我們多花兩天，但沒有承擔市場端的風險。",
+      "core": "I said no, and I explained that retention affects data in the field.",
+      "key_phrases": [
+        {"en": "I offered a different option.", "zh": "我提供了另一個選項。"},
+        {"en": "We lost two days but we did not take a field risk.", "zh": "我們多花兩天，但沒有承擔市場端的風險。"}
+      ],
+      "follow_ups": [
+        {"en": "How did sales react?", "zh": "業務的反應如何？"}
+      ],
+      "dont": {"en": "I told them it is not my responsibility.", "why_zh": "拒絕又不給替代方案，會被貼上難合作的標籤。"},
+      "shadow": true
+    },
+    {
+      "id": "i027",
+      "category": "behavioral",
+      "category_zh": "行為問題",
+      "q": "Give me an example of a conflict with a colleague.",
+      "q_zh": "舉一個你和同事起衝突的例子。",
+      "intent_zh": "衝突處理；重點是把爭論拉回資料。",
+      "outline_zh": ["爭點是什麼", "你怎麼降溫（把爭論轉成實驗）", "結果與後續關係"],
+      "answer": "A test engineer and I disagreed about whether the failures came from the test program or the wafer. It became personal in the meeting, so I stopped the discussion and suggested we design one experiment together. We ran the same wafers on two testers. The data showed it was the wafer, and he accepted it immediately.",
+      "answer_zh": "我和一位測試工程師爭論失效到底來自測試程式還是晶圓本身。會議上開始針對人，所以我先喊停，提議我們一起設計一個實驗。我們把同一批晶圓放到兩台測試機上跑。資料顯示問題出在晶圓，他當場就接受了。",
+      "core": "I stopped the discussion and suggested we design one experiment together.",
+      "key_phrases": [
+        {"en": "It became personal in the meeting.", "zh": "會議上開始針對人。"},
+        {"en": "We ran the same wafers on two testers.", "zh": "我們把同一批晶圓放到兩台測試機上跑。"}
+      ],
+      "follow_ups": [
+        {"en": "What if the data had shown you were wrong?", "zh": "如果資料證明是你錯呢？"}
+      ],
+      "dont": {"en": "I avoid conflict, I just do my part.", "why_zh": "迴避衝突在跨部門工作等於問題被放著爛。"},
+      "shadow": true
+    },
+    {
+      "id": "i028",
+      "category": "behavioral",
+      "category_zh": "行為問題",
+      "q": "Tell me about a process you improved.",
+      "q_zh": "講一個你改善過的流程。",
+      "intent_zh": "主動改善的習慣；要有前後對比的數字。",
+      "outline_zh": ["原本的痛點與成本（時間／人力）", "你做了什麼", "量化結果與擴散"],
+      "answer": "Our weekly yield review used to take four hours because everyone made their own slides. I built one dashboard that pulls the numbers automatically from the database. Now the meeting takes ninety minutes and we spend the time on decisions, not on formatting. Six teams use the same dashboard today.",
+      "answer_zh": "我們的週良率會議以前要開四小時，因為每個人各做各的投影片。我做了一個會自動從資料庫抓數字的儀表板。現在會議只要九十分鐘，時間花在決策而不是排版上。今天有六個團隊在用同一個儀表板。",
+      "core": "Now the meeting takes ninety minutes and we spend the time on decisions.",
+      "key_phrases": [
+        {"en": "used to take four hours because everyone made their own slides", "zh": "以前要四小時，因為每個人各做各的投影片"},
+        {"en": "Six teams use the same dashboard today.", "zh": "今天有六個團隊在用同一個儀表板。"}
+      ],
+      "follow_ups": [
+        {"en": "How did you get the other teams to adopt it?", "zh": "你怎麼讓其他團隊願意採用？"}
+      ],
+      "dont": {"en": "I always try to improve things when I have time.", "why_zh": "沒有案例與數字的改善宣言等於沒說。"},
+      "shadow": true
+    },
+    {
+      "id": "i029",
+      "category": "motivation",
+      "category_zh": "動機與職涯",
+      "q": "Why are you looking for a new opportunity?",
+      "q_zh": "你為什麼想換工作？",
+      "intent_zh": "確認你的動機是「往前」而不是「逃離」，以及會不會講前東家壞話。",
+      "outline_zh": ["肯定現職學到什麼", "說出成長天花板在哪", "講你要往哪裡去，不批評別人"],
+      "answer": "I have learned a lot in yield analysis, but my scope has stayed the same for the last two years. I want a role with more direct customer work and more influence on the next product generation. I'm not leaving because of my team; I still have a good relationship with my manager.",
+      "answer_zh": "我在良率分析學到很多，但我的守備範圍這兩年沒有變過。我想要一個能更直接面對客戶、也能影響下一個世代產品的位置。我不是因為團隊的關係要走，我和主管的關係一直很好。",
+      "core": "I want a role with more direct customer work and more influence on the next product generation.",
+      "key_phrases": [
+        {"en": "my scope has stayed the same for the last two years", "zh": "我的守備範圍這兩年沒有變過"},
+        {"en": "I'm not leaving because of my team.", "zh": "我不是因為團隊的關係要離開。"}
+      ],
+      "follow_ups": [
+        {"en": "Did you try to change your scope internally?", "zh": "你有嘗試在內部爭取轉換嗎？"}
+      ],
+      "dont": {"en": "My manager is bad and the company has no future.", "why_zh": "批評前東家是最常見的淘汰理由，面試官會假設你之後也會這樣講他們。"},
+      "shadow": true
+    },
+    {
+      "id": "i030",
+      "category": "motivation",
+      "category_zh": "動機與職涯",
+      "q": "Why do you want to join our company?",
+      "q_zh": "你為什麼想加入我們公司？",
+      "intent_zh": "測你有沒有做功課，以及你要的東西這裡是否給得起。",
+      "outline_zh": ["兩個具體理由，至少一個是這家公司獨有的", "把理由連回你的能力", "不要講薪水與知名度"],
+      "answer": "Two reasons. Your controller and NAND teams sit in the same site, so the failure analysis loop is much shorter than where I am now. Second, this role owns the customer interface, which is the part of my current job I enjoy most. I want to do that full time instead of ten percent of the time.",
+      "answer_zh": "兩個理由。你們的控制器團隊和 NAND 團隊在同一個廠區，失效分析的循環比我現在的環境短很多。第二，這個職位擁有客戶介面，而那正是我現在工作裡最喜歡的部分。我想全職做那件事，而不是只佔工作的一成。",
+      "core": "This role owns the customer interface, which is the part of my current job I enjoy most.",
+      "key_phrases": [
+        {"en": "the failure analysis loop is much shorter", "zh": "失效分析的循環短很多"},
+        {"en": "I want to do that full time instead of ten percent of the time.", "zh": "我想全職做那件事，而不是只佔一成工作。"}
+      ],
+      "follow_ups": [
+        {"en": "What do you know about our product roadmap?", "zh": "你對我們的產品路線圖了解多少？"}
+      ],
+      "dont": {"en": "Because your company is famous and the salary is good.", "why_zh": "這兩個理由對任何公司都成立，等於沒有理由。"},
+      "shadow": true
+    },
+    {
+      "id": "i031",
+      "category": "motivation",
+      "category_zh": "動機與職涯",
+      "q": "Where do you see yourself in five years?",
+      "q_zh": "五年後你希望自己在什麼位置？",
+      "intent_zh": "看你的方向與這個職位是否一致，也在看你有沒有真的想過。",
+      "outline_zh": ["給一個具體角色，不是職稱夢", "說出需要補齊的能力", "誠實講管理或技術路線"],
+      "answer": "In five years I want to be the technical owner for a full product line, not only for sort yield. That means understanding design and test well enough to argue with both. I'm less interested in managing headcount, at least until I have that technical depth.",
+      "answer_zh": "五年後我想成為一整條產品線的技術負責人，而不只是負責 sort yield。那代表我對設計端和測試端的理解，要足以和他們對等地爭論。我對管人數比較沒興趣，至少在技術深度到位之前不是。",
+      "core": "In five years I want to be the technical owner for a full product line.",
+      "key_phrases": [
+        {"en": "understanding design and test well enough to argue with both", "zh": "對設計與測試的理解足以和雙方爭論"},
+        {"en": "I'm less interested in managing headcount.", "zh": "我對管人數比較沒有興趣。"}
+      ],
+      "follow_ups": [
+        {"en": "What if this role does not lead there?", "zh": "如果這個職位不通往那裡呢？"}
+      ],
+      "dont": {"en": "I want to be a manager in five years.", "why_zh": "只講職稱不講能力，面試官無法判斷你是否想清楚。"},
+      "shadow": true
+    },
+    {
+      "id": "i032",
+      "category": "motivation",
+      "category_zh": "動機與職涯",
+      "q": "What are your strengths?",
+      "q_zh": "你的優勢是什麼？",
+      "intent_zh": "要的是與職位相關、而且能舉證的強項。",
+      "outline_zh": ["一個核心強項，用工作語言定義", "舉證", "第二個強項，最好是溝通面"],
+      "answer": "My strength is turning messy data into a decision. I'm comfortable joining test data, equipment history, and process logs, and I can usually tell the team what to check first. The second one is that I write reports people actually read, because I put the conclusion on the first page.",
+      "answer_zh": "我的強項是把雜亂的資料變成一個決策。我很習慣把測試資料、機台履歷和製程 log 併在一起，通常也能告訴團隊該先查哪裡。第二個是我寫的報告別人真的會看，因為我把結論放在第一頁。",
+      "core": "I write reports people actually read, because I put the conclusion on the first page.",
+      "key_phrases": [
+        {"en": "turning messy data into a decision", "zh": "把雜亂的資料變成一個決策"},
+        {"en": "I can usually tell the team what to check first.", "zh": "我通常能告訴團隊先查哪裡。"}
+      ],
+      "follow_ups": [
+        {"en": "Give me an example from last month.", "zh": "舉一個上個月的例子。"}
+      ],
+      "dont": {"en": "I am responsible, hard-working, and a good team player.", "why_zh": "三個萬用形容詞，和這份工作沒有連結。"},
+      "shadow": true
+    },
+    {
+      "id": "i033",
+      "category": "motivation",
+      "category_zh": "動機與職涯",
+      "q": "What is your weakness?",
+      "q_zh": "你的弱點是什麼？",
+      "intent_zh": "要一個真實、有代價、但你已經在管理的弱點。",
+      "outline_zh": ["一個真的弱點（不是包裝的優點）", "它造成過什麼代價", "你現在用什麼機制控制它"],
+      "answer": "I go too deep too early. On the furnace case I spent two weeks on a detail that did not change the conclusion. Now I set a time box: if a branch does not change the decision within two days, I stop and write down why. It is still something I have to watch.",
+      "answer_zh": "我太早鑽太深。在爐管那個案子上，我花了兩週在一個不會改變結論的細節上。現在我會設時間盒：如果一條線索兩天之內不會改變決策，我就停下來並寫下原因。這件事我到現在還是要提醒自己。",
+      "core": "If a branch does not change the decision within two days, I stop and write down why.",
+      "key_phrases": [
+        {"en": "I go too deep too early.", "zh": "我太早鑽太深。"},
+        {"en": "It is still something I have to watch.", "zh": "這件事我到現在還是要提醒自己。"}
+      ],
+      "follow_ups": [
+        {"en": "Has that time box ever made you miss something?", "zh": "這個時間盒有沒有讓你漏掉過什麼？"}
+      ],
+      "dont": {"en": "I am a perfectionist.", "why_zh": "面試官聽過幾千次，會直接判定你沒有準備。"},
+      "shadow": true
+    },
+    {
+      "id": "i034",
+      "category": "motivation",
+      "category_zh": "動機與職涯",
+      "q": "What motivates you at work?",
+      "q_zh": "工作上什麼事情能激勵你？",
+      "intent_zh": "看你的動力來源和這個職位的日常是否匹配。",
+      "outline_zh": ["一個具體的時刻，不是抽象價值", "一個長期的成就感來源", "可以誠實講什麼會消耗你"],
+      "answer": "I like the moment when a pattern finally makes sense, when the wafer map and the equipment history line up. The second thing is seeing a fix stay in the control plan a year later. I don't get much energy from meetings where nothing is decided.",
+      "answer_zh": "我喜歡的是圖案終於說得通的那一刻——當晶圓圖和機台履歷對得起來的時候。第二件事是看到一個對策一年後還留在管制計畫裡。至於什麼都沒決定的會議，我從裡面得不到什麼能量。",
+      "core": "I like the moment when a pattern finally makes sense.",
+      "key_phrases": [
+        {"en": "when the wafer map and the equipment history line up", "zh": "當晶圓圖與機台履歷對得起來的時候"},
+        {"en": "seeing a fix stay in the control plan a year later", "zh": "看到一個對策一年後還留在管制計畫裡"}
+      ],
+      "follow_ups": [
+        {"en": "What part of your current job drains you?", "zh": "目前工作哪個部分最消耗你？"}
+      ],
+      "dont": {"en": "Money motivates me.", "why_zh": "就算是真的，這句話會讓面試官擔心你隨時被挖走。"},
+      "shadow": true
+    },
+    {
+      "id": "i035",
+      "category": "salary_logistics",
+      "category_zh": "薪資與條件",
+      "q": "What are your salary expectations?",
+      "q_zh": "你的期望薪資是多少？",
+      "intent_zh": "看你有沒有做過行情功課，以及會不會太早把底牌掀開。",
+      "outline_zh": ["給區間不給單一數字，並說明是查過的", "說明彈性在哪（base／bonus）", "把問題丟回去問對方預算"],
+      "answer": "Based on my research for this level in this market, I'm looking at a range in total package rather than a single number. I'm flexible on the split between base and bonus. Before I give a final number, may I ask what range you have budgeted for this position?",
+      "answer_zh": "根據我查到的這個職級在這個市場的行情，我看的是整體待遇的一個區間，而不是單一數字。base 和 bonus 怎麼配我有彈性。在我給出最終數字之前，可以請問這個職位的預算區間嗎？",
+      "core": "I'm flexible on the split between base and bonus.",
+      "key_phrases": [
+        {"en": "Based on my research for this level in this market", "zh": "根據我查到的這個職級在這個市場的行情"},
+        {"en": "May I ask what range you have budgeted for this position?", "zh": "請問這個職位的預算區間是多少？"}
+      ],
+      "follow_ups": [
+        {"en": "What is your current salary?", "zh": "你現在的薪水是多少？"}
+      ],
+      "dont": {"en": "Whatever you think is fair is fine for me.", "why_zh": "完全不表態會被開在區間底部，也顯得沒做功課。"},
+      "shadow": true
+    },
+    {
+      "id": "i036",
+      "category": "salary_logistics",
+      "category_zh": "薪資與條件",
+      "q": "Are you willing to travel or relocate?",
+      "q_zh": "你願意出差或外派嗎？",
+      "intent_zh": "誠實表態，但可以講出條件與彈性。",
+      "outline_zh": ["出差：直接說能，並給既有經驗", "外派：給條件（期間、時程）", "強調誠實優於先答應再反悔"],
+      "answer": "Yes for travel. I already go to Korea and Japan two or three times a year for customer meetings and audits. For relocation, I would consider it for a defined period, but I would need to discuss the timing with my family first. I would rather be honest now than change my answer later.",
+      "answer_zh": "出差沒問題。我本來就一年去韓國、日本兩三趟開客戶會議和稽核。外派的話，如果有明確期間我會考慮，但我需要先和家人討論時程。我寧可現在誠實講，也不要之後才改口。",
+      "core": "I would rather be honest now than change my answer later.",
+      "key_phrases": [
+        {"en": "for customer meetings and audits", "zh": "去開客戶會議與稽核"},
+        {"en": "I would consider it for a defined period.", "zh": "如果有明確期間，我會考慮。"}
+      ],
+      "follow_ups": [
+        {"en": "How long a rotation would work for you?", "zh": "多長的外派期你可以接受？"}
+      ],
+      "dont": {"en": "Yes, no problem, anytime, anywhere.", "why_zh": "沒有條件的全盤答應不可信，之後反悔代價更大。"},
+      "shadow": true
+    },
+    {
+      "id": "i037",
+      "category": "salary_logistics",
+      "category_zh": "薪資與條件",
+      "q": "When could you start?",
+      "q_zh": "你什麼時候可以到職？",
+      "intent_zh": "實務問題，但你的回答會透露你交接的責任感。",
+      "outline_zh": ["給明確的預告期", "可壓縮的空間", "說明你要負責到底的部分"],
+      "answer": "My notice period is one month, and I have handover documents ready for my two products. If you need me earlier, I can try to shorten it to three weeks, but I would like to close the open 8D first. I don't want to leave a customer case in the middle.",
+      "answer_zh": "我的預告期是一個月，兩個產品的交接文件我已經準備好了。如果你們需要我早一點，我可以試著壓到三週，但我想先把手上還開著的 8D 結掉。我不想把客戶案子丟在半路。",
+      "core": "I don't want to leave a customer case in the middle.",
+      "key_phrases": [
+        {"en": "My notice period is one month.", "zh": "我的預告期是一個月。"},
+        {"en": "I have handover documents ready.", "zh": "我的交接文件已經準備好了。"}
+      ],
+      "follow_ups": [
+        {"en": "Do you have other offers in progress?", "zh": "你手上還有其他 offer 在進行嗎？"}
+      ],
+      "dont": {"en": "I can start tomorrow.", "why_zh": "馬上就能走，會讓人懷疑你在現職沒有被交付重要工作。"},
+      "shadow": true
+    },
+    {
+      "id": "i038",
+      "category": "ask_them",
+      "category_zh": "反問面試官",
+      "q": "Do you have any questions for us?",
+      "q_zh": "你有什麼問題想問我們嗎？",
+      "intent_zh": "反問是最後的加分題；問題本身就在展示你怎麼思考。",
+      "outline_zh": ["問一個具體的技術問題", "說明你為什麼問", "連回你能貢獻什麼"],
+      "answer": "Yes. What is the biggest technical problem this team is fighting right now, and how long has it been open? I ask because I want to know whether it is a data problem or an organization problem. That tells me where I would be useful in the first six months.",
+      "answer_zh": "有。這個團隊現在最頭痛的技術問題是什麼？它開著多久了？我這樣問是因為我想知道那究竟是資料的問題，還是組織的問題。那能讓我判斷前六個月我能在哪裡幫上忙。",
+      "core": "What is the biggest technical problem this team is fighting right now?",
+      "key_phrases": [
+        {"en": "how long has it been open", "zh": "這個問題開著多久了"},
+        {"en": "That tells me where I would be useful.", "zh": "那能讓我知道我能在哪裡幫上忙。"}
+      ],
+      "follow_ups": [
+        {"en": "Why does that matter to you?", "zh": "這件事為什麼對你重要？"}
+      ],
+      "dont": {"en": "No, I think you have explained everything.", "why_zh": "不反問等於沒興趣，是最常見的隱形扣分。"},
+      "shadow": true
+    },
+    {
+      "id": "i039",
+      "category": "ask_them",
+      "category_zh": "反問面試官",
+      "q": "Do you have any questions about the role?",
+      "q_zh": "對這個職位你有什麼想問的？",
+      "intent_zh": "問成功標準等於在確認期待值，也讓對方看見你會對齊目標。",
+      "outline_zh": ["問一年後的成功標準", "問日常最緊密的合作對象", "說明你為什麼需要知道"],
+      "answer": "How would you measure whether I am successful after the first year? I would also like to know who I work with most closely day to day. If the answer is the customer quality team, I should prepare differently than if it is the process team.",
+      "answer_zh": "第一年結束時，你們會用什麼標準判斷我做得成不成功？我也想知道日常最緊密合作的對象是誰。如果答案是客戶品質團隊，那我要準備的東西，會和答案是製程團隊時很不一樣。",
+      "core": "How would you measure whether I am successful after the first year?",
+      "key_phrases": [
+        {"en": "who I work with most closely day to day", "zh": "我每天最常合作的是誰"},
+        {"en": "I should prepare differently.", "zh": "那我要準備的東西會不一樣。"}
+      ],
+      "follow_ups": [
+        {"en": "What would make you accept this offer?", "zh": "什麼條件會讓你接受這個 offer？"}
+      ],
+      "dont": {"en": "How many days of annual leave do I get?", "why_zh": "福利問題留給 HR 與談 offer 階段，別佔用技術面試的最後印象。"},
+      "shadow": true
+    },
+    {
+      "id": "i040",
+      "category": "ask_them",
+      "category_zh": "反問面試官",
+      "q": "Is there anything else you want us to know?",
+      "q_zh": "還有什麼是你希望我們知道的？",
+      "intent_zh": "最後一題是你自己補上沒被問到的優勢，或先處理對方的疑慮（例如英文）。",
+      "outline_zh": ["主動點出對方可能的疑慮", "用事實而不是保證去回應", "收在一句你的工作原則"],
+      "answer": "One thing. My English is not perfect, but I have run customer con-calls in English for three years and I have never missed a commitment date. If a technical point matters, I will ask again until I am sure I understand it. I would rather ask twice than deliver the wrong thing.",
+      "answer_zh": "有一件事。我的英文不完美，但我已經用英文主持客戶電話會議三年，而且從沒錯過承諾的日期。如果某個技術點很重要，我會再問一次，直到我確定自己聽懂為止。我寧可問兩次，也不要交錯東西。",
+      "core": "I would rather ask twice than deliver the wrong thing.",
+      "key_phrases": [
+        {"en": "I have never missed a commitment date.", "zh": "我從沒有錯過承諾的日期。"},
+        {"en": "I will ask again until I am sure I understand it.", "zh": "我會再問一次，直到我確定聽懂為止。"}
+      ],
+      "follow_ups": [
+        {"en": "How do you handle it when you don't understand on a call?", "zh": "開會聽不懂的時候你怎麼處理？"}
+      ],
+      "dont": {"en": "No, nothing. Thank you.", "why_zh": "最後一次主動出擊的機會，放棄很可惜。"},
+      "shadow": true
+    }
+  ]
+}

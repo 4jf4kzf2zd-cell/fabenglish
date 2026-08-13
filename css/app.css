@@ -425,4 +425,37 @@ input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent);
 }
 .steps > div[data-on="1"] { background: var(--accent); color: var(--on-accent); font-weight: 600; }
 
+/* ---------- 面試 ---------- */
+
+.iv-q { font-size: 16px; font-weight: 600; line-height: 1.5; }
+.iv-q.big { font-size: 20px; line-height: 1.45; margin-bottom: 4px; }
+.iv-sec { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
+.iv-sec:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.iv-h { font-size: 12px; color: var(--text-dim); letter-spacing: .08em; margin-bottom: 6px; }
+.iv-outline { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.9; }
+.iv-answer { font-size: 15px; line-height: 1.8; }
+.iv-core {
+  font-size: 16px;
+  line-height: 1.6;
+  border-left: 3px solid var(--accent);
+  padding: 2px 0 2px 12px;
+  margin: 6px 0 10px;
+}
+.iv-timer { min-height: 20px; margin: 8px 0; }
+
+/* ---------- 循環聽 ---------- */
+
+.loop-stage {
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 0 16px;
+  text-align: center;
+}
+.loop-en { font-size: 19px; line-height: 1.5; font-weight: 500; }
+.loop-zh { line-height: 1.6; }
+.loop-meta { font-variant-numeric: tabular-nums; }
+
 .hidden { display: none !important; }

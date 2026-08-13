@@ -310,19 +310,25 @@ try {
     const items = await content.vocab();
     srs.answer(items[5].id, true);
     srs.answer(items[5].id, false);
-    store.update(s => { s.shadow.p008 = { best: 42 }; });
+    store.update(s => {
+      s.shadow.p008 = { best: 42 };
+      s.interview.i001 = { ok: false, tries: 1 };   // 面試自評卡住（M4）
+    });
   });
 
   const report = await page.evaluate(async () => {
     const [w, c] = await Promise.all([import('/js/weakness.js'), import('/js/content.js')]);
-    const [vocab, readings, emails, presentation, listening] = await Promise.all([
-      c.vocab(), c.readings(), c.emails(), c.presentation(), c.listening(),
+    const [vocab, readings, emails, presentation, listening, interview] = await Promise.all([
+      c.vocab(), c.readings(), c.emails(), c.presentation(), c.listening(), c.interview(),
     ]);
-    const r = w.buildReport({ vocab, readings, emails, presentation, listening });
+    const r = w.buildReport({ vocab, readings, emails, presentation, listening, interview });
     return { md: r.markdown, counts: r.counts, empty: r.empty, name: w.filename() };
   });
   check('弱點清單有抓到答錯的單字', report.counts.vocab === 1, JSON.stringify(report.counts));
-  check('弱點清單有抓到低分跟讀句', report.counts.shadow === 1);
+  check('弱點清單有抓到要再練的句子', report.counts.shadow === 1);
+  check('弱點清單有抓到面試卡住的題目', report.counts.interview === 1);
+  check('弱點清單含面試段落', report.md.includes('面試答不出來的題目'));
+  check('弱點清單不出現跟讀分數', !/\d+ 分/.test(report.md), (report.md.match(/.{0,20}\d+ 分.{0,10}/) || [''])[0]);
   check('弱點清單是 markdown 格式', report.md.startsWith('# FabEnglish 弱點清單'));
   check('弱點清單含單字表格', report.md.includes('| 單字 | 中譯 | 答錯次數 |'));
   check('弱點清單附上給 Claude 的指令', report.md.includes('給 Claude 的指令'));
@@ -350,12 +356,63 @@ try {
   check('今天已經練過就不顯示提醒',
     !/連續紀錄今天到期/.test(await page.$eval('#view', n => n.innerText)));
 
-  /* --- 10. 其他路由 --- */
-  console.log('\n[10] 路由與設定');
+  /* --- 10. 面試題 / 循環聽 / 跟讀不顯示分數（M4） --- */
+  console.log('\n[10] 面試題 / 循環聽 / 跟讀不顯示分數');
+
+  await page.goto(`${BASE}/index.html#/interview`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#view .card');
+  const ivText = await page.$eval('#view', n => n.innerText);
+  check('面試頁列出七個分類',
+    ['自我介紹', '經歷與專案', '技術深挖', '行為問題', '動機與職涯', '薪資與條件', '反問面試官']
+      .every(k => ivText.includes(k)));
+  check('面試頁列出 40 題', await page.$$eval('#view .card', ns => ns.length) >= 40);
+
+  await clickByText(page, 'button', '看解析與範答');
+  await sleep(200);
+  const ivDetail = await page.$eval('#view', n => n.innerText);
+  check('展開後有「面試官在問什麼」', ivDetail.includes('面試官在問什麼'));
+  check('展開後有回答骨架與核心句', ivDetail.includes('回答骨架') && ivDetail.includes('核心句跟讀'));
+  await page.screenshot({ path: join(SHOTS, '6-interview.png') });
+
+  await page.goto(`${BASE}/index.html#/interview/mock`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#view .card');
+  check('模擬面試從第 1 / 6 題開始', /第 1 \/ 6 題/.test(await page.$eval('#view', n => n.innerText)));
+  await clickByText(page, 'button', '🤔 卡住了');
+  await sleep(200);
+  await clickByText(page, 'button', '下一題 →');
+  await sleep(200);
+  check('可前進到第 2 題', /第 2 \/ 6 題/.test(await page.$eval('#view', n => n.innerText)));
+  await clickByText(page, 'button', '← 上一題');
+  await sleep(200);
+  check('可回到上一題', /第 1 \/ 6 題/.test(await page.$eval('#view', n => n.innerText)));
+  const ivState = await page.evaluate(async () => (await import('/js/store.js')).get().interview);
+  check('模擬面試自評寫入進度', Object.values(ivState).some(v => v.ok === false), JSON.stringify(ivState));
+
+  await page.goto(`${BASE}/index.html#/loop`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.loop-stage');
+  const loopText = await page.$eval('#view', n => n.innerText);
+  check('循環聽有重複次數與停頓設定', loopText.includes('每句重複') && loopText.includes('句間停頓'));
+  check('循環聽有五種句源',
+    (await page.$$eval('#view select option', ns => ns.length)) === 5);
+  const loopFirst = await page.$eval('.loop-en', n => n.textContent);
+  await page.evaluate(() => [...document.querySelectorAll('button')].find(b => b.textContent.includes('⏭'))?.click());
+  await sleep(200);
+  check('⏭ 會換到下一句', (await page.$eval('.loop-en', n => n.textContent)) !== loopFirst);
+  await page.screenshot({ path: join(SHOTS, '7-loop.png') });
+
+  await page.goto(`${BASE}/index.html#/present`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#view .card');
+  // 跟讀分數不得出現在任何 UI（.shadow-score 已移除，pill 只寫「練過」）
+  const scoreish = await page.$$eval('#view .shadow-score, #view .pill', ns => ns.map(n => n.textContent));
+  check('簡報句型列表不出現跟讀分數', !scoreish.some(t => /\d/.test(t)), scoreish.join(','));
+
+  /* --- 11. 其他路由 --- */
+  console.log('\n[11] 路由與設定');
   const ROUTES = [
     ['#/home', '天連續練習'], ['#/vocab', ''], ['#/reading', '篇完成'],
     ['#/progress', 'Leitner'], ['#/settings', '每日新字上限'],
     ['#/email', '填空練習'], ['#/present', '模擬簡報'], ['#/listen', '段完成'],
+    ['#/interview', '模擬面試'], ['#/loop', '每句重複'],
   ];
   for (const [hash, expect] of ROUTES) {
     await page.goto(`${BASE}/index.html${hash}`, { waitUntil: 'networkidle0' });
@@ -369,12 +426,12 @@ try {
   await page.goto(`${BASE}/index.html#/progress`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.boxes');
   const progText = await page.$eval('#view', n => n.innerText);
-  check('進度頁顯示五個模組完成度',
-    ['單字 SRS', '閱讀', 'Email 填空', '簡報跟讀', '聽力'].every(k => progText.includes(k)));
+  check('進度頁顯示六個模組完成度',
+    ['單字 SRS', '閱讀', 'Email 填空', '簡報跟讀', '聽力', '面試題'].every(k => progText.includes(k)));
   await page.screenshot({ path: join(SHOTS, '5-progress.png') });
 
-  /* --- 11. console 錯誤 --- */
-  console.log('\n[11] Console');
+  /* --- 12. console 錯誤 --- */
+  console.log('\n[12] Console');
   const realErrors = consoleErrors.filter(e => !/favicon|speech|not-allowed/i.test(e));
   check('沒有 console 錯誤', realErrors.length === 0, realErrors.join(' | ').slice(0, 300));
 

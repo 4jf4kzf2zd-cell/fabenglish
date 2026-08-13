@@ -13,8 +13,17 @@ NAND Flash 原廠工程師的商用英文練習 PWA。每天 20–30 分鐘，�
 | M1 | Shell/路由/首頁、單字 SRS、閱讀、進度＋匯出匯入、TTS、設定、PWA | ✅ 已完成 |
 | M2 | 跟讀評分、簡報句型（含簡報模式）、Email 句型（cloze）、聽力（含數字聽寫） | ✅ 已完成 |
 | M3 | 內容補滿、streak 提示（首頁＋PWA 圖示數字）、弱點清單匯出 markdown | ✅ 已完成 |
+| M4 | 面試常見問題（含模擬面試）、循環聽、跟讀改直接錄音且不顯示分數、可回上一題 | ✅ 已完成 |
 
-內容現況：vocab **600**（A200/B250/C150）、readings **30**、email **30**、presentation **40**、listening **15**。
+內容現況：vocab **600**（A200/B250/C150）、readings **30**、email **30**、presentation **40**、listening **15**、interview **40**。
+
+面試模組：40 題分七類（自我介紹／經歷專案／技術深挖／行為問題／動機職涯／薪資條件／反問面試官），
+每題有「面試官在問什麼 → 回答骨架 → 範答 → 核心句跟讀 → 關鍵句型 → 別這樣答 → 可能的追問」。
+模擬面試抽 6 題，只播題目、計時 60 秒讓你出聲答，再自評「答得出來／卡住」——App 不評分自由回答。
+
+循環聽（`#/loop`）：把常用句一直重複播放，可切句源、設定每句重複次數與句間停頓，通勤時開著洗耳朵。
+
+> 跟讀**不給分數**：Web Speech 對非母語腔調誤差太大，數字會誤導。畫面只做逐字比對與辨識結果呈現。
 
 弱點清單：進度頁可把「記不住的單字、唸不好的句子、讀不懂的文章、聽不清楚的對話、寫不出來的句型」
 整理成一份 Markdown 下載或複製，貼回 Claude Project 就能生成加強教材（檔尾附了現成的指令）。
@@ -37,7 +46,7 @@ npm test           # scoring.js 單元測試（48 項）
 ```bash
 node scripts/validate.js                                   # 內容 schema（含聽寫題可判性）
 node scripts/test-scoring.mjs                              # 48 項純函式單元測試
-PUPPETEER_DIR=<有裝 puppeteer 的專案> node scripts/smoke.mjs   # 66 項無頭煙霧測試
+PUPPETEER_DIR=<有裝 puppeteer 的專案> node scripts/smoke.mjs   # 95 項無頭煙霧測試
 ```
 
 煙霧測試涵蓋：SRS 升降盒與到期日、時間旅行後的隔日複習、匯出→清除→匯入完整還原、
@@ -76,7 +85,7 @@ js/srs.js           Leitner 5 盒與日期（含 dev 時間旅行）
 js/speech.js        TTS/STT 封裝，所有 iOS workaround 都在這裡
 js/scoring.js       跟讀 token 對齊評分 ＋ 數字聽寫比對（純函式）
 js/shadow.js        跟讀 UI 元件（單字／簡報／簡報模式共用）
-js/weakness.js      弱點清單 → markdown
+js/weakness.js      弱點清單 → markdown（含面試卡住的題目）
 js/badge.js         PWA 圖示待複習數（不支援時靜默）
 js/content.js       content/*.json 載入與快取
 js/dom.js           極簡 DOM 建構工具

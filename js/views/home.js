@@ -13,16 +13,17 @@ const PLAN = {
   4: { label: '單字 ＋ 閱讀', hint: '複習量通常這天最高，先清 SRS。' },
   5: { label: '跟讀 ＋ 簡報句型', hint: '週五練口說輸出，跟讀 10 句簡報用語。' },
   6: { label: '聽力', hint: '週末聽一段長對話，做聽寫題練數字。' },
-  0: { label: '弱點複習', hint: '看進度頁的弱字清單，把 lapses 最多的字補起來。' },
+  0: { label: '面試題 ＋ 弱點複習', hint: '跑一輪 6 題模擬面試，再把 lapses 最多的字補起來。' },
 };
 
 export async function render(root, ctx) {
-  const [vocabItems, readingItems, emailItems, presentItems, listenItems] = await Promise.all([
+  const [vocabItems, readingItems, emailItems, presentItems, listenItems, interviewItems] = await Promise.all([
     content.vocab().catch(() => []),
     content.readings().catch(() => []),
     content.emails().catch(() => []),
     content.presentation().catch(() => []),
     content.listening().catch(() => []),
+    content.interview().catch(() => []),
   ]);
 
   const st = store.get();
@@ -71,6 +72,9 @@ export async function render(root, ctx) {
         `${countBy(presentItems, i => st.shadow[i.id]?.best != null)} / ${presentItems.filter(i => i.shadow).length} 句跟讀`),
       menuItem('#/listen', '聽力',
         `${countBy(listenItems, i => st.listening[i.id]?.quiz != null)} / ${listenItems.length} 段完成`),
+      menuItem('#/interview', '面試常見問題',
+        `${countBy(interviewItems, i => st.interview[i.id])} / ${interviewItems.length} 題練過`),
+      menuItem('#/loop', '循環聽', '常用句重複播放，通勤時開著'),
       menuItem('#/progress', '進度與備份', ''),
     ),
 

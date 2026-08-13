@@ -6,8 +6,10 @@
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.js",
+    "test": "node scripts/test-scoring.mjs",
     "icons": "node scripts/make-icons.mjs",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {},
   "devDependencies": {}

@@ -329,4 +329,91 @@ input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent);
 .kv { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; font-size: 14px; }
 .kv + .kv { border-top: 1px solid var(--line); }
 
+/* ---------- 跟讀 ---------- */
+
+.shadow { margin-top: 10px; }
+.shadow-target {
+  font-size: 17px;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+.shadow-target .w-hit { color: var(--ok); }
+.shadow-target .w-miss { color: var(--bad); text-decoration: underline wavy var(--bad); text-underline-offset: 3px; }
+.shadow-status { margin-bottom: 10px; min-height: 20px; }
+.warn-text { color: var(--warn); }
+.rec-text { color: var(--bad); }
+.shadow-result { margin-top: 10px; }
+.shadow-result i { font-style: normal; }
+
+.shadow-score { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; }
+.shadow-score .n { font-size: 30px; font-weight: 600; line-height: 1; }
+.shadow-score .u { font-size: 13px; color: var(--text-dim); }
+.g-good .n { color: var(--ok); }
+.g-ok   .n { color: var(--warn); }
+.g-bad  .n { color: var(--bad); }
+
+/* ---------- Email 句型 ---------- */
+
+.pattern { font-size: 16px; line-height: 1.7; }
+.pattern .slot { color: var(--accent); font-weight: 600; }
+.dont {
+  border-left: 3px solid var(--bad);
+  padding-left: 12px;
+  margin-top: 12px;
+}
+.dont .en { color: var(--bad); }
+.cloze-text { font-size: 16px; line-height: 2.2; }
+.cloze-text input {
+  display: inline-block;
+  width: 8.5em;
+  min-height: 36px;
+  padding: 2px 8px;
+  margin: 0 2px;
+  text-align: center;
+}
+.cloze-text input.correct { border-color: var(--ok); color: var(--ok); }
+.cloze-text input.wrong { border-color: var(--bad); color: var(--bad); }
+
+/* ---------- 聽力 ---------- */
+
+.turn {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.turn:last-child { border-bottom: none; }
+.turn.active { background: var(--accent-2); margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
+.turn .who { flex: 0 0 88px; font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+.turn .said { flex: 1; }
+/* 盲聽時把整句蓋成一條，避免長對話把頁面撐得很長 */
+.turn .said.masked {
+  color: transparent;
+  background: var(--surface-2);
+  border-radius: 4px;
+  user-select: none;
+  max-height: 1.6em;
+  overflow: hidden;
+}
+.turn .icon-btn { flex: 0 0 auto; align-self: flex-start; }
+
+.rate-group { display: flex; gap: 6px; }
+.rate-group button { flex: 1; min-height: 38px; padding: 4px 8px; font-size: 14px; }
+.rate-group button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+.dictation .focus { font-size: 12px; }
+.dictation .answer { font-family: var(--mono); font-size: 17px; }
+
+.steps { display: flex; gap: 6px; margin-bottom: 12px; }
+.steps > div {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  padding: 6px 2px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--text-dim);
+}
+.steps > div[data-on="1"] { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+
 .hidden { display: none !important; }

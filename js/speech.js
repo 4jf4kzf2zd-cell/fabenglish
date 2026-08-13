@@ -238,13 +238,100 @@ export function bindPlayButton(btn, getText, opts = {}) {
 }
 
 /* ------------------------------------------------------------------ */
-/* STT — M2 的跟讀引擎會用；M1 先放偵測用的 helper                      */
+/* STT — 跟讀引擎用                                                     */
 /* ------------------------------------------------------------------ */
 
 export function sttUnavailableReason() {
   if (!sttSupported) return '這個瀏覽器不支援語音辨識（iOS 請用 Safari 14.5 以上）。';
-  if (!navigator.onLine) return '跟讀功能需要網路連線。';       // SPEC §5-5
+  if (!navigator.onLine) return '跟讀功能需要網路連線（辨識在 Apple 伺服器上做）。';   // SPEC §5-5
   if (location.protocol !== 'https:' && location.hostname !== 'localhost')
     return '語音辨識需要 https 連線。';
   return null;
+}
+
+/** 是否為加到主畫面後的 standalone 模式（SPEC §5-8 的 bug 提示要用）。 */
+export function isStandalone() {
+  return window.navigator.standalone === true ||
+    window.matchMedia?.('(display-mode: standalone)').matches === true;
+}
+
+const STT_ERROR_ZH = {
+  'not-allowed': '麥克風權限被拒絕。請到「設定 > Safari > 麥克風」允許本網站使用麥克風。',
+  'service-not-allowed': '系統不允許語音辨識。若是從主畫面開啟，請改用 Safari 分頁開啟再試一次。',
+  'no-speech': '沒有聽到聲音，請靠近麥克風再說一次。',
+  'audio-capture': '找不到麥克風。',
+  'network': '語音辨識需要網路連線，目前連不上。',
+  'aborted': '已取消。',
+};
+
+/**
+ * 聽一句話（單句短語音，SPEC §5-6：iOS 停頓 1–2 秒就會自己 onend）。
+ * @param {{lang?:string, onInterim?:(text:string)=>void, maxMs?:number}} opts
+ * @returns {{promise:Promise<{transcript:string, error?:string, message?:string}>, stop:()=>void, abort:()=>void}}
+ */
+export function listen(opts = {}) {
+  const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Rec) {
+    return {
+      promise: Promise.resolve({ transcript: '', error: 'unsupported', message: sttUnavailableReason() }),
+      stop() {}, abort() {},
+    };
+  }
+
+  const rec = new Rec();
+  rec.lang = opts.lang || 'en-US';
+  rec.continuous = false;
+  rec.interimResults = true;
+  rec.maxAlternatives = 1;
+
+  let finalText = '';
+  let lastInterim = '';
+  let settled = false;
+  let errorCode = null;
+  let timer = null;
+
+  const promise = new Promise(resolve => {
+    const done = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      // SPEC §5-6：onend 時若還沒拿到 final，就用最後一次 interim
+      const transcript = (finalText || lastInterim).trim();
+      if (errorCode && !transcript) {
+        resolve({ transcript: '', error: errorCode, message: STT_ERROR_ZH[errorCode] || `辨識失敗（${errorCode}）` });
+      } else {
+        resolve({ transcript });
+      }
+    };
+
+    rec.onresult = ev => {
+      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+        const alt = ev.results[i][0];
+        if (ev.results[i].isFinal) finalText += alt.transcript + ' ';
+        else lastInterim = alt.transcript;
+      }
+      opts.onInterim?.((finalText + lastInterim).trim());
+    };
+    rec.onerror = ev => { errorCode = ev?.error || 'error'; };
+    rec.onend = done;
+
+    try {
+      rec.start();
+    } catch (err) {
+      errorCode = 'start-failed';
+      STT_ERROR_ZH['start-failed'] = isStandalone()
+        ? '無法啟動語音辨識。從主畫面開啟時較舊的 iOS 有此問題，請改用 Safari 分頁開啟。'
+        : `無法啟動語音辨識：${err.message}`;
+      done();
+    }
+
+    // 保險絲：使用者一直不說話時不要卡著
+    timer = setTimeout(() => { try { rec.stop(); } catch (_) { done(); } }, opts.maxMs || 12000);
+  });
+
+  return {
+    promise,
+    stop() { try { rec.stop(); } catch (_) { /* noop */ } },
+    abort() { errorCode = errorCode || 'aborted'; try { rec.abort(); } catch (_) { /* noop */ } },
+  };
 }

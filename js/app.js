@@ -8,18 +8,19 @@ import * as vocab from './views/vocab.js';
 import * as reading from './views/reading.js';
 import * as progress from './views/progress.js';
 import * as settings from './views/settings.js';
-import * as soon from './views/soon.js';
+import * as email from './views/email.js';
+import * as present from './views/present.js';
+import * as listen from './views/listen.js';
 
 const routes = {
   '/home':     { view: home,     title: 'FabEnglish' },
   '/vocab':    { view: vocab,    title: '單字 SRS' },
   '/reading':  { view: reading,  title: '閱讀' },
+  '/email':    { view: email,    title: 'Email 句型' },
+  '/present':  { view: present,  title: '簡報句型' },
+  '/listen':   { view: listen,   title: '聽力' },
   '/progress': { view: progress, title: '進度' },
   '/settings': { view: settings, title: '設定' },
-  // M2 模組：路由先佔位，做完再換成真的 view
-  '/email':    { view: soon, title: 'Email 句型', meta: { name: 'Email 句型', milestone: 'M2' } },
-  '/present':  { view: soon, title: '簡報句型', meta: { name: '簡報句型', milestone: 'M2' } },
-  '/listen':   { view: soon, title: '聽力', meta: { name: '聽力', milestone: 'M2' } },
 };
 
 const viewEl = document.getElementById('view');

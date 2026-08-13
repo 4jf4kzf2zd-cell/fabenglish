@@ -10,15 +10,18 @@ NAND Flash 原廠工程師的商用英文練習 PWA。每天 20–30 分鐘，�
 
 | 里程碑 | 範圍 | 狀態 |
 |---|---|---|
-| M1 | Shell/路由/首頁、單字 SRS、閱讀、進度＋匯出匯入、TTS、設定、PWA | ✅ 已完成（vocab 100、readings 10） |
-| M2 | 跟讀評分、簡報句型、Email 句型、聽力 | ⬜ 未開始（路由已佔位） |
-| M3 | 內容補滿、streak 提示、弱點清單匯出 | ⬜ 未開始 |
+| M1 | Shell/路由/首頁、單字 SRS、閱讀、進度＋匯出匯入、TTS、設定、PWA | ✅ 已完成 |
+| M2 | 跟讀評分、簡報句型（含簡報模式）、Email 句型（cloze）、聽力（含數字聽寫） | ✅ 已完成 |
+| M3 | 內容補滿（vocab 600、readings 30、listening 15）、streak 提示、弱點清單匯出 | ⬜ 未開始 |
+
+內容現況：vocab **300**（A100/B125/C75）、readings **20**、email **30**、presentation **40**、listening **8**。
 
 ## 本機開發
 
 ```bash
 npm run serve      # → http://localhost:8080
 npm run validate   # 驗證 content/*.json（commit 前必跑）
+npm test           # scoring.js 單元測試（48 項）
 ```
 
 > ES modules 與 `fetch` 不能用 `file://` 開，一定要走 http。
@@ -29,14 +32,19 @@ npm run validate   # 驗證 content/*.json（commit 前必跑）
 ## 測試
 
 ```bash
-node scripts/validate.js                                   # 內容 schema
-PUPPETEER_DIR=<有裝 puppeteer 的專案> node scripts/smoke.mjs   # 43 項無頭煙霧測試
+node scripts/validate.js                                   # 內容 schema（含聽寫題可判性）
+node scripts/test-scoring.mjs                              # 48 項純函式單元測試
+PUPPETEER_DIR=<有裝 puppeteer 的專案> node scripts/smoke.mjs   # 66 項無頭煙霧測試
 ```
 
 煙霧測試涵蓋：SRS 升降盒與到期日、時間旅行後的隔日複習、匯出→清除→匯入完整還原、
-閱讀作答與紀錄、八條路由渲染、console 零錯誤。截圖輸出在 `.smoke/`。
+閱讀作答、Email cloze 比對、跟讀面板與**離線降級**、聽力四階段與數字聽寫、
+八條路由渲染、console 零錯誤。截圖輸出在 `.smoke/`。
 
-**TTS 實際發聲、麥克風權限、PWA 加到主畫面、離線行為必須在 iPhone 實機驗**（SPEC §8）。
+`validate.js` 除了 schema，還會強制每一題聽寫的 `answer_display` 都能被 `scoring.checkDictation` 判對，
+避免出現「照著答案打也被判錯」的題目。
+
+**TTS 實際發聲、STT 跟讀評分、麥克風權限、PWA 加到主畫面、離線行為必須在 iPhone 實機驗**（SPEC §8）。
 
 ## 部署到 GitHub Pages
 
@@ -63,6 +71,8 @@ js/app.js           路由與初始化
 js/store.js         localStorage 唯一入口、匯出/匯入
 js/srs.js           Leitner 5 盒與日期（含 dev 時間旅行）
 js/speech.js        TTS/STT 封裝，所有 iOS workaround 都在這裡
+js/scoring.js       跟讀 token 對齊評分 ＋ 數字聽寫比對（純函式）
+js/shadow.js        跟讀 UI 元件（單字／簡報／簡報模式共用）
 js/content.js       content/*.json 載入與快取
 js/dom.js           極簡 DOM 建構工具
 js/views/           每個模組一個 view

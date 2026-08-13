@@ -131,7 +131,7 @@ try {
   await page.goto(`${BASE}/index.html#/reading`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.menu a');
   const listCount = await page.$$eval('.menu a', ns => ns.length);
-  check('列表顯示 10 篇文章', listCount === 10, `實際 ${listCount}`);
+  check('列表顯示 20 篇文章', listCount === 20, `實際 ${listCount}`);
 
   await page.goto(`${BASE}/index.html#/reading/r001`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.article');
@@ -182,12 +182,129 @@ try {
   check('匯入後閱讀紀錄完整還原', restored.readings.r001?.done === true);
   check('匯入後連續天數還原', restored.streak.current === 1);
 
-  /* --- 6. 其他路由 --- */
-  console.log('\n[6] 路由與設定');
+  /* --- 6. Email 句型 --- */
+  console.log('\n[6] Email 句型');
+  await page.goto(`${BASE}/index.html#/email`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.pattern');
+  const patternCount = await page.$$eval('.pattern', ns => ns.length);
+  check('列出 30 組句型', patternCount === 30, `實際 ${patternCount}`);
+  check('句型的變數槽有上色', (await page.$$eval('.pattern .slot', ns => ns.length)) > 0);
+  check('每組都有「別這樣寫」對照', (await page.$$eval('.dont', ns => ns.length)) === 30);
+
+  await page.goto(`${BASE}/index.html#/email/drill`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.cloze-text input');
+  const blanks = await page.$$eval('.cloze-text input', ns => ns.length);
+  check('cloze 空格數與答案數一致', blanks === 3, `實際 ${blanks}`);
+
+  await page.evaluate(async () => {
+    const c = await import('/js/content.js');
+    const item = (await c.emails())[0];
+    document.querySelectorAll('.cloze-text input').forEach((input, i) => {
+      // 故意用大寫＋前後空白，驗證比對有忽略大小寫與空白
+      input.value = `  ${item.cloze.answers[i].toUpperCase()} `;
+    });
+  });
+  await clickByText(page, 'button', '對答案');
+  await sleep(200);
+  const drillText = await page.$eval('#view', n => n.innerText);
+  check('填空正確（忽略大小寫與前後空白）', drillText.includes('✅ 正確'), drillText.slice(0, 80).replace(/\n/g, ' '));
+  const stateE = await readState(page);
+  check('cloze 通過紀錄已寫入', stateE.cloze.e001?.passed === true);
+
+  /* --- 7. 簡報句型與跟讀 --- */
+  console.log('\n[7] 簡報句型 / 跟讀');
+  await page.goto(`${BASE}/index.html#/present`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.menu, .card');
+  const presentText = await page.$eval('#view', n => n.innerText);
+  check('簡報模式入口存在', presentText.includes('模擬簡報'));
+  check('依 section 分組顯示', presentText.includes('圖表描述') && presentText.includes('根本原因'));
+
+  await page.evaluate(() => document.querySelectorAll('button[aria-label="跟讀這句"]')[0].click());
+  await page.waitForSelector('.shadow');
+  const shadowText = await page.$eval('.shadow', n => n.innerText);
+  check('跟讀面板可展開並顯示目標句與按鈕',
+    shadowText.includes('聽一次') && shadowText.includes('跟讀'),
+    shadowText.slice(0, 80).replace(/\n/g, ' '));
+
+  // M2 驗收：離線時跟讀要顯示「需要網路」提示，而不是壞掉
+  await page.setOfflineMode(true);
+  await page.evaluate(() => {
+    document.querySelectorAll('button[aria-label="跟讀這句"]')[0].click();   // 收起
+    document.querySelectorAll('button[aria-label="跟讀這句"]')[1].click();   // 換一句展開
+  });
+  await page.waitForSelector('.shadow');
+  await sleep(150);
+  const offlineText = await page.$eval('.shadow', n => n.innerText);
+  const offlineBtns = await page.$$eval('.shadow button', ns => ns.map(n => n.textContent.trim()));
+  check('離線時顯示「需要網路」提示',
+    offlineText.includes('需要網路') && (await page.$('.shadow .warn-text')) !== null,
+    offlineText.slice(0, 90).replace(/\n/g, ' '));
+  check('離線時不提供錄音按鈕（不會壞掉）',
+    !offlineBtns.some(t => t.includes('跟讀')), JSON.stringify(offlineBtns));
+  check('離線時仍可播放目標句（TTS 不需網路）', offlineBtns.some(t => t.includes('聽一次')));
+  await page.setOfflineMode(false);
+
+  await page.goto(`${BASE}/index.html#/present/deck`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.shadow');
+  const deckText = await page.$eval('#view', n => n.innerText);
+  check('簡報模式組出 10 句', /第 1 \/ 10 句/.test(deckText), deckText.slice(0, 60).replace(/\n/g, ' '));
+
+  /* --- 8. 聽力 --- */
+  console.log('\n[8] 聽力');
+  await page.goto(`${BASE}/index.html#/listen`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.menu a');
+  check('列出 8 段對話', (await page.$$eval('.menu a', ns => ns.length)) === 8);
+
+  await page.goto(`${BASE}/index.html#/listen/l001`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.turn');
+  check('對話有 10 個 turn', (await page.$$eval('.turn', ns => ns.length)) === 10);
+  check('第一輪盲聽時字幕被蓋住', (await page.$$eval('.said.masked', ns => ns.length)) === 10);
+  check('有三段語速可選', (await page.$$eval('.rate-group button', ns => ns.length)) === 3);
+
+  await clickByText(page, 'button', '聽完了，去答題');
+  await page.waitForSelector('.qz');
+  await page.evaluate(async () => {
+    const c = await import('/js/content.js');
+    const item = (await c.listening()).find(i => i.id === 'l001');
+    document.querySelectorAll('.qz').forEach((qz, i) => {
+      qz.querySelectorAll('.opt')[item.questions[i].answer].click();
+    });
+  });
+  await sleep(250);
+  const stateL = await readState(page);
+  check('理解題全對記為 1.0', stateL.listening.l001?.quiz === 1, JSON.stringify(stateL.listening.l001));
+
+  await clickByText(page, 'button', '開字幕重聽');
+  await sleep(150);
+  check('重聽階段字幕打開', (await page.$$eval('.said.masked', ns => ns.length)) === 0);
+
+  await clickByText(page, 'button', '去做聽寫題');
+  await page.waitForSelector('.dictation, .qz input');
+  const dictInputs = await page.$$eval('#view input[type="text"]', ns => ns.length);
+  check('聽寫題有 2 題', dictInputs === 2, `實際 ${dictInputs}`);
+
+  // M2 驗收：自由格式的數字輸入要能判對
+  await page.evaluate(() => {
+    const inputs = document.querySelectorAll('#view input[type="text"]');
+    inputs[0].value = '46 lots -> 12 shipped';
+    inputs[1].value = 'WW36';
+  });
+  await page.evaluate(() => {
+    document.querySelectorAll('#view button').forEach(b => { if (b.textContent.trim() === '對答案') b.click(); });
+  });
+  await sleep(300);
+  const dictText = await page.$eval('#view', n => n.innerText);
+  check('聽寫自由格式輸入可判對', (dictText.match(/✅ 正確/g) || []).length === 2,
+    dictText.slice(0, 120).replace(/\n/g, ' '));
+  const stateD = await readState(page);
+  check('聽寫分數已寫入', stateD.listening.l001?.dictation === 1, JSON.stringify(stateD.listening.l001));
+
+  /* --- 9. 其他路由 --- */
+  console.log('\n[9] 路由與設定');
   const ROUTES = [
     ['#/home', '天連續練習'], ['#/vocab', ''], ['#/reading', '篇完成'],
     ['#/progress', 'Leitner'], ['#/settings', '每日新字上限'],
-    ['#/email', 'M2'], ['#/present', 'M2'], ['#/listen', 'M2'],
+    ['#/email', '填空練習'], ['#/present', '模擬簡報'], ['#/listen', '段完成'],
   ];
   for (const [hash, expect] of ROUTES) {
     await page.goto(`${BASE}/index.html${hash}`, { waitUntil: 'networkidle0' });
@@ -200,10 +317,13 @@ try {
   }
   await page.goto(`${BASE}/index.html#/progress`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.boxes');
+  const progText = await page.$eval('#view', n => n.innerText);
+  check('進度頁顯示五個模組完成度',
+    ['單字 SRS', '閱讀', 'Email 填空', '簡報跟讀', '聽力'].every(k => progText.includes(k)));
   await page.screenshot({ path: join(SHOTS, '5-progress.png') });
 
-  /* --- 7. console 錯誤 --- */
-  console.log('\n[7] Console');
+  /* --- 10. console 錯誤 --- */
+  console.log('\n[10] Console');
   const realErrors = consoleErrors.filter(e => !/favicon|speech|not-allowed/i.test(e));
   check('沒有 console 錯誤', realErrors.length === 0, realErrors.join(' | ').slice(0, 300));
 

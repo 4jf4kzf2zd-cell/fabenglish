@@ -5,12 +5,16 @@ import * as store from '../store.js';
 import * as srs from '../srs.js';
 import * as speech from '../speech.js';
 import * as content from '../content.js';
+import { createShadow } from '../shadow.js';
 
 const TIER_LABEL = { A: 'A 專業', B: 'B 商務', C: 'C 片語' };
 
 let session = null;   // {queue:[], idx, again:[], right:0, wrong:0, total}
+let openShadow = null;
 
 export function destroy() {
+  openShadow?.destroy();
+  openShadow = null;
   speech.cancel();
 }
 
@@ -42,6 +46,8 @@ export async function render(root, ctx) {
 
   function draw() {
     speech.cancel();
+    openShadow?.destroy();
+    openShadow = null;
     host.replaceChildren();
 
     const item = session.queue[session.idx];
@@ -123,7 +129,20 @@ export async function render(root, ctx) {
     );
 
     const nextDays = srs.daysBetween(srs.today(), rec.due);
-    const shadowBtn = el('button', { class: 'ghost', disabled: true, title: '跟讀評分於 M2 實作' }, '🎤 跟讀（M2）');
+
+    // 例句跟讀（SPEC §4.1 → 叫用 §4.6 跟讀引擎）
+    const shadowHost = div({});
+    const best = store.get().shadow[item.id]?.best;
+    const shadowBtn = el('button', {
+      class: 'ghost',
+      onClick: () => {
+        if (shadowHost.firstChild) { openShadow?.destroy(); openShadow = null; shadowHost.replaceChildren(); return; }
+        openShadow?.destroy();
+        openShadow = createShadow(item.example, { id: item.id });
+        shadowHost.replaceChildren(openShadow.el);
+        shadowHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      },
+    }, best != null ? `🎤 跟讀例句（最佳 ${best}）` : '🎤 跟讀例句');
 
     return div({},
       card(
@@ -133,7 +152,8 @@ export async function render(root, ctx) {
           playTerm,
         ),
         dl,
-        div({ class: 'row', style: 'margin-top:14px' }, shadowBtn),
+        item.example ? div({ class: 'row', style: 'margin-top:14px' }, shadowBtn) : null,
+        shadowHost,
       ),
       p(correct
         ? `✅ 進入 Box ${rec.box}，${nextDays} 天後再考。`

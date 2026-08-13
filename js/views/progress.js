@@ -6,15 +6,22 @@ import * as srs from '../srs.js';
 import * as content from '../content.js';
 
 export async function render(root, ctx) {
-  const [vocabItems, readingItems] = await Promise.all([
+  const [vocabItems, readingItems, emailItems, presentItems, listenItems] = await Promise.all([
     content.vocab().catch(() => []),
     content.readings().catch(() => []),
+    content.emails().catch(() => []),
+    content.presentation().catch(() => []),
+    content.listening().catch(() => []),
   ]);
 
   const st = store.get();
   const bins = srs.boxHistogram();
   const learned = Object.keys(st.srs).length;
   const readDone = readingItems.filter(r => st.readings[r.id]?.done).length;
+  const clozePassed = emailItems.filter(i => st.cloze[i.id]?.passed).length;
+  const shadowable = presentItems.filter(i => i.shadow);
+  const shadowDone = shadowable.filter(i => st.shadow[i.id]?.best != null).length;
+  const listenDone = listenItems.filter(i => st.listening[i.id]?.quiz != null).length;
   const due = srs.todayCounts(vocabItems);
 
   append(root,
@@ -36,12 +43,13 @@ export async function render(root, ctx) {
     card(
       meter('單字 SRS', learned, vocabItems.length),
       meter('閱讀', readDone, readingItems.length),
-      meterSoon('Email 句型'),
-      meterSoon('簡報句型'),
-      meterSoon('聽力'),
+      meter('Email 填空', clozePassed, emailItems.length),
+      meter('簡報跟讀', shadowDone, shadowable.length),
+      meter('聽力', listenDone, listenItems.length),
     ),
 
     weakSection(vocabItems),
+    weakShadowSection(presentItems),
 
     h2('備份'),
     card(
@@ -80,10 +88,22 @@ function meter(label, n, total) {
   );
 }
 
-function meterSoon(label) {
-  return div({ class: 'kv' },
-    el('span', { class: 'dim', text: label }),
-    el('span', { class: 'pill', text: 'M2' }),
+/** 跟讀分數最低的句子（M3 弱點清單的雛形）。 */
+function weakShadowSection(presentItems) {
+  const st = store.get();
+  const scored = presentItems
+    .filter(i => st.shadow[i.id]?.best != null)
+    .sort((a, b) => st.shadow[a.id].best - st.shadow[b.id].best)
+    .slice(0, 5)
+    .filter(i => st.shadow[i.id].best < 90);
+  if (!scored.length) return null;
+
+  return div({},
+    h2('跟讀最低分的句子'),
+    card(...scored.map(i => div({ class: 'kv', style: 'align-items:flex-start' },
+      el('span', { style: 'flex:1', text: i.en }),
+      el('span', { class: 'dim small', text: `${st.shadow[i.id].best} 分` }),
+    ))),
   );
 }
 

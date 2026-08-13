@@ -18,16 +18,25 @@
 ```bash
 npm run serve      # http://localhost:8080（localhost 會自動進 dev 模式）
 npm run validate   # 驗證 content/*.json
+npm test           # scoring.js 單元測試
 npm run icons      # 重新產生 icons/（改圖案時才需要）
-node scripts/smoke.mjs   # 無頭瀏覽器煙霧測試（需 puppeteer，選用）
+PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 66 項無頭測試（選用）
 ```
 
 > ES modules 與 fetch 不能用 `file://` 開，一定要走 http。
 
 ## 目前進度
 
-- **M1 完成**：Shell/路由/首頁、單字 SRS、閱讀、進度＋匯出匯入、TTS、設定、PWA、內容 vocab 100 ＋ readings 10
-- **M2 未開始**：跟讀評分（`js/scoring.js`）、Email 句型、簡報句型、聽力。路由已佔位在 `js/views/soon.js`
+- **M1 完成**：Shell/路由/首頁、單字 SRS、閱讀、進度＋匯出匯入、TTS、設定、PWA
+- **M2 完成**：跟讀評分（`js/scoring.js` ＋ `js/shadow.js`）、Email 句型（cloze）、簡報句型（含簡報模式）、聽力（四階段＋數字聽寫）
+- 內容：vocab 300 / readings 20 / email 30 / presentation 40 / listening 8
+- **M3 未開始**：內容補滿（vocab 600、readings 30、listening 15）、streak 提示、弱點清單匯出 markdown
+
+## M2 的兩個關鍵不變條件
+
+1. `scoring.js` 是純函式，不准 import 任何瀏覽器 API —— 這樣才能用 node 直接測。
+2. 聽寫題的 `answer_display` 必須能被 `checkDictation` 判對，`validate.js` 會強制檢查。
+   寫題目時避開會被誤判成數字的字（句首的 "One"、機台代號 F02、8D 這種英數混排）。
 
 ## 邊界（附錄 B）
 

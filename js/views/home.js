@@ -17,9 +17,12 @@ const PLAN = {
 };
 
 export async function render(root, ctx) {
-  const [vocabItems, readingItems] = await Promise.all([
+  const [vocabItems, readingItems, emailItems, presentItems, listenItems] = await Promise.all([
     content.vocab().catch(() => []),
     content.readings().catch(() => []),
+    content.emails().catch(() => []),
+    content.presentation().catch(() => []),
+    content.listening().catch(() => []),
   ]);
 
   const st = store.get();
@@ -61,9 +64,12 @@ export async function render(root, ctx) {
     div({ class: 'card menu' },
       menuItem('#/vocab', '單字 SRS', `${Object.keys(st.srs).length} / ${vocabItems.length} 字已學`),
       menuItem('#/reading', '閱讀', `${doneCount(readingItems)} / ${readingItems.length} 篇完成`),
-      menuItem('#/email', 'Email 句型', 'M2', true),
-      menuItem('#/present', '簡報句型', 'M2', true),
-      menuItem('#/listen', '聽力', 'M2', true),
+      menuItem('#/email', 'Email 句型',
+        `${countBy(emailItems, i => st.cloze[i.id]?.passed)} / ${emailItems.length} 組通過`),
+      menuItem('#/present', '簡報句型',
+        `${countBy(presentItems, i => st.shadow[i.id]?.best != null)} / ${presentItems.filter(i => i.shadow).length} 句跟讀`),
+      menuItem('#/listen', '聽力',
+        `${countBy(listenItems, i => st.listening[i.id]?.quiz != null)} / ${listenItems.length} 段完成`),
       menuItem('#/progress', '進度與備份', ''),
     ),
 
@@ -73,6 +79,10 @@ export async function render(root, ctx) {
   function doneCount(items) {
     return items.filter(r => st.readings[r.id]?.done).length;
   }
+}
+
+function countBy(items, fn) {
+  return items.filter(fn).length;
 }
 
 function stat(n, label) {

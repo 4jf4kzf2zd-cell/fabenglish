@@ -40,10 +40,11 @@ fabenglish/
 │   ├── store.js          # localStorage 讀寫、進度 schema、匯出/匯入
 │   ├── srs.js            # Leitner 演算法 + 日期（含 dev 時間旅行；全 App 的「今天」都走 srs.today()）
 │   ├── speech.js         # TTS / STT 封裝（所有 iOS workaround 集中在這裡）
-│   ├── scoring.js        # 跟讀評分（token 對齊）※M2 才建立
+│   ├── scoring.js        # 跟讀評分（token 對齊）＋數字聽寫比對；純函式，可用 node 測
+│   ├── shadow.js         # 跟讀 UI 元件（單字例句／簡報句型／簡報模式共用）
 │   ├── content.js        # content/*.json 載入與快取
 │   ├── dom.js            # 極簡 DOM 建構工具（避免 innerHTML 拼字串）
-│   └── views/            # 每個模組一個 view 檔（home / vocab / reading / progress / settings / soon）
+│   └── views/            # 每個模組一個 view 檔（home / vocab / reading / email / present / listen / progress / settings）
 ├── content/
 │   ├── vocab.json
 │   ├── readings.json
@@ -53,6 +54,7 @@ fabenglish/
 ├── icons/                # PWA 圖示（由 scripts/make-icons.mjs 產生，勿手改）
 ├── scripts/
 │   ├── validate.js       # node 腳本：驗證 content/*.json 符合 schema（commit 前必跑）
+│   ├── test-scoring.mjs  # scoring.js 單元測試（純 node，無依賴）
 │   ├── serve.mjs         # 本機靜態伺服器（ES modules 不能用 file:// 開）
 │   ├── smoke.mjs         # 無頭瀏覽器煙霧測試（選用，需外部 puppeteer）
 │   └── make-icons.mjs    # 產生 icons/（純 Node 手寫 PNG，零依賴）
@@ -260,9 +262,11 @@ localStorage key：`fabenglish.v1`，單一 JSON：
 ### M2 — 完整模組
 範圍：跟讀評分引擎、簡報句型（含簡報模式）、Email 句型（含 cloze）、聽力（含聽寫）。內容補至：vocab 300、readings 20、email 30、presentation 40、listening 8。
 驗收：
-- [ ] iPhone 實機跟讀一句可得分且逐字上色正確
-- [ ] 聽寫「92.5%」用文字輸入可判對
-- [ ] 離線時跟讀顯示需網路提示而非壞掉
+- [ ] iPhone 實機跟讀一句可得分且逐字上色正確　←　**待實機驗**（無頭環境沒有 STT，只驗到流程與離線分支）
+- [x] 聽寫「92.5%」用文字輸入可判對　←　`scripts/test-scoring.mjs` 與 smoke [8] 自動驗證；`validate.js` 另外強制每題 answer_display 都要判得過
+- [x] 離線時跟讀顯示需網路提示而非壞掉　←　smoke [7] 用 offline 模式自動驗證
+
+實際完成：vocab 300（A100/B125/C75）、readings 20、email 30、presentation 40、listening 8。
 
 ### M3 — 打磨
 範圍：內容補滿（vocab 600、readings 30、listening 15）、streak 通知（PWA badge 或首頁提示）、弱點清單（SRS lapses 最多的字、跟讀分數最低的句）匯出成 markdown（可貼回 Claude Project 生成加強教材）。

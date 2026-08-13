@@ -1,4 +1,469 @@
 {
   "version": 1,
-  "items": []
+  "items": [
+    {
+      "id": "l001",
+      "title": "Con-call: customer asks about the excursion",
+      "turns": [
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "Thanks for joining. Can you walk us through the failure signature first?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Sure. The failures are concentrated in two wafers, both from the same furnace batch." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "Is it random, or does it follow a pattern on the wafer?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "It follows a clear edge ring. That rules out a random particle defect." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "Understood. How much material is affected, and how much has shipped to us?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Forty-six lots in total. Twelve of them have already shipped to your site." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "That is a lot. What is your containment plan for the shipped material?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "We ask you to quarantine the remaining stock while we screen the sister lots." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "And when can we expect the interim report?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "By Wednesday next week. The confirmed root cause will follow in work week thirty-six." }
+      ],
+      "questions": [
+        {
+          "q": "What does the edge ring pattern tell the engineer?",
+          "options": [
+            "The failures are caused by random particles",
+            "The failures are systematic, not random",
+            "The customer mishandled the units",
+            "Only one die per wafer failed"
+          ],
+          "answer": 1,
+          "explain_zh": "That rules out a random particle defect —— 有規律的分佈代表系統性的製程問題。這是 FA 對話裡最常出現的第一個判斷。"
+        },
+        {
+          "q": "How many lots have already shipped to the customer?",
+          "options": ["Twelve", "Forty-six", "Two", "Thirty-six"],
+          "answer": 0,
+          "explain_zh": "Forty-six lots in total. Twelve of them have already shipped。總數與已出貨數是兩個不同的數字，聽的時候要分開記。"
+        },
+        {
+          "q": "What does the engineer ask the customer to do?",
+          "options": [
+            "Return all material immediately",
+            "Stop the production line",
+            "Quarantine the remaining stock",
+            "Re-test every unit"
+          ],
+          "answer": 2,
+          "explain_zh": "We ask you to quarantine the remaining stock —— 隔離庫存是圍堵動作，不等於退貨或停線。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "Forty-six lots are affected, and twelve of them have already shipped.",
+          "answer_display": "46 lots affected / 12 shipped",
+          "focus": "numbers"
+        },
+        {
+          "text": "The confirmed root cause will follow in work week thirty-six.",
+          "answer_display": "WW36",
+          "focus": "workweek"
+        }
+      ]
+    },
+    {
+      "id": "l002",
+      "title": "Daily yield meeting with the fab",
+      "turns": [
+        { "speaker": "Lisa (Fab PE)", "voice": "en-US", "text": "Good morning. Let us start with yesterday's sort yield." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "The line average was ninety-three point two percent, which is on baseline." },
+        { "speaker": "Lisa (Fab PE)", "voice": "en-US", "text": "Any lot below the excursion limit?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "One lot came in at eighty-seven point five percent. It is on hold now." },
+        { "speaker": "Lisa (Fab PE)", "voice": "en-US", "text": "Do we know what is different about that lot?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "It is the only lot that went through the backup etcher last Friday." },
+        { "speaker": "Lisa (Fab PE)", "voice": "en-US", "text": "Then let us pull the tool logs before we release anything else." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Agreed. I will have the commonality analysis ready by this afternoon." }
+      ],
+      "questions": [
+        {
+          "q": "What was the line average sort yield?",
+          "options": ["87.5 percent", "93.2 percent", "91.8 percent", "94.1 percent"],
+          "answer": 1,
+          "explain_zh": "ninety-three point two percent。會議裡數字往往連續出現，要分清楚哪個是平均、哪個是異常批。"
+        },
+        {
+          "q": "Why is the low lot suspicious?",
+          "options": [
+            "It is the oldest lot in the fab",
+            "It was tested twice",
+            "It is the only lot that used the backup etcher",
+            "It came from a different customer"
+          ],
+          "answer": 2,
+          "explain_zh": "the only lot that went through the backup etcher —— 這就是 tool commonality 的思路：找出唯一不同的地方。"
+        },
+        {
+          "q": "What is the agreed next step?",
+          "options": [
+            "Scrap the lot",
+            "Pull the tool logs before releasing other material",
+            "Ship the lot with a waiver",
+            "Repeat the sort test"
+          ],
+          "answer": 1,
+          "explain_zh": "let us pull the tool logs before we release anything else —— 先查再放行，是標準的圍堵順序。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "The line average was ninety-three point two percent yesterday.",
+          "answer_display": "93.2%",
+          "focus": "percentage"
+        },
+        {
+          "text": "That lot came in at eighty-seven point five percent and is now on hold.",
+          "answer_display": "87.5%",
+          "focus": "percentage"
+        }
+      ]
+    },
+    {
+      "id": "l003",
+      "title": "Supplier call: incoming material deviation",
+      "turns": [
+        { "speaker": "You (Customer)", "voice": "en-GB", "text": "We found the film thickness on your last shipment is outside our spec." },
+        { "speaker": "Dan (Supplier FAE)", "voice": "en-US", "text": "Could you share the measured values? We did not see a flag on our side." },
+        { "speaker": "You (Customer)", "voice": "en-GB", "text": "Our incoming data shows two hundred and fifteen nanometres against a limit of two hundred." },
+        { "speaker": "Dan (Supplier FAE)", "voice": "en-US", "text": "That is above our control limit too. Let me check the batch record." },
+        { "speaker": "You (Customer)", "voice": "en-GB", "text": "While you check, I need two things: tightened inspection and a recovery date." },
+        { "speaker": "Dan (Supplier FAE)", "voice": "en-US", "text": "We can add one hundred percent inspection starting next week." },
+        { "speaker": "You (Customer)", "voice": "en-GB", "text": "Next week is too late. Our build starts on Monday." },
+        { "speaker": "Dan (Supplier FAE)", "voice": "en-US", "text": "Then we will inspect the current stock this weekend and confirm on Sunday." },
+        { "speaker": "You (Customer)", "voice": "en-GB", "text": "Good. Please send written confirmation with the action items today." }
+      ],
+      "questions": [
+        {
+          "q": "What is the measured value versus the limit?",
+          "options": [
+            "200 nm measured, 215 nm limit",
+            "215 nm measured, 200 nm limit",
+            "215 nm measured, 250 nm limit",
+            "100 nm measured, 200 nm limit"
+          ],
+          "answer": 1,
+          "explain_zh": "two hundred and fifteen nanometres against a limit of two hundred。against 前面是實測值，後面是規格。"
+        },
+        {
+          "q": "What two things does the customer demand?",
+          "options": [
+            "A discount and an apology",
+            "Tightened inspection and a recovery date",
+            "A new supplier and a credit note",
+            "A site visit and a report"
+          ],
+          "answer": 1,
+          "explain_zh": "I need two things: tightened inspection and a recovery date —— 提出要求時先講數量再逐項列出，對方比較不會漏。"
+        },
+        {
+          "q": "How does the customer push back on the supplier's first offer?",
+          "options": [
+            "By threatening to cancel the contract",
+            "By pointing out that the build starts on Monday",
+            "By asking for a lower price",
+            "By escalating to management immediately"
+          ],
+          "answer": 1,
+          "explain_zh": "Next week is too late. Our build starts on Monday —— 用自己的時程當理由施壓，比單純說 too late 有力。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "Our incoming data shows two hundred and fifteen nanometres against a limit of two hundred.",
+          "answer_display": "215 nm vs 200 nm",
+          "focus": "spec"
+        },
+        {
+          "text": "We can add one hundred percent inspection starting next week.",
+          "answer_display": "100% inspection",
+          "focus": "percentage"
+        }
+      ]
+    },
+    {
+      "id": "l004",
+      "title": "Customer audit closing meeting",
+      "turns": [
+        { "speaker": "Karen (Auditor)", "voice": "en-US", "text": "We have three findings. Two are minor and one is major." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Could you walk us through the major one first?" },
+        { "speaker": "Karen (Auditor)", "voice": "en-US", "text": "Traceability records for reworked wafers were incomplete in two of the ten lots we sampled." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "We accept the finding. Those lots were reworked during a system upgrade." },
+        { "speaker": "Karen (Auditor)", "voice": "en-US", "text": "Does that mean the material history is unknown?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "No. The records are incomplete, but we can rebuild the history from the tool logs." },
+        { "speaker": "Karen (Auditor)", "voice": "en-US", "text": "Please include that evidence in your response. When can we expect it?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Within thirty days, together with the corrective action for the manual entry." }
+      ],
+      "questions": [
+        {
+          "q": "How many lots were sampled, and how many had incomplete records?",
+          "options": [
+            "Ten sampled, two incomplete",
+            "Two sampled, ten incomplete",
+            "Three sampled, one incomplete",
+            "Thirty sampled, two incomplete"
+          ],
+          "answer": 0,
+          "explain_zh": "two of the ten lots we sampled。X of the Y 這個結構在稽核與品質對話裡非常常見，要習慣拆開聽。"
+        },
+        {
+          "q": "How does the engineer limit the scope of the finding?",
+          "options": [
+            "By disputing the auditor's sample",
+            "By saying the records are incomplete but the history can be rebuilt",
+            "By blaming the operator",
+            "By asking for more time"
+          ],
+          "answer": 1,
+          "explain_zh": "The records are incomplete, but we can rebuild the history from the tool logs —— 先接受缺失，再把影響範圍縮到「紀錄」而非「材料」。"
+        },
+        {
+          "q": "What is the promised response time?",
+          "options": ["Within seven days", "Within thirty days", "Within one work week", "By the next audit"],
+          "answer": 1,
+          "explain_zh": "Within thirty days，並且要連矯正措施一起交。稽核回覆的期限通常寫在稽核程序裡，不要口頭承諾更短的時間。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "Traceability records were incomplete in two of the ten lots we sampled.",
+          "answer_display": "2 / 10 lots",
+          "focus": "numbers"
+        },
+        {
+          "text": "We will respond within thirty days with the corrective action.",
+          "answer_display": "30 days",
+          "focus": "numbers"
+        }
+      ]
+    },
+    {
+      "id": "l005",
+      "title": "FA result review with the customer",
+      "turns": [
+        { "speaker": "Steve (Customer QE)", "voice": "en-US", "text": "We received your failure analysis report. I have a few questions on the method." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Of course. Which part would you like me to expand on?" },
+        { "speaker": "Steve (Customer QE)", "voice": "en-US", "text": "You applied one million read cycles. How did you choose that number?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "It is ten times the read count assumed in our qualification model." },
+        { "speaker": "Steve (Customer QE)", "voice": "en-US", "text": "And the threshold voltage shifted by how much?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "One hundred and twenty millivolts on the adjacent page, fully recovered after erase." },
+        { "speaker": "Steve (Customer QE)", "voice": "en-US", "text": "So you are saying the cells are not damaged." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Correct. The shift is reversible, which points to disturb rather than physical damage." },
+        { "speaker": "Steve (Customer QE)", "voice": "en-US", "text": "Then we should compare our usage model with your assumption." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "That is exactly what we would like to propose as the next step." }
+      ],
+      "questions": [
+        {
+          "q": "Why did the team choose one million read cycles?",
+          "options": [
+            "It is the maximum the tester supports",
+            "It is ten times the qualified read count",
+            "The customer requested that number",
+            "It is the industry standard"
+          ],
+          "answer": 1,
+          "explain_zh": "ten times the read count assumed in our qualification model。被問「為什麼選這個條件」時，要能把數字連回認證假設。"
+        },
+        {
+          "q": "What does the full recovery after erase indicate?",
+          "options": [
+            "The test was invalid",
+            "The cells are physically damaged",
+            "The shift is reversible, so it is disturb rather than damage",
+            "The customer's equipment is faulty"
+          ],
+          "answer": 2,
+          "explain_zh": "The shift is reversible, which points to disturb rather than physical damage —— 可逆性是這類問題的關鍵證據。"
+        },
+        {
+          "q": "What is proposed as the next step?",
+          "options": [
+            "A design change",
+            "A comparison of the usage model and the qualification assumption",
+            "A full recall",
+            "A second failure analysis"
+          ],
+          "answer": 1,
+          "explain_zh": "compare our usage model with your assumption —— 把問題轉成雙方一起做的事，比直接說責任在客戶更容易推進。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "We applied one million read cycles at eighty-five degrees.",
+          "answer_display": "1,000,000 cycles @ 85°C",
+          "focus": "spec"
+        },
+        {
+          "text": "The threshold voltage shifted by one hundred and twenty millivolts.",
+          "answer_display": "120 mV",
+          "focus": "spec"
+        }
+      ]
+    },
+    {
+      "id": "l006",
+      "title": "Kickoff: qualification plan for a new product",
+      "turns": [
+        { "speaker": "Priya (Program Manager)", "voice": "en-US", "text": "The customer wants samples in work week forty and production in work week forty-eight." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "That is tight. The reliability stress alone takes one thousand hours." },
+        { "speaker": "Priya (Program Manager)", "voice": "en-US", "text": "Can we run anything in parallel?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Yes. We can start endurance and retention at the same time if we have enough units." },
+        { "speaker": "Priya (Program Manager)", "voice": "en-US", "text": "How many units do you need in total?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Seventy-seven units per condition, so about three hundred for the full plan." },
+        { "speaker": "Priya (Program Manager)", "voice": "en-US", "text": "I will check the build. What is the main risk you want to flag?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "If the first build slips by two weeks, the production date cannot hold." }
+      ],
+      "questions": [
+        {
+          "q": "What are the two dates the customer wants?",
+          "options": [
+            "Samples in WW40, production in WW48",
+            "Samples in WW48, production in WW40",
+            "Samples in WW36, production in WW40",
+            "Samples in WW40, production in WW44"
+          ],
+          "answer": 0,
+          "explain_zh": "samples in work week forty and production in work week forty-eight。兩個週次連著唸時最容易記反，聽到就要立刻記下來。"
+        },
+        {
+          "q": "How many units are needed for the full plan?",
+          "options": ["77", "170", "About 300", "1,000"],
+          "answer": 2,
+          "explain_zh": "Seventy-seven units per condition, so about three hundred for the full plan。per condition 與 total 是兩個層級的數字。"
+        },
+        {
+          "q": "What risk does the engineer flag?",
+          "options": [
+            "The tester may break down",
+            "A two-week slip in the first build breaks the production date",
+            "The customer may cancel",
+            "The reliability stress may fail"
+          ],
+          "answer": 1,
+          "explain_zh": "If the first build slips by two weeks, the production date cannot hold —— 示警要具體到條件與後果。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "The customer wants samples in work week forty and production in work week forty-eight.",
+          "answer_display": "WW40 samples / WW48 production",
+          "focus": "workweek"
+        },
+        {
+          "text": "We need seventy-seven units per condition, about three hundred in total.",
+          "answer_display": "77 per condition / ~300 total",
+          "focus": "numbers"
+        }
+      ]
+    },
+    {
+      "id": "l007",
+      "title": "Escalation call: shipment hold and recovery",
+      "turns": [
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "I joined this call because we missed the committed date twice." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Understood. Let me give you the current status and a date we can hold." },
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "Please keep it short. What is blocking you today?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "The verification lots are still in the furnace. They come out on Thursday morning." },
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "And if they pass?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "We release on Friday and ship four thousand units the same day." },
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "What if they fail?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Then we fall back to the screened material, which covers sixty percent of your demand." },
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "That is the answer I needed. Send me both scenarios in writing today." }
+      ],
+      "questions": [
+        {
+          "q": "Why did the director join the call?",
+          "options": [
+            "To introduce a new project",
+            "Because the committed date was missed twice",
+            "To audit the fab",
+            "To negotiate the price"
+          ],
+          "answer": 1,
+          "explain_zh": "we missed the committed date twice —— 跳票兩次就是升級的門檻，這時對方要的是可靠的日期，不是技術細節。"
+        },
+        {
+          "q": "What does the engineer do well in this call?",
+          "options": [
+            "Explains the physics in detail",
+            "Gives both the success case and the fallback case",
+            "Apologizes repeatedly",
+            "Blames the furnace supplier"
+          ],
+          "answer": 1,
+          "explain_zh": "通過就週五出貨，沒通過就退回篩選料。管理層問話時，同時給 plan A 與 plan B 才是專業的回答。"
+        },
+        {
+          "q": "How much of the demand does the fallback cover?",
+          "options": ["40 percent", "60 percent", "100 percent", "4,000 units only"],
+          "answer": 1,
+          "explain_zh": "the screened material, which covers sixty percent of your demand。備案要講出涵蓋率，對方才知道缺口多大。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "We release on Friday and ship four thousand units the same day.",
+          "answer_display": "4,000 units",
+          "focus": "numbers"
+        },
+        {
+          "text": "The screened material covers sixty percent of your demand.",
+          "answer_display": "60%",
+          "focus": "percentage"
+        }
+      ]
+    },
+    {
+      "id": "l008",
+      "title": "Small talk and agenda setting before a review",
+      "turns": [
+        { "speaker": "Emily (Customer QE)", "voice": "en-US", "text": "Hi Jerry, good to see you again. How was your trip to Boise?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Long but useful. The time difference is fourteen hours, so I am still adjusting." },
+        { "speaker": "Emily (Customer QE)", "voice": "en-US", "text": "I know that feeling. Did you get to see the new fab?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Only from outside, but the scale is impressive." },
+        { "speaker": "Emily (Customer QE)", "voice": "en-US", "text": "Nice. Shall we get started? I have a hard stop at half past ten." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Sure. I have three topics and they should take twenty minutes." },
+        { "speaker": "Emily (Customer QE)", "voice": "en-US", "text": "Perfect. Let us leave the cost discussion for the next call." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Agreed. Then I will focus on yield, the open 8D, and the sample schedule." }
+      ],
+      "questions": [
+        {
+          "q": "What does 'a hard stop at half past ten' mean?",
+          "options": [
+            "The meeting cannot start before 10:30",
+            "She must leave the meeting at 10:30",
+            "The topic is difficult",
+            "The call will be recorded until 10:30"
+          ],
+          "answer": 1,
+          "explain_zh": "hard stop 是「時間一到我一定要離開」，聽到就要立刻壓縮議程。這是外商會議最常見的用語之一。"
+        },
+        {
+          "q": "How does the engineer respond to the time pressure?",
+          "options": [
+            "By asking to reschedule",
+            "By stating the number of topics and how long they will take",
+            "By skipping the introduction",
+            "By speaking faster"
+          ],
+          "answer": 1,
+          "explain_zh": "I have three topics and they should take twenty minutes —— 用數量與時間回應時間壓力，對方立刻知道行不行得通。"
+        },
+        {
+          "q": "Which topic is postponed?",
+          "options": ["Yield", "The open 8D", "The sample schedule", "The cost discussion"],
+          "answer": 3,
+          "explain_zh": "Let us leave the cost discussion for the next call。會前把議題砍掉是常態，記得會後在信裡確認被砍的項目何時談。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "The time difference is fourteen hours.",
+          "answer_display": "14 hours",
+          "focus": "numbers"
+        },
+        {
+          "text": "I have three topics and they should take twenty minutes.",
+          "answer_display": "3 topics / 20 minutes",
+          "focus": "numbers"
+        }
+      ]
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 // sw.js — 靜態資源 cache-first；content/*.json 用 stale-while-revalidate
 // 改版時把 VERSION 加一，舊 cache 會在 activate 時清掉。
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const STATIC_CACHE = `fabenglish-static-${VERSION}`;
 const CONTENT_CACHE = `fabenglish-content-${VERSION}`;
 
@@ -16,14 +16,21 @@ const PRECACHE = [
   './js/speech.js',
   './js/content.js',
   './js/dom.js',
+  './js/scoring.js',
+  './js/shadow.js',
   './js/views/home.js',
   './js/views/vocab.js',
   './js/views/reading.js',
+  './js/views/email.js',
+  './js/views/present.js',
+  './js/views/listen.js',
   './js/views/progress.js',
   './js/views/settings.js',
-  './js/views/soon.js',
   './content/vocab.json',
   './content/readings.json',
+  './content/email_patterns.json',
+  './content/presentation.json',
+  './content/listening.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
 ];

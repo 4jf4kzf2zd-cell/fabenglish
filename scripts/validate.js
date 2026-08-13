@@ -5,6 +5,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkDictation, extractNumbers, normalize } from '../js/scoring.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CONTENT = join(ROOT, 'content');
@@ -147,6 +148,14 @@ const SCHEMAS = {
       (it.dictation || []).forEach((d, i) => {
         if (!str(d.text) || !str(d.answer_display)) bad(`dictation[${i}] 需要 text 與 answer_display`);
         if (!['numbers', 'workweek', 'spec', 'percentage'].includes(d.focus)) bad(`dictation[${i}].focus 不在枚舉內`);
+        if (str(d.text) && str(d.answer_display)) {
+          // 題目一定要能被 scoring.checkDictation 判對，否則使用者照著答案打也會被判錯
+          const expected = extractNumbers(normalize(d.text));
+          if (!expected.length) bad(`dictation[${i}].text 抽不到任何數字，聽寫題必須考數字`);
+          else if (!checkDictation(d.text, d.answer_display).pass) {
+            bad(`dictation[${i}] 的 answer_display「${d.answer_display}」判不過；text 抽到 [${expected}]，answer 抽到 [${extractNumbers(normalize(d.answer_display))}]`);
+          }
+        }
       });
     },
   },

@@ -1,4 +1,325 @@
 {
   "version": 1,
-  "items": []
+  "items": [
+    {
+      "id": "p001",
+      "section": "opening",
+      "section_zh": "開場",
+      "en": "Good morning everyone. Thank you for joining this quarterly yield review.",
+      "zh": "各位早安，感謝各位參加本次季度良率檢討會議。",
+      "shadow": true
+    },
+    {
+      "id": "p002",
+      "section": "opening",
+      "section_zh": "開場",
+      "en": "I am Jerry from the device engineering team, and I will cover the WW32 excursion today.",
+      "zh": "我是元件工程部的 Jerry，今天由我說明 WW32 的良率異常事件。",
+      "shadow": true
+    },
+    {
+      "id": "p003",
+      "section": "opening",
+      "section_zh": "開場",
+      "en": "Before we start, please feel free to stop me at any point if something is unclear.",
+      "zh": "開始之前，若有任何不清楚的地方，隨時可以打斷我。",
+      "shadow": true
+    },
+    {
+      "id": "p004",
+      "section": "opening",
+      "section_zh": "開場",
+      "en": "The goal today is to agree on the containment scope and the release date.",
+      "zh": "今天的目標是就圍堵範圍與放行日期取得共識。",
+      "shadow": true
+    },
+    {
+      "id": "p005",
+      "section": "agenda",
+      "section_zh": "議程",
+      "en": "I will walk you through four parts: the issue, the analysis, the actions, and the schedule.",
+      "zh": "我會分四個部分說明：問題、分析、對策、時程。",
+      "shadow": true
+    },
+    {
+      "id": "p006",
+      "section": "agenda",
+      "section_zh": "議程",
+      "en": "The presentation should take about fifteen minutes, and we will leave ten minutes for questions.",
+      "zh": "簡報大約十五分鐘，另外保留十分鐘給提問。",
+      "shadow": true
+    },
+    {
+      "id": "p007",
+      "section": "agenda",
+      "section_zh": "議程",
+      "en": "Let me start with a quick summary, and then I will go into the data.",
+      "zh": "我先做個快速摘要，接著再進入資料細節。",
+      "shadow": true
+    },
+    {
+      "id": "p008",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "Sort yield trended up by 2.3 points after the fix was implemented in WW32.",
+      "zh": "修正措施在 WW32 導入後，sort yield 上升了 2.3 個百分點。",
+      "shadow": true
+    },
+    {
+      "id": "p009",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "The x-axis shows the work week, and the y-axis shows the sort yield in percent.",
+      "zh": "橫軸是工作週，縱軸是 sort yield 的百分比。",
+      "shadow": true
+    },
+    {
+      "id": "p010",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "The red line is the excursion limit, and the shaded band is the normal range.",
+      "zh": "紅線是異常界限，陰影帶是正常範圍。",
+      "shadow": true
+    },
+    {
+      "id": "p011",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "Yield dropped sharply in WW32 and recovered gradually over the following three weeks.",
+      "zh": "良率在 WW32 急遽下滑，接下來三週逐步回復。",
+      "shadow": true
+    },
+    {
+      "id": "p012",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "As you can see on this wafer map, the failures are concentrated at the wafer edge.",
+      "zh": "從這張晶圓分佈圖可以看到，失效集中在晶圓邊緣。",
+      "shadow": true
+    },
+    {
+      "id": "p013",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "If we drill down by tool, all failing lots came from the same furnace.",
+      "zh": "若按機台深入細看，所有失效批次都來自同一台爐管。",
+      "shadow": true
+    },
+    {
+      "id": "p014",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "Edge die account for about eighty percent of the total fail count.",
+      "zh": "邊緣晶粒約占總失效數的百分之八十。",
+      "shadow": true
+    },
+    {
+      "id": "p015",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "The difference between the two groups is statistically significant at the ninety-five percent level.",
+      "zh": "兩組之間的差異在百分之九十五信賴水準下具統計顯著性。",
+      "shadow": true
+    },
+    {
+      "id": "p016",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "Please note that the last data point is preliminary and covers only two lots.",
+      "zh": "請注意最後一個資料點是初步數據，只涵蓋兩個批次。",
+      "shadow": true
+    },
+    {
+      "id": "p017",
+      "section": "data_description",
+      "section_zh": "圖表描述",
+      "en": "The trial split recovered the yield to 94.1 percent, compared with 91.8 percent for the control.",
+      "zh": "試產分組把良率拉到 94.1%，對照組是 91.8%。",
+      "shadow": true
+    },
+    {
+      "id": "p018",
+      "section": "root_cause",
+      "section_zh": "根本原因",
+      "en": "The root cause is a slow drift in chamber pressure on furnace F02.",
+      "zh": "根本原因是 F02 爐管腔體壓力的緩慢漂移。",
+      "shadow": true
+    },
+    {
+      "id": "p019",
+      "section": "root_cause",
+      "section_zh": "根本原因",
+      "en": "The drift stayed inside the alarm limit but moved outside the qualified process window.",
+      "zh": "這個漂移仍在警報界限內，卻已超出認證過的製程窗口。",
+      "shadow": true
+    },
+    {
+      "id": "p020",
+      "section": "root_cause",
+      "section_zh": "根本原因",
+      "en": "Cross-section analysis confirmed a thinner tunnel oxide at the die edge.",
+      "zh": "剖面分析確認晶粒邊緣的穿隧氧化層偏薄。",
+      "shadow": true
+    },
+    {
+      "id": "p021",
+      "section": "root_cause",
+      "section_zh": "根本原因",
+      "en": "This finding is consistent with the read-disturb signature we saw at wafer sort.",
+      "zh": "這項發現與我們在 wafer sort 看到的讀取干擾特徵相符。",
+      "shadow": true
+    },
+    {
+      "id": "p022",
+      "section": "root_cause",
+      "section_zh": "根本原因",
+      "en": "We reproduced the failure by running a split at the drifted pressure.",
+      "zh": "我們以漂移後的壓力做分組實驗，成功重現了失效。",
+      "shadow": true
+    },
+    {
+      "id": "p023",
+      "section": "root_cause",
+      "section_zh": "根本原因",
+      "en": "We ruled out a package issue because the same failure appeared before assembly.",
+      "zh": "我們排除了封裝問題，因為同樣的失效在封裝前就出現了。",
+      "shadow": true
+    },
+    {
+      "id": "p024",
+      "section": "root_cause",
+      "section_zh": "根本原因",
+      "en": "Tool commonality analysis pointed to one furnace in every failing lot.",
+      "zh": "機台共通性分析指出每個失效批都經過同一台爐管。",
+      "shadow": true
+    },
+    {
+      "id": "p025",
+      "section": "root_cause",
+      "section_zh": "根本原因",
+      "en": "To be precise, the mechanism is confirmed, but the trigger of the drift is still under investigation.",
+      "zh": "精確地說，機制已經確認，但造成漂移的觸發原因仍在調查中。",
+      "shadow": false
+    },
+    {
+      "id": "p026",
+      "section": "action",
+      "section_zh": "行動方案",
+      "en": "As immediate containment, all sister lots were put on hold on 12 August.",
+      "zh": "作為立即圍堵，所有同期批已於 8 月 12 日扣留。",
+      "shadow": true
+    },
+    {
+      "id": "p027",
+      "section": "action",
+      "section_zh": "行動方案",
+      "en": "We added a temporary screening step before final test to protect shipments.",
+      "zh": "我們在終測前加了一道臨時篩選，以保護出貨。",
+      "shadow": true
+    },
+    {
+      "id": "p028",
+      "section": "action",
+      "section_zh": "行動方案",
+      "en": "The alarm limit will be tightened from eight percent to three percent, with automatic tool shutdown.",
+      "zh": "警報界限將從 8% 收緊到 3%，並加上機台自動停機。",
+      "shadow": true
+    },
+    {
+      "id": "p029",
+      "section": "action",
+      "section_zh": "行動方案",
+      "en": "The change takes effect from WW35 on all furnaces of the same type.",
+      "zh": "此變更自 WW35 起適用於所有同型爐管。",
+      "shadow": true
+    },
+    {
+      "id": "p030",
+      "section": "action",
+      "section_zh": "行動方案",
+      "en": "Containment stays in place until the fix is verified on three consecutive lots.",
+      "zh": "圍堵措施會持續到修正措施在連續三個批次上驗證通過為止。",
+      "shadow": true
+    },
+    {
+      "id": "p031",
+      "section": "action",
+      "section_zh": "行動方案",
+      "en": "We also applied the same check to the other furnace types and found no similar drift.",
+      "zh": "我們也把同樣的檢查橫向展開到其他型號爐管，沒有發現類似漂移。",
+      "shadow": true
+    },
+    {
+      "id": "p032",
+      "section": "qa_defense",
+      "section_zh": "Q&A 應對",
+      "en": "That is a fair question. Let me give you the data we have so far.",
+      "zh": "這是個合理的問題，我先說明目前手上的資料。",
+      "shadow": true
+    },
+    {
+      "id": "p033",
+      "section": "qa_defense",
+      "section_zh": "Q&A 應對",
+      "en": "I do not have that number with me. I will confirm it and send it by Friday.",
+      "zh": "這個數字我手邊沒有，我確認後於週五前寄給您。",
+      "shadow": true
+    },
+    {
+      "id": "p034",
+      "section": "qa_defense",
+      "section_zh": "Q&A 應對",
+      "en": "Let me make sure I understand your question correctly. You are asking about the shipped material, right?",
+      "zh": "我確認一下我是否正確理解您的問題，您問的是已出貨的部分，對嗎？",
+      "shadow": true
+    },
+    {
+      "id": "p035",
+      "section": "qa_defense",
+      "section_zh": "Q&A 應對",
+      "en": "We believe this will not recur because the tool now shuts down automatically when the limit is crossed.",
+      "zh": "我們認為不會再發生，因為機台現在一旦超出界限就會自動停機。",
+      "shadow": true
+    },
+    {
+      "id": "p036",
+      "section": "qa_defense",
+      "section_zh": "Q&A 應對",
+      "en": "That point is outside the scope of today's review, but I am happy to follow up offline.",
+      "zh": "這一點超出今天檢討的範圍，但我很樂意會後個別追蹤。",
+      "shadow": false
+    },
+    {
+      "id": "p037",
+      "section": "closing",
+      "section_zh": "結尾",
+      "en": "To summarize, the mechanism is confirmed, the fix is in production, and yield is back to baseline.",
+      "zh": "總結：機制已確認、修正措施已導入量產、良率已回到基準水準。",
+      "shadow": true
+    },
+    {
+      "id": "p038",
+      "section": "closing",
+      "section_zh": "結尾",
+      "en": "The next milestone is the verification result, which we will share in WW36.",
+      "zh": "下一個里程碑是驗證結果，我們會在 WW36 分享。",
+      "shadow": true
+    },
+    {
+      "id": "p039",
+      "section": "closing",
+      "section_zh": "結尾",
+      "en": "Thank you for your time. I am happy to take any remaining questions.",
+      "zh": "感謝各位的時間，若還有問題我很樂意回答。",
+      "shadow": true
+    },
+    {
+      "id": "p040",
+      "section": "closing",
+      "section_zh": "結尾",
+      "en": "I will send the slides and the action items right after this call.",
+      "zh": "會後我會立刻把投影片與待辦事項寄給大家。",
+      "shadow": true
+    }
+  ]
 }

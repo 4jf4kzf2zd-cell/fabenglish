@@ -1,4 +1,485 @@
 {
   "version": 1,
-  "items": []
+  "items": [
+    {
+      "id": "e001",
+      "scenario": "bad_news",
+      "scenario_zh": "通報壞消息（excursion 通知）",
+      "pattern": "We regret to inform you that {lot} exhibited {failure_mode} during {test_stage}. As immediate containment, we have {action}.",
+      "pattern_zh": "很遺憾通知您，{批號} 在 {測試站} 出現 {失效模式}。作為立即圍堵措施，我們已 {動作}。",
+      "filled_example": "We regret to inform you that lot A123 exhibited elevated read-disturb failures during MST. As immediate containment, we have put all sister lots on hold.",
+      "cloze": {
+        "text": "We ___ to inform you that lot A123 ___ elevated read-disturb failures during MST. As immediate ___, we have put all sister lots on hold.",
+        "answers": ["regret", "exhibited", "containment"]
+      },
+      "dont": {
+        "en": "We are sorry, the lot has problem.",
+        "why_zh": "太口語且文法錯誤；壞消息通知要用固定句式顯得可控。客戶讀到的是「你有沒有在管」，不是你的心情。"
+      }
+    },
+    {
+      "id": "e002",
+      "scenario": "bad_news",
+      "scenario_zh": "通報壞消息（先講影響範圍）",
+      "pattern": "The issue affects {quantity} units from {work_week}. Of these, {shipped_qty} have already been shipped to you under {reference}.",
+      "pattern_zh": "本問題影響 {數量} 顆 {週次} 的產品，其中 {已出貨數} 顆已依 {出貨單號} 出貨給貴司。",
+      "filled_example": "The issue affects 46 lots from WW30 to WW32. Of these, 12 lots have already been shipped to you under invoice INV-2208.",
+      "cloze": {
+        "text": "The issue ___ 46 lots from WW30 to WW32. ___ these, 12 lots have already been ___ to you under invoice INV-2208.",
+        "answers": ["affects", "Of", "shipped"]
+      },
+      "dont": {
+        "en": "Some lots may be affected, we are still checking.",
+        "why_zh": "客戶第一時間要的是「有多少到我這裡」。給不出精確數字就給範圍與更新時間，不要用 some 打發。"
+      }
+    },
+    {
+      "id": "e003",
+      "scenario": "bad_news",
+      "scenario_zh": "通報壞消息（附上時程承諾）",
+      "pattern": "We will provide the interim 8D report by {date}, and the confirmed root cause by {date2}.",
+      "pattern_zh": "我們會在 {日期} 前提供 8D 期中報告，並於 {日期2} 前提出確認的根本原因。",
+      "filled_example": "We will provide the interim 8D report by Wednesday 24 August, and the confirmed root cause by WW36.",
+      "cloze": {
+        "text": "We will ___ the interim 8D report ___ Wednesday 24 August, and the ___ root cause by WW36.",
+        "answers": ["provide", "by", "confirmed"]
+      },
+      "dont": {
+        "en": "We will send the report as soon as possible.",
+        "why_zh": "as soon as possible 在客戶眼中等於沒有日期。寧可給一個保守但守得住的日期。"
+      }
+    },
+    {
+      "id": "e004",
+      "scenario": "bad_news",
+      "scenario_zh": "通報壞消息（請客戶配合動作）",
+      "pattern": "We kindly ask you to {customer_action} until we confirm {condition}.",
+      "pattern_zh": "在我們確認 {條件} 之前，敬請貴司先 {客戶動作}。",
+      "filled_example": "We kindly ask you to quarantine the remaining stock until we confirm the screening result on the shipped lots.",
+      "cloze": {
+        "text": "We kindly ___ you to ___ the remaining stock ___ we confirm the screening result on the shipped lots.",
+        "answers": ["ask", "quarantine", "until"]
+      },
+      "dont": {
+        "en": "Please stop using our product now.",
+        "why_zh": "沒有條件與期限的停用要求會被視為 recall 等級事件。要寫清楚「做什麼、到什麼時候為止」。"
+      }
+    },
+    {
+      "id": "e005",
+      "scenario": "bad_news",
+      "scenario_zh": "通報壞消息（承認資料落差）",
+      "pattern": "We acknowledge the gap between your {their_data} and our {our_data}, and we are investigating the correlation.",
+      "pattern_zh": "我們確認貴司的 {對方資料} 與我方的 {我方資料} 之間存在落差，正在調查兩者的相關性。",
+      "filled_example": "We acknowledge the gap between your incoming inspection result and our final test data, and we are investigating the correlation.",
+      "cloze": {
+        "text": "We ___ the gap between your incoming inspection result and our final test data, and we are ___ the ___.",
+        "answers": ["acknowledge", "investigating", "correlation"]
+      },
+      "dont": {
+        "en": "Our data is correct, please check your test again.",
+        "why_zh": "第一封信就否認對方的數據會直接升級成爭端。先承認落差存在，再用資料把責任範圍講清楚。"
+      }
+    },
+    {
+      "id": "e006",
+      "scenario": "request_extension",
+      "scenario_zh": "要求展延（給理由與新日期）",
+      "pattern": "We need to extend the {deliverable} deadline from {old_date} to {new_date} because {reason}.",
+      "pattern_zh": "由於 {原因}，我們需要將 {交付項目} 的期限從 {原日期} 延到 {新日期}。",
+      "filled_example": "We need to extend the FA report deadline from 25 August to 1 September because the cross-section queue is longer than expected.",
+      "cloze": {
+        "text": "We need to ___ the FA report deadline ___ 25 August ___ 1 September because the cross-section queue is longer than expected.",
+        "answers": ["extend", "from", "to"]
+      },
+      "dont": {
+        "en": "Sorry, we cannot finish on time.",
+        "why_zh": "只講做不到卻不給新日期，對方無法排計畫。展延信的重點是新日期，不是道歉。"
+      }
+    },
+    {
+      "id": "e007",
+      "scenario": "request_extension",
+      "scenario_zh": "要求展延（說明已完成的部分）",
+      "pattern": "Steps {done_steps} are complete; only {remaining} is outstanding, which requires {duration}.",
+      "pattern_zh": "{已完成步驟} 已完成，只剩 {未完成項目}，需要 {所需時間}。",
+      "filled_example": "Steps D1 to D4 are complete; only the verification run is outstanding, which requires three production lots.",
+      "cloze": {
+        "text": "Steps D1 to D4 are ___; only the verification run is ___, which ___ three production lots.",
+        "answers": ["complete", "outstanding", "requires"]
+      },
+      "dont": {
+        "en": "We are still working on it.",
+        "why_zh": "把已完成與未完成拆開寫，展延才有說服力；只說 still working 會被讀成沒有進度。"
+      }
+    },
+    {
+      "id": "e008",
+      "scenario": "request_extension",
+      "scenario_zh": "要求展延（提出折衷方案）",
+      "pattern": "If {full_deliverable} by {date} is critical for you, we can provide {partial} first and the remainder by {date2}.",
+      "pattern_zh": "若貴司必須在 {日期} 前拿到 {完整交付}，我們可以先提供 {部分內容}，其餘於 {日期2} 補上。",
+      "filled_example": "If the full 8D by Friday is critical for you, we can provide the containment section first and the remainder by WW36.",
+      "cloze": {
+        "text": "If the full 8D by Friday is ___ for you, we can ___ the containment section first and the ___ by WW36.",
+        "answers": ["critical", "provide", "remainder"]
+      },
+      "dont": {
+        "en": "It is impossible to finish by Friday.",
+        "why_zh": "impossible 是死路。給折衷方案讓對方選，你才保有主動權。"
+      }
+    },
+    {
+      "id": "e009",
+      "scenario": "request_extension",
+      "scenario_zh": "要求展延（設備或資源限制）",
+      "pattern": "The {resource} is fully booked until {date}; this is the constraint driving the new schedule.",
+      "pattern_zh": "{資源} 在 {日期} 前都已排滿，這是新時程受限的原因。",
+      "filled_example": "The SEM is fully booked until 30 August; this is the constraint driving the new schedule.",
+      "cloze": {
+        "text": "The SEM is fully ___ until 30 August; this is the ___ driving the new ___.",
+        "answers": ["booked", "constraint", "schedule"]
+      },
+      "dont": {
+        "en": "Our machine is busy so we are late.",
+        "why_zh": "口語且像藉口。指名資源、給出解除日期，才會被當成可管理的限制條件。"
+      }
+    },
+    {
+      "id": "e010",
+      "scenario": "request_extension",
+      "scenario_zh": "要求展延（承諾不再延）",
+      "pattern": "This is a one-time extension. We have added {buffer} to the plan so that the new date holds even if {risk} occurs.",
+      "pattern_zh": "本次為一次性展延。我們已在計畫中加入 {緩衝}，即使 {風險} 發生也能守住新日期。",
+      "filled_example": "This is a one-time extension. We have added one week of buffer to the plan so that the new date holds even if the retest fails.",
+      "cloze": {
+        "text": "This is a ___ extension. We have added one week of ___ to the plan so that the new date ___ even if the retest fails.",
+        "answers": ["one-time", "buffer", "holds"]
+      },
+      "dont": {
+        "en": "We hope there will be no more delay.",
+        "why_zh": "hope 不是承諾。講出你做了什麼讓新日期站得住，才叫承諾。"
+      }
+    },
+    {
+      "id": "e011",
+      "scenario": "status_update",
+      "scenario_zh": "進度更新（三段式標準結構）",
+      "pattern": "Status as of {date}: {done} is complete, {in_progress} is in progress, and {next} starts on {date2}.",
+      "pattern_zh": "截至 {日期} 的狀態：{已完成} 已完成，{進行中} 進行中，{下一步} 於 {日期2} 開始。",
+      "filled_example": "Status as of 22 August: containment is complete, cross-section analysis is in progress, and the verification run starts on 29 August.",
+      "cloze": {
+        "text": "___ as of 22 August: containment is ___, cross-section analysis is in ___, and the verification run starts on 29 August.",
+        "answers": ["Status", "complete", "progress"]
+      },
+      "dont": {
+        "en": "Everything is going well.",
+        "why_zh": "沒有資訊量。固定用「已完成／進行中／下一步」三段，收信人三秒就能抓到狀態。"
+      }
+    },
+    {
+      "id": "e012",
+      "scenario": "status_update",
+      "scenario_zh": "進度更新（沒有新進展時）",
+      "pattern": "There is no change since my last update on {date}. The next meaningful data point is {milestone} on {date2}.",
+      "pattern_zh": "自 {日期} 上次更新以來沒有變化。下一個有意義的資料點是 {日期2} 的 {里程碑}。",
+      "filled_example": "There is no change since my last update on Monday. The next meaningful data point is the retest result on Thursday.",
+      "cloze": {
+        "text": "There is no ___ since my last update on Monday. The next ___ data point is the retest result ___ Thursday.",
+        "answers": ["change", "meaningful", "on"]
+      },
+      "dont": {
+        "en": "No update this week.",
+        "why_zh": "沒進展也要說「下一個資料點在哪一天」，否則對方會每天來問。"
+      }
+    },
+    {
+      "id": "e013",
+      "scenario": "status_update",
+      "scenario_zh": "進度更新（列出待辦與負責人）",
+      "pattern": "Open items: (1) {item1} - owner {owner1}, due {date1}; (2) {item2} - owner {owner2}, due {date2}.",
+      "pattern_zh": "未結事項：(1) {項目1}，負責人 {人1}，期限 {日期1}；(2) {項目2}，負責人 {人2}，期限 {日期2}。",
+      "filled_example": "Open items: (1) cross-section on two units - owner FA team, due 26 August; (2) tool log review - owner process team, due 24 August.",
+      "cloze": {
+        "text": "___ items: (1) cross-section on two units - ___ FA team, ___ 26 August.",
+        "answers": ["Open", "owner", "due"]
+      },
+      "dont": {
+        "en": "We will do the cross-section and check the tool logs.",
+        "why_zh": "沒有負責人與期限的待辦不會被完成。列表格式讓對方能直接追。"
+      }
+    },
+    {
+      "id": "e014",
+      "scenario": "status_update",
+      "scenario_zh": "進度更新（提早示警）",
+      "pattern": "One risk to flag early: if {condition}, the {milestone} may slip by {duration}. I will confirm by {date}.",
+      "pattern_zh": "先提早示警一個風險：若 {條件}，{里程碑} 可能延後 {時間}。我會在 {日期} 前確認。",
+      "filled_example": "One risk to flag early: if the verification lots do not pass, the WW36 release may slip by two weeks. I will confirm by 30 August.",
+      "cloze": {
+        "text": "One ___ to flag early: if the verification lots do not pass, the WW36 release may ___ by two weeks. I will ___ by 30 August.",
+        "answers": ["risk", "slip", "confirm"]
+      },
+      "dont": {
+        "en": "Maybe there will be some delay, I am not sure.",
+        "why_zh": "示警要具體：什麼條件、延多久、何時給答案。模糊的示警等於沒有示警。"
+      }
+    },
+    {
+      "id": "e015",
+      "scenario": "status_update",
+      "scenario_zh": "進度更新（會議後的追蹤信）",
+      "pattern": "Thank you for joining the call. To recap, we agreed on {agreement}. I will {my_action} by {date}, and you will {your_action}.",
+      "pattern_zh": "感謝您參加會議。重點回顧：我們就 {共識} 達成一致。我會在 {日期} 前 {我方動作}，貴司則 {對方動作}。",
+      "filled_example": "Thank you for joining the call. To recap, we agreed on a two-step release. I will send the containment data by Friday, and you will confirm the quarantine quantity.",
+      "cloze": {
+        "text": "Thank you for joining the call. To ___, we ___ on a two-step release. I will send the containment data ___ Friday.",
+        "answers": ["recap", "agreed", "by"]
+      },
+      "dont": {
+        "en": "Nice talking to you today.",
+        "why_zh": "會後信的價值在白紙黑字固定共識與待辦。只寒暄等於這通會議沒有紀錄。"
+      }
+    },
+    {
+      "id": "e016",
+      "scenario": "rca_summary",
+      "scenario_zh": "根因摘要（一句話講完機制）",
+      "pattern": "The root cause is {cause}, which led to {effect} and resulted in {failure}.",
+      "pattern_zh": "根本原因是 {原因}，導致 {中間效應}，最終造成 {失效}。",
+      "filled_example": "The root cause is a slow chamber pressure drift, which led to a thinner oxide at the wafer edge and resulted in read-disturb failures.",
+      "cloze": {
+        "text": "The root ___ is a slow chamber pressure drift, which ___ to a thinner oxide at the wafer edge and ___ in read-disturb failures.",
+        "answers": ["cause", "led", "resulted"]
+      },
+      "dont": {
+        "en": "The problem is the furnace.",
+        "why_zh": "指出設備不等於指出機制。因果鏈要寫完整：原因 → 中間效應 → 失效。"
+      }
+    },
+    {
+      "id": "e017",
+      "scenario": "rca_summary",
+      "scenario_zh": "根因摘要（說明如何確認）",
+      "pattern": "We confirmed the mechanism by {method}; the result matched the excursion lots within {tolerance}.",
+      "pattern_zh": "我們以 {方法} 確認此機制，結果與異常批次的差異在 {容差} 以內。",
+      "filled_example": "We confirmed the mechanism by running a split at the drifted pressure; the result matched the excursion lots within 0.4 points.",
+      "cloze": {
+        "text": "We ___ the mechanism by running a split at the drifted pressure; the result ___ the excursion lots ___ 0.4 points.",
+        "answers": ["confirmed", "matched", "within"]
+      },
+      "dont": {
+        "en": "We believe this is the root cause.",
+        "why_zh": "believe 不能當證據。沒有重現實驗就寫 suspected root cause，不要寫 confirmed。"
+      }
+    },
+    {
+      "id": "e018",
+      "scenario": "rca_summary",
+      "scenario_zh": "根因摘要（排除其他可能）",
+      "pattern": "We ruled out {alternative} because {evidence}.",
+      "pattern_zh": "我們排除了 {其他可能}，因為 {證據}。",
+      "filled_example": "We ruled out a package-level issue because the same failure was reproduced at wafer sort before assembly.",
+      "cloze": {
+        "text": "We ___ out a package-level issue ___ the same failure was ___ at wafer sort before assembly.",
+        "answers": ["ruled", "because", "reproduced"]
+      },
+      "dont": {
+        "en": "It should not be a package issue.",
+        "why_zh": "should not 沒有證據支撐。排除項要附上是哪一筆資料讓你排除的。"
+      }
+    },
+    {
+      "id": "e019",
+      "scenario": "rca_summary",
+      "scenario_zh": "根因摘要（矯正措施與生效時間）",
+      "pattern": "As corrective action, {change} will be effective from {date} on {scope}.",
+      "pattern_zh": "作為矯正措施，{變更} 自 {日期} 起適用於 {範圍}。",
+      "filled_example": "As corrective action, the pressure alarm limit will be tightened to plus or minus 3 percent, effective from WW35 on all furnaces of the same type.",
+      "cloze": {
+        "text": "As ___ action, the pressure alarm limit will be ___ to plus or minus 3 percent, ___ from WW35 on all furnaces of the same type.",
+        "answers": ["corrective", "tightened", "effective"]
+      },
+      "dont": {
+        "en": "We will control the pressure better.",
+        "why_zh": "矯正措施要寫成可稽核的規格變更：改成什麼數值、何時生效、涵蓋哪些機台。"
+      }
+    },
+    {
+      "id": "e020",
+      "scenario": "rca_summary",
+      "scenario_zh": "根因摘要（防止再發與橫向展開）",
+      "pattern": "To prevent recurrence, we also applied the same check to {other_scope} and found {finding}.",
+      "pattern_zh": "為防止再發，我們也將同樣的檢查橫向展開到 {其他範圍}，結果 {發現}。",
+      "filled_example": "To prevent recurrence, we also applied the same check to the other three furnace types and found no similar drift.",
+      "cloze": {
+        "text": "To ___ recurrence, we also ___ the same check to the other three furnace types and ___ no similar drift.",
+        "answers": ["prevent", "applied", "found"]
+      },
+      "dont": {
+        "en": "This will not happen again.",
+        "why_zh": "空口保證沒有價值。橫向展開的範圍與結果才是客戶要的 D7。"
+      }
+    },
+    {
+      "id": "e021",
+      "scenario": "reply_complaint",
+      "scenario_zh": "回覆客訴（先確認收到與時程）",
+      "pattern": "Thank you for reporting this. We have opened case {case_id} and will respond with {deliverable} by {date}.",
+      "pattern_zh": "感謝通報。我們已開立案件 {案號}，將於 {日期} 前提供 {交付項目}。",
+      "filled_example": "Thank you for reporting this. We have opened case QC-2208-17 and will respond with an interim analysis by 26 August.",
+      "cloze": {
+        "text": "Thank you for ___ this. We have ___ case QC-2208-17 and will ___ with an interim analysis by 26 August.",
+        "answers": ["reporting", "opened", "respond"]
+      },
+      "dont": {
+        "en": "We received your mail.",
+        "why_zh": "確認收到要連案號與回覆日期一起給，對方才知道這件事真的進了流程。"
+      }
+    },
+    {
+      "id": "e022",
+      "scenario": "reply_complaint",
+      "scenario_zh": "回覆客訴（要求補充資料）",
+      "pattern": "To proceed with the analysis, could you provide {data1} and {data2}? Without these we cannot {blocked_action}.",
+      "pattern_zh": "為了進行分析，可否提供 {資料1} 與 {資料2}？沒有這些我們無法 {受阻的動作}。",
+      "filled_example": "To proceed with the analysis, could you provide the failing unit serial numbers and the test conditions? Without these we cannot trace the parent lots.",
+      "cloze": {
+        "text": "To ___ with the analysis, could you ___ the failing unit serial numbers and the test conditions? ___ these we cannot trace the parent lots.",
+        "answers": ["proceed", "provide", "Without"]
+      },
+      "dont": {
+        "en": "Please send more information.",
+        "why_zh": "要具體到欄位。含糊的補件要求會來回三四趟，每一趟都是你的時程在流失。"
+      }
+    },
+    {
+      "id": "e023",
+      "scenario": "reply_complaint",
+      "scenario_zh": "回覆客訴（責任不在我方時）",
+      "pattern": "Our analysis shows the parts meet {spec}. The failures correlate with {customer_condition}, which exceeds the condition assumed in our qualification.",
+      "pattern_zh": "我方分析顯示產品符合 {規格}。失效與 {客戶端條件} 相關，而該條件已超出我們認證時所假設的範圍。",
+      "filled_example": "Our analysis shows the parts meet the endurance specification. The failures correlate with the read count per block, which exceeds the condition assumed in our qualification.",
+      "cloze": {
+        "text": "Our analysis shows the parts ___ the endurance specification. The failures ___ with the read count per block, which ___ the condition assumed in our qualification.",
+        "answers": ["meet", "correlate", "exceeds"]
+      },
+      "dont": {
+        "en": "This is your fault, not ours.",
+        "why_zh": "就算你是對的，這樣寫也會讓案子升到雙方管理層。用資料說話，語氣保持中性。"
+      }
+    },
+    {
+      "id": "e024",
+      "scenario": "reply_complaint",
+      "scenario_zh": "回覆客訴（提出共同檢視）",
+      "pattern": "We propose a joint review of {topic} before we consider {big_change}.",
+      "pattern_zh": "在考慮 {重大變更} 之前，我們建議先共同檢視 {主題}。",
+      "filled_example": "We propose a joint review of the usage model before we consider any design change.",
+      "cloze": {
+        "text": "We ___ a ___ review of the usage model ___ we consider any design change.",
+        "answers": ["propose", "joint", "before"]
+      },
+      "dont": {
+        "en": "We will not change the design.",
+        "why_zh": "直接拒絕會關上談判空間。joint review 讓對方有台階，也讓你有時間收集資料。"
+      }
+    },
+    {
+      "id": "e025",
+      "scenario": "reply_complaint",
+      "scenario_zh": "回覆客訴（補償或後續處置）",
+      "pattern": "For the {quantity} affected units, we will {remedy}. Please confirm whether you prefer {option1} or {option2}.",
+      "pattern_zh": "針對受影響的 {數量} 顆，我們將 {處置方式}。請確認貴司希望採 {選項1} 或 {選項2}。",
+      "filled_example": "For the 240 affected units, we will replace the material at no charge. Please confirm whether you prefer replacement or credit.",
+      "cloze": {
+        "text": "For the 240 ___ units, we will ___ the material at no charge. Please ___ whether you prefer replacement or credit.",
+        "answers": ["affected", "replace", "confirm"]
+      },
+      "dont": {
+        "en": "We can discuss compensation later.",
+        "why_zh": "把處置往後拖只會讓客訴一直開著。先給兩個選項，讓對方做選擇題。"
+      }
+    },
+    {
+      "id": "e026",
+      "scenario": "request_waiver",
+      "scenario_zh": "申請特採（說明偏差與範圍）",
+      "pattern": "We request a one-time waiver for {quantity} units of {product}, which deviate from {spec_item} by {amount}.",
+      "pattern_zh": "我們申請一次性特採 {數量} 顆 {產品}，該批於 {規格項目} 上偏離 {幅度}。",
+      "filled_example": "We request a one-time waiver for 3,000 units of NF128, which deviate from the standby current limit by 4 percent.",
+      "cloze": {
+        "text": "We ___ a one-time ___ for 3,000 units of NF128, which ___ from the standby current limit by 4 percent.",
+        "answers": ["request", "waiver", "deviate"]
+      },
+      "dont": {
+        "en": "The units are slightly out of spec, please accept them.",
+        "why_zh": "slightly 是主觀字。特採一定要寫出數量、規格項目與精確偏離幅度。"
+      }
+    },
+    {
+      "id": "e027",
+      "scenario": "request_waiver",
+      "scenario_zh": "申請特採（提出佐證資料）",
+      "pattern": "As justification, {evidence} shows no impact on {risk_area} over {condition}.",
+      "pattern_zh": "作為佐證，{證據} 顯示在 {條件} 下對 {風險項目} 無影響。",
+      "filled_example": "As justification, the reliability data shows no impact on retention over 1,000 hours at 125 degrees Celsius.",
+      "cloze": {
+        "text": "As ___, the reliability data shows no ___ on retention ___ 1,000 hours at 125 degrees Celsius.",
+        "answers": ["justification", "impact", "over"]
+      },
+      "dont": {
+        "en": "We think it will be fine.",
+        "why_zh": "特採審查看的是資料。沒有可靠度或量測資料佐證的特採申請通常直接被退。"
+      }
+    },
+    {
+      "id": "e028",
+      "scenario": "request_waiver",
+      "scenario_zh": "申請特採（限定範圍避免變成慣例）",
+      "pattern": "This waiver applies only to {scope} and does not change {baseline}. Future shipments will meet {spec_item}.",
+      "pattern_zh": "本特採僅適用於 {範圍}，不變更 {基準}。後續出貨將符合 {規格項目}。",
+      "filled_example": "This waiver applies only to lot A123 and does not change the datasheet limit. Future shipments will meet the original standby current spec.",
+      "cloze": {
+        "text": "This waiver ___ only to lot A123 and does not ___ the datasheet limit. Future shipments will ___ the original standby current spec.",
+        "answers": ["applies", "change", "meet"]
+      },
+      "dont": {
+        "en": "We hope you can accept this level from now on.",
+        "why_zh": "特採一旦被讀成永久放寬，等於偷改規格。範圍限定句一定要寫。"
+      }
+    },
+    {
+      "id": "e029",
+      "scenario": "request_waiver",
+      "scenario_zh": "申請特採（說明已採取的補償措施）",
+      "pattern": "To offset the risk, we added {extra_control} for these units and will report {monitoring} monthly.",
+      "pattern_zh": "為抵銷風險，我們對這批加做了 {額外管控}，並將每月回報 {監控項目}。",
+      "filled_example": "To offset the risk, we added 100 percent screening for these units and will report the field return rate monthly.",
+      "cloze": {
+        "text": "To ___ the risk, we ___ 100 percent screening for these units and will ___ the field return rate monthly.",
+        "answers": ["offset", "added", "report"]
+      },
+      "dont": {
+        "en": "We will be more careful with these units.",
+        "why_zh": "careful 不是管控。要寫出加做了什麼測試、回報什麼指標、多久回報一次。"
+      }
+    },
+    {
+      "id": "e030",
+      "scenario": "request_waiver",
+      "scenario_zh": "申請特採（請對方簽核）",
+      "pattern": "Please confirm your approval by {date} so that we can release the shipment on {ship_date}.",
+      "pattern_zh": "請於 {日期} 前確認核准，以便我們於 {出貨日} 放行出貨。",
+      "filled_example": "Please confirm your approval by 29 August so that we can release the shipment on 31 August.",
+      "cloze": {
+        "text": "Please ___ your approval by 29 August ___ that we can ___ the shipment on 31 August.",
+        "answers": ["confirm", "so", "release"]
+      },
+      "dont": {
+        "en": "Let us know if you agree.",
+        "why_zh": "沒有期限的簽核請求會被壓在信箱最底層。要把「幾號前回覆」與「回覆才能出貨」綁在一起。"
+      }
+    }
+  ]
 }

@@ -42,6 +42,8 @@ fabenglish/
 │   ├── speech.js         # TTS / STT 封裝（所有 iOS workaround 集中在這裡）
 │   ├── scoring.js        # 跟讀評分（token 對齊）＋數字聽寫比對；純函式，可用 node 測
 │   ├── shadow.js         # 跟讀 UI 元件（單字例句／簡報句型／簡報模式共用）
+│   ├── weakness.js       # 弱點清單 → markdown（M3）
+│   ├── badge.js          # PWA 圖示待複習數（App Badging API，不支援時靜默）
 │   ├── content.js        # content/*.json 載入與快取
 │   ├── dom.js            # 極簡 DOM 建構工具（避免 innerHTML 拼字串）
 │   └── views/            # 每個模組一個 view 檔（home / vocab / reading / email / present / listen / progress / settings）
@@ -270,6 +272,15 @@ localStorage key：`fabenglish.v1`，單一 JSON：
 
 ### M3 — 打磨
 範圍：內容補滿（vocab 600、readings 30、listening 15）、streak 通知（PWA badge 或首頁提示）、弱點清單（SRS lapses 最多的字、跟讀分數最低的句）匯出成 markdown（可貼回 Claude Project 生成加強教材）。
+
+驗收：
+- [x] 內容補滿：vocab **600**（A200/B250/C150）、readings **30**（六種 genre、Lv1–3）、listening **15**　←　`validate.js` 0 警告
+- [x] streak 通知：首頁到期提醒（`js/views/home.js`）＋ PWA 圖示待複習數（`js/badge.js`，App Badging API）　←　smoke [9] 自動驗證提醒卡片
+- [x] 弱點清單匯出 markdown（`js/weakness.js`，進度頁可預覽／下載／複製）　←　smoke [9] 自動驗證
+- [ ] iPhone 實機確認圖示數字會出現（需 iOS 16.4+、加到主畫面、允許通知）　←　**待實機驗**
+
+> Badge 的限制：iOS 只有在「加到主畫面」後才支援，且需要通知權限；不支援時
+> `js/badge.js` 全程靜默不報錯，設定頁會說明原因。
 
 ## 8. 測試清單（每個里程碑都要在 iPhone 實機過一遍）
 

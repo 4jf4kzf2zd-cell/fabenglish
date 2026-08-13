@@ -131,7 +131,7 @@ try {
   await page.goto(`${BASE}/index.html#/reading`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.menu a');
   const listCount = await page.$$eval('.menu a', ns => ns.length);
-  check('列表顯示 20 篇文章', listCount === 20, `實際 ${listCount}`);
+  check('列表顯示 30 篇文章', listCount === 30, `實際 ${listCount}`);
 
   await page.goto(`${BASE}/index.html#/reading/r001`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.article');
@@ -253,7 +253,7 @@ try {
   console.log('\n[8] 聽力');
   await page.goto(`${BASE}/index.html#/listen`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.menu a');
-  check('列出 8 段對話', (await page.$$eval('.menu a', ns => ns.length)) === 8);
+  check('列出 15 段對話', (await page.$$eval('.menu a', ns => ns.length)) === 15);
 
   await page.goto(`${BASE}/index.html#/listen/l001`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.turn');
@@ -299,8 +299,59 @@ try {
   const stateD = await readState(page);
   check('聽寫分數已寫入', stateD.listening.l001?.dictation === 1, JSON.stringify(stateD.listening.l001));
 
-  /* --- 9. 其他路由 --- */
-  console.log('\n[9] 路由與設定');
+  /* --- 9. streak 提示與弱點清單（M3） --- */
+  console.log('\n[9] streak 提示 / 弱點清單');
+
+  // 造一個真正的 lapse（新字答錯不算 lapse，要先升到 Box 2 再答錯）與一個低分跟讀
+  await page.evaluate(async () => {
+    const [srs, content, store] = await Promise.all([
+      import('/js/srs.js'), import('/js/content.js'), import('/js/store.js'),
+    ]);
+    const items = await content.vocab();
+    srs.answer(items[5].id, true);
+    srs.answer(items[5].id, false);
+    store.update(s => { s.shadow.p008 = { best: 42 }; });
+  });
+
+  const report = await page.evaluate(async () => {
+    const [w, c] = await Promise.all([import('/js/weakness.js'), import('/js/content.js')]);
+    const [vocab, readings, emails, presentation, listening] = await Promise.all([
+      c.vocab(), c.readings(), c.emails(), c.presentation(), c.listening(),
+    ]);
+    const r = w.buildReport({ vocab, readings, emails, presentation, listening });
+    return { md: r.markdown, counts: r.counts, empty: r.empty, name: w.filename() };
+  });
+  check('弱點清單有抓到答錯的單字', report.counts.vocab === 1, JSON.stringify(report.counts));
+  check('弱點清單有抓到低分跟讀句', report.counts.shadow === 1);
+  check('弱點清單是 markdown 格式', report.md.startsWith('# FabEnglish 弱點清單'));
+  check('弱點清單含單字表格', report.md.includes('| 單字 | 中譯 | 答錯次數 |'));
+  check('弱點清單附上給 Claude 的指令', report.md.includes('給 Claude 的指令'));
+  check('弱點清單檔名帶日期', /^fabenglish-weakness-\d{8}\.md$/.test(report.name), report.name);
+
+  await page.goto(`${BASE}/index.html#/progress`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.boxes');
+  await clickByText(page, 'button', '產生弱點清單');
+  await sleep(300);
+  const mdShown = await page.$eval('.md-preview', n => n.textContent);
+  check('進度頁可產生弱點清單預覽', mdShown.includes('FabEnglish 弱點清單'));
+  check('產生後出現下載與複製按鈕',
+    (await page.$$eval('#view button', ns => ns.map(n => n.textContent))).some(t => t.includes('下載 .md')));
+
+  // streak 提示：把日期推到明天 → 昨天有練、今天還沒 → 應該出現到期提醒
+  await setDayOffset(page, 1);
+  await page.goto(`${BASE}/index.html#/home`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#view .card');
+  const homeAlert = await page.$eval('#view', n => n.innerText);
+  check('連續紀錄快中斷時首頁出現提醒', /連續紀錄今天到期/.test(homeAlert),
+    homeAlert.slice(0, 60).replace(/\n/g, ' '));
+  await setDayOffset(page, 0);
+  await page.goto(`${BASE}/index.html#/home`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#view .card');
+  check('今天已經練過就不顯示提醒',
+    !/連續紀錄今天到期/.test(await page.$eval('#view', n => n.innerText)));
+
+  /* --- 10. 其他路由 --- */
+  console.log('\n[10] 路由與設定');
   const ROUTES = [
     ['#/home', '天連續練習'], ['#/vocab', ''], ['#/reading', '篇完成'],
     ['#/progress', 'Leitner'], ['#/settings', '每日新字上限'],
@@ -322,8 +373,8 @@ try {
     ['單字 SRS', '閱讀', 'Email 填空', '簡報跟讀', '聽力'].every(k => progText.includes(k)));
   await page.screenshot({ path: join(SHOTS, '5-progress.png') });
 
-  /* --- 10. console 錯誤 --- */
-  console.log('\n[10] Console');
+  /* --- 11. console 錯誤 --- */
+  console.log('\n[11] Console');
   const realErrors = consoleErrors.filter(e => !/favicon|speech|not-allowed/i.test(e));
   check('沒有 console 錯誤', realErrors.length === 0, realErrors.join(' | ').slice(0, 300));
 

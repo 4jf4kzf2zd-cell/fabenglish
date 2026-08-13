@@ -137,6 +137,9 @@ window.addEventListener('pagehide', () => speech.cancel());
 // voices 先暖機，之後點播放才不會抓不到 voice（SPEC §5-2）
 speech.ready().catch(() => {});
 
+// PWA 圖示上的待複習數字（不支援就安靜略過）
+import('./badge.js').then(b => b.refresh()).catch(() => {});
+
 if (!location.hash) location.hash = '#/home';
 render();
 

@@ -51,6 +51,9 @@ export async function render(root, ctx) {
     weakSection(vocabItems),
     weakShadowSection(presentItems),
 
+    h2('弱點清單'),
+    weaknessCard({ vocab: vocabItems, readings: readingItems, emails: emailItems, presentation: presentItems, listening: listenItems }),
+
     h2('備份'),
     card(
       p('iOS 可能在儲存空間不足時回收 PWA 的資料，請定期匯出備份。', 'small dim'),
@@ -118,6 +121,62 @@ function weakSection(vocabItems) {
       el('span', { class: 'dim small', text: `${st.srs[it.id].lapses} 次` }),
     ))),
   );
+}
+
+/* ------------------------ 弱點清單匯出 ------------------------ */
+
+/** SPEC §7 M3：把弱點整理成 markdown，可貼回 Claude Project 生成加強教材。 */
+function weaknessCard(content) {
+  const box = card(
+    p('把「記不住的單字、唸不好的句子、讀不懂的文章」整理成一份 Markdown，貼回 Claude Project 就能生成加強教材。', 'small dim'),
+  );
+
+  const preview = el('pre', {
+    class: 'md-preview hidden',
+    style: 'white-space:pre-wrap;font-family:var(--mono);font-size:12px;max-height:260px;overflow:auto;background:var(--surface-2);padding:10px;border-radius:8px',
+  });
+  const summary = p('', 'small dim');
+
+  const genBtn = el('button', { class: 'block primary', onClick: generate }, '產生弱點清單');
+  box.append(genBtn, summary, preview);
+  return box;
+
+  async function generate() {
+    const { buildReport, filename } = await import('../weakness.js');
+    const report = buildReport(content);
+
+    preview.textContent = report.markdown;
+    preview.classList.remove('hidden');
+    summary.textContent = report.empty
+      ? '目前沒有偵測到明顯弱點，多練幾天再產生一次。'
+      : `單字 ${report.counts.vocab}、跟讀 ${report.counts.shadow}、閱讀 ${report.counts.reading}、聽力 ${report.counts.listening}、Email ${report.counts.cloze} 項。`;
+
+    genBtn.replaceWith(div({ class: 'row' },
+      el('button', { class: 'primary', onClick: () => download(report.markdown, filename()) }, '⬇︎ 下載 .md'),
+      el('button', { onClick: e => copy(report.markdown, e.currentTarget) }, '複製'),
+    ));
+  }
+
+  function download(text, name) {
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/markdown;charset=utf-8' }));
+    const a = el('a', { href: url, download: name });
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  async function copy(text, btn) {
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = '已複製 ✓';
+    } catch (_) {
+      // iOS 在非使用者手勢或非 https 下會失敗，退回讓使用者自己選取
+      preview.focus?.();
+      btn.textContent = '請長按上方文字複製';
+    }
+    setTimeout(() => { btn.textContent = '複製'; }, 2500);
+  }
 }
 
 /* ---------------------------- 匯出 ---------------------------- */

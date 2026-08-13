@@ -3,6 +3,7 @@
 import { el, div, card, h2, p, confirmDialog, speakerButton, append } from '../dom.js';
 import * as store from '../store.js';
 import * as speech from '../speech.js';
+import * as badge from '../badge.js';
 
 const SAMPLE = 'Sort yield trended up by 2.3 points after the fix was implemented in WW32.';
 
@@ -74,6 +75,9 @@ export async function render(root, ctx) {
       ),
     ),
 
+    h2('提醒'),
+    badgeCard(),
+
     h2('其他'),
     card(
       el('label', { class: 'field', style: 'display:flex;align-items:center;gap:10px' },
@@ -97,4 +101,59 @@ export async function render(root, ctx) {
 
 function fmtRate(r) {
   return `${Number(r).toFixed(1)}×`;
+}
+
+/** PWA 圖示待複習數（App Badging API），不支援就說清楚為什麼。 */
+function badgeCard() {
+  const s = store.settings();
+  const box = card();
+
+  if (!badge.supported()) {
+    box.append(
+      el('h3', { text: '待複習數字提醒' }),
+      p('這個瀏覽器不支援在 App 圖示上顯示數字。iOS 需要 16.4 以上，而且要先把網站「加到主畫面」再從圖示開啟。', 'small dim'),
+    );
+    return box;
+  }
+
+  const chk = el('input', {
+    type: 'checkbox', checked: !!s.badge,
+    onChange: async e => {
+      store.setSetting('badge', e.target.checked);
+      if (e.target.checked) {
+        if (badge.permission() === 'default') await badge.requestPermission();
+        await badge.refresh();
+      } else {
+        await badge.clear();
+      }
+      status.textContent = statusText();
+    },
+  });
+
+  const status = el('p', { class: 'small dim', text: statusText() });
+
+  box.append(
+    el('label', { class: 'field', style: 'display:flex;align-items:center;gap:10px;margin-bottom:8px' },
+      chk,
+      el('span', { style: 'margin:0', text: '在 App 圖示顯示今日待複習數' }),
+    ),
+    status,
+    el('button', {
+      class: 'block ghost',
+      onClick: async () => {
+        if (badge.permission() === 'default') await badge.requestPermission();
+        await badge.refresh();
+        status.textContent = statusText();
+      },
+    }, '重新整理圖示數字'),
+  );
+  return box;
+
+  function statusText() {
+    const perm = badge.permission();
+    if (!store.settings().badge) return '已關閉。';
+    if (perm === 'denied') return '⚠️ 通知權限被拒絕，iOS 上圖示數字不會出現。請到「設定 > 通知」允許。';
+    if (perm === 'default') return '尚未取得通知權限，第一次開啟時系統會詢問。';
+    return '已開啟。數字＝今日待複習＋新字的總數。';
+  }
 }

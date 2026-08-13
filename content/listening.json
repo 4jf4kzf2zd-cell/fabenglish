@@ -464,6 +464,434 @@
           "focus": "numbers"
         }
       ]
+    },
+    {
+      "id": "l009",
+      "title": "Weekly con-call: progress on the corrective action",
+      "turns": [
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "Let us go through the open items from last week." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Two of the three are closed. The tool log review and the split experiment are done." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "What did the split tell you?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "It reproduced the failure, so the mechanism is now confirmed rather than suspected." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "Good. And the third item?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "The verification lots are still running. They come out on Thursday." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "So the report slips again?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "No. The report goes out Friday as committed, with the verification section marked open." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "That works for us. Please mark clearly which sections are final." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Understood. Sections one to five final, section six open until next week." }
+      ],
+      "questions": [
+        {
+          "q": "How does the engineer avoid another delay?",
+          "options": [
+            "By finishing everything early",
+            "By sending the report on time with one section marked open",
+            "By asking for an extension",
+            "By skipping the verification"
+          ],
+          "answer": 1,
+          "explain_zh": "守住日期、把未完成的部分標記為 open。這是最實用的一招：交期不動，內容分層。"
+        },
+        {
+          "q": "What changed after the split experiment?",
+          "options": [
+            "The mechanism moved from suspected to confirmed",
+            "The root cause was rejected",
+            "The customer closed the case",
+            "The verification was cancelled"
+          ],
+          "answer": 0,
+          "explain_zh": "confirmed rather than suspected —— 重現實驗是這個轉變的唯一依據。"
+        },
+        {
+          "q": "What does the customer ask for?",
+          "options": [
+            "A phone call every day",
+            "Clear marking of which sections are final",
+            "A discount",
+            "A new engineer on the case"
+          ],
+          "answer": 1,
+          "explain_zh": "Please mark clearly which sections are final。客戶可以接受不完整，但不能接受分不清哪裡不完整。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "Sections one to five are final, and section six stays open until next week.",
+          "answer_display": "sections 1-5 final, section 6 open",
+          "focus": "numbers"
+        },
+        {
+          "text": "Two of the three open items are closed this week.",
+          "answer_display": "2 of 3 closed",
+          "focus": "numbers"
+        }
+      ]
+    },
+    {
+      "id": "l010",
+      "title": "Internal: negotiating priority in the FA lab",
+      "turns": [
+        { "speaker": "Chen (FA Lab Lead)", "voice": "en-US", "text": "You are asking me to jump the queue again. What makes this one different?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "The customer line is on hold. Every day costs them about two hundred thousand dollars." },
+        { "speaker": "Chen (FA Lab Lead)", "voice": "en-US", "text": "Understood. But I have eleven cases in the queue and two of them are also customer cases." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "I only need the cross-section on two units, not the full flow." },
+        { "speaker": "Chen (FA Lab Lead)", "voice": "en-US", "text": "That changes things. Two cross-sections I can fit in on Wednesday." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "That would help a lot. Can I send the units this afternoon?" },
+        { "speaker": "Chen (FA Lab Lead)", "voice": "en-US", "text": "Yes, but mark them clearly and include the failing address." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Will do. I will also send the wafer maps so you know where to cut." }
+      ],
+      "questions": [
+        {
+          "q": "What made the lab lead agree?",
+          "options": [
+            "The customer cost figure",
+            "Narrowing the request to two cross-sections instead of the full flow",
+            "An order from management",
+            "The engineer offered to pay"
+          ],
+          "answer": 1,
+          "explain_zh": "把需求縮小到「只要兩顆剖面」才是關鍵。談判時縮小範圍常常比施壓有效。"
+        },
+        {
+          "q": "How many cases are already in the queue?",
+          "options": ["Two", "Eleven", "Twenty", "Two hundred"],
+          "answer": 1,
+          "explain_zh": "eleven cases in the queue，其中兩件也是客戶案。數字連著出現時要分清楚指涉。"
+        },
+        {
+          "q": "What does the lab lead ask for in return?",
+          "options": [
+            "A written request from management",
+            "Clear marking and the failing address",
+            "Payment from the customer",
+            "A week of notice"
+          ],
+          "answer": 1,
+          "explain_zh": "mark them clearly and include the failing address。給對方省時間，比口頭道謝更有用。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "Every day costs them about two hundred thousand dollars.",
+          "answer_display": "$200,000 per day",
+          "focus": "numbers"
+        },
+        {
+          "text": "I have eleven cases in the queue and two of them are customer cases.",
+          "answer_display": "11 cases / 2 customer cases",
+          "focus": "numbers"
+        }
+      ]
+    },
+    {
+      "id": "l011",
+      "title": "Customer visit: questions during the fab tour",
+      "turns": [
+        { "speaker": "Karen (Customer Auditor)", "voice": "en-US", "text": "How often is this furnace calibrated?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Every six months, and after any chamber maintenance." },
+        { "speaker": "Karen (Customer Auditor)", "voice": "en-US", "text": "Who signs off the calibration record?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "The equipment engineer performs it and the process owner approves it." },
+        { "speaker": "Karen (Customer Auditor)", "voice": "en-US", "text": "What happens if a tool goes past its calibration date?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "The booking system locks it out automatically. Nobody can run material on it." },
+        { "speaker": "Karen (Customer Auditor)", "voice": "en-US", "text": "Can you show me that in the system later today?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Yes. I will arrange a demonstration after lunch." },
+        { "speaker": "Karen (Customer Auditor)", "voice": "en-US", "text": "Thank you. That will save us a written follow-up." }
+      ],
+      "questions": [
+        {
+          "q": "What is the calibration interval?",
+          "options": [
+            "Every three months",
+            "Every six months, plus after chamber maintenance",
+            "Once a year",
+            "Only after maintenance"
+          ],
+          "answer": 1,
+          "explain_zh": "Every six months, and after any chamber maintenance。稽核問頻率時，例外條件也要一起講。"
+        },
+        {
+          "q": "Why is the automatic lockout a strong answer?",
+          "options": [
+            "It is cheaper than training",
+            "It does not rely on anyone remembering",
+            "It is required by law",
+            "It speeds up production"
+          ],
+          "answer": 1,
+          "explain_zh": "系統性阻擋不依賴人。稽核員最喜歡聽到的就是這種答案。"
+        },
+        {
+          "q": "What does offering the live demonstration achieve?",
+          "options": [
+            "It delays the audit",
+            "It saves a written follow-up item",
+            "It avoids answering the question",
+            "It shifts the topic"
+          ],
+          "answer": 1,
+          "explain_zh": "That will save us a written follow-up。現場證明比事後補文件省事得多。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "The furnace is calibrated every six months.",
+          "answer_display": "every 6 months",
+          "focus": "numbers"
+        },
+        {
+          "text": "The bake runs for one hundred sixty eight hours at one hundred twenty five degrees.",
+          "answer_display": "168 hr @ 125°C",
+          "focus": "spec"
+        }
+      ]
+    },
+    {
+      "id": "l012",
+      "title": "Con-call: negotiating qualification sample quantity",
+      "turns": [
+        { "speaker": "Priya (Program Manager)", "voice": "en-US", "text": "The customer is asking for two hundred samples in work week forty-six." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "That is more than our first build will produce." },
+        { "speaker": "Priya (Program Manager)", "voice": "en-US", "text": "How many can you commit to?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Eighty from the first build, and the rest four weeks later." },
+        { "speaker": "Priya (Program Manager)", "voice": "en-US", "text": "They will push back. What can we offer to soften that?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "We can send our own reliability data on the same silicon while they wait." },
+        { "speaker": "Priya (Program Manager)", "voice": "en-US", "text": "That is useful. Anything else?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Yes. If they tell us which tests come first, we can allocate the eighty units to match." },
+        { "speaker": "Priya (Program Manager)", "voice": "en-US", "text": "Good. I will frame it as a phased delivery rather than a shortage." }
+      ],
+      "questions": [
+        {
+          "q": "What does the engineer offer instead of the full quantity?",
+          "options": [
+            "A discount",
+            "Eighty units first, the rest four weeks later",
+            "Samples from a different product",
+            "Nothing until the second build"
+          ],
+          "answer": 1,
+          "explain_zh": "分批交付。做不到全部時，先給能給的，並附上第二批的時間。"
+        },
+        {
+          "q": "Why offer to align the eighty units with the customer's test order?",
+          "options": [
+            "To reduce shipping cost",
+            "So the customer can still start on schedule with fewer units",
+            "To avoid sending reliability data",
+            "To delay the second batch"
+          ],
+          "answer": 1,
+          "explain_zh": "讓客戶先做最急的測試，數量不足的痛感就會下降。這是很實用的談判技巧。"
+        },
+        {
+          "q": "How does the program manager plan to present it?",
+          "options": [
+            "As a shortage",
+            "As a phased delivery",
+            "As a quality issue",
+            "As a customer mistake"
+          ],
+          "answer": 1,
+          "explain_zh": "phased delivery 與 shortage 是同一件事的兩種說法，但客戶的反應完全不同。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "The customer is asking for two hundred samples in work week forty-six.",
+          "answer_display": "200 samples, WW46",
+          "focus": "workweek"
+        },
+        {
+          "text": "We can commit to eighty units first and the rest four weeks later.",
+          "answer_display": "80 units / +4 weeks",
+          "focus": "numbers"
+        }
+      ]
+    },
+    {
+      "id": "l013",
+      "title": "Escalation: the customer line is down",
+      "turns": [
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "Our line stopped this morning. I need to know what you can do today." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "First, let me confirm what I know and what I do not know." },
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "Go ahead." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "We know the failure is limited to material from three lots. We do not yet know why those three." },
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "Can I run the material that is not from those lots?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Yes. We have screened forty other lots and found no failures." },
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "That gets my line running. When will you know about the three?" },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Cross-section results come Wednesday. I will call you the same afternoon." },
+        { "speaker": "Robert (Customer Director)", "voice": "en-US", "text": "Do that. And send today's summary in writing within the hour." }
+      ],
+      "questions": [
+        {
+          "q": "How does the engineer open the answer?",
+          "options": [
+            "By apologizing at length",
+            "By separating what is known from what is not known",
+            "By blaming the fab",
+            "By promising a full analysis today"
+          ],
+          "answer": 1,
+          "explain_zh": "what I know and what I do not know —— 危機通話最有效的開場，能立刻讓對方安心你沒有在唬。"
+        },
+        {
+          "q": "What actually gets the customer's line running again?",
+          "options": [
+            "A full root cause",
+            "Confirming that forty other screened lots are clean",
+            "A replacement shipment",
+            "A waiver"
+          ],
+          "answer": 1,
+          "explain_zh": "界定「哪些是安全的」比找出根因更快解決停線。這是圍堵的商業價值。"
+        },
+        {
+          "q": "What does the director ask for at the end?",
+          "options": [
+            "A visit to the fab",
+            "A written summary within the hour",
+            "A price reduction",
+            "A new account manager"
+          ],
+          "answer": 1,
+          "explain_zh": "send today's summary in writing within the hour。口頭講完要立刻補書面，這是升級案件的慣例。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "We have screened forty other lots and found no failures.",
+          "answer_display": "40 lots screened",
+          "focus": "numbers"
+        },
+        {
+          "text": "The failure is limited to material from three lots.",
+          "answer_display": "3 lots",
+          "focus": "numbers"
+        }
+      ]
+    },
+    {
+      "id": "l014",
+      "title": "Cross-team: design and process disagree on margin",
+      "turns": [
+        { "speaker": "Alan (Design)", "voice": "en-US", "text": "The device has enough margin. The process moved, not the design." },
+        { "speaker": "You (Process)", "voice": "en-GB", "text": "The process moved within its qualified window. That is allowed." },
+        { "speaker": "Alan (Design)", "voice": "en-US", "text": "Then the window is too wide." },
+        { "speaker": "You (Process)", "voice": "en-GB", "text": "Possibly. But the design was qualified against that window, not against the typical value." },
+        { "speaker": "Alan (Design)", "voice": "en-US", "text": "That is a fair point. Do you have the distribution from the qualification lots?" },
+        { "speaker": "You (Process)", "voice": "en-GB", "text": "Yes. The qualification lots all sat near the centre, so the corners were never really tested." },
+        { "speaker": "Alan (Design)", "voice": "en-US", "text": "Then neither side is wrong. We tested a narrower range than we thought." },
+        { "speaker": "You (Process)", "voice": "en-GB", "text": "Agreed. Let us propose a corner lot experiment instead of arguing about ownership." }
+      ],
+      "questions": [
+        {
+          "q": "What is the real problem the two sides uncover?",
+          "options": [
+            "The design is defective",
+            "The process is out of control",
+            "The qualification lots never covered the corners of the window",
+            "The customer changed the specification"
+          ],
+          "answer": 2,
+          "explain_zh": "認證批全部落在中心，等於製程窗口的邊角從未被真正驗證過。這是很常見的隱藏風險。"
+        },
+        {
+          "q": "What makes this a productive argument?",
+          "options": [
+            "One side wins",
+            "Both sides concede a specific point backed by data",
+            "They escalate to management",
+            "They stop talking about it"
+          ],
+          "answer": 1,
+          "explain_zh": "That is a fair point 與 Possibly 各讓一步，最後把問題定義成共同的實驗題，而不是責任歸屬。"
+        },
+        {
+          "q": "What do they agree to do?",
+          "options": [
+            "Change the design",
+            "Narrow the process window immediately",
+            "Propose a corner lot experiment",
+            "Ask the customer to decide"
+          ],
+          "answer": 2,
+          "explain_zh": "把爭論轉成可執行的實驗，是跨部門會議最好的結尾。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "The qualification used seventy seven units per condition across three lots.",
+          "answer_display": "77 units/condition, 3 lots",
+          "focus": "spec"
+        },
+        {
+          "text": "The process window is plus or minus eight percent today.",
+          "answer_display": "±8%",
+          "focus": "percentage"
+        }
+      ]
+    },
+    {
+      "id": "l015",
+      "title": "Closing call: lessons learned",
+      "turns": [
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "Before we close the case, I would like to capture the lessons learned." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Happy to. From our side there are two." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "Please go ahead." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "First, an alarm limit that is wider than the qualified window is not a real alarm." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "That one applies to us as well, honestly." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Second, we should have sent the interim report on time even without a root cause." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "I appreciate you saying that. The silence was harder than the problem." },
+        { "speaker": "You (Engineer)", "voice": "en-GB", "text": "Understood. We have moved to a fixed weekly update for all open cases." },
+        { "speaker": "Mark (Customer QE)", "voice": "en-US", "text": "Then I am happy to close this case. Thank you for the work." }
+      ],
+      "questions": [
+        {
+          "q": "What is the first lesson learned?",
+          "options": [
+            "The furnace should be replaced",
+            "An alarm limit wider than the qualified window is not a real alarm",
+            "More samples are needed",
+            "The customer should test more"
+          ],
+          "answer": 1,
+          "explain_zh": "警報界限比製程窗口寬，等於警報永遠不會響。這是整起事件的核心教訓。"
+        },
+        {
+          "q": "What did the customer find hardest during the case?",
+          "options": [
+            "The technical complexity",
+            "The silence between updates",
+            "The cost of the material",
+            "The number of meetings"
+          ],
+          "answer": 1,
+          "explain_zh": "The silence was harder than the problem。沉默比壞消息更傷關係，這句話值得背起來。"
+        },
+        {
+          "q": "What process change came out of the case?",
+          "options": [
+            "A fixed weekly update for all open cases",
+            "A new furnace supplier",
+            "A tighter datasheet limit",
+            "A dedicated customer engineer"
+          ],
+          "answer": 0,
+          "explain_zh": "把單一事件的教訓變成常態制度，才算真正結案。"
+        }
+      ],
+      "dictation": [
+        {
+          "text": "We now send a fixed update every seven days on all open cases.",
+          "answer_display": "every 7 days",
+          "focus": "numbers"
+        },
+        {
+          "text": "The alarm limit was eight percent while the qualified window was three percent.",
+          "answer_display": "8% alarm vs 3% window",
+          "focus": "percentage"
+        }
+      ]
     }
   ]
 }

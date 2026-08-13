@@ -37,6 +37,7 @@ export async function render(root, ctx) {
   const plan = PLAN[srs.parseYmd(t).getDay()];
 
   append(root,
+    streakReminder(st, t, counts.total),
     card(
       div({ class: 'hero' },
         el('span', { class: 'n', text: String(shownStreak) }),
@@ -76,9 +77,38 @@ export async function render(root, ctx) {
     ctx.isDev() ? devPanel(ctx) : null,
   );
 
+  // PWA 圖示上的待複習數字（SPEC §7 M3：streak 通知）
+  import('../badge.js').then(b => b.update(counts.total)).catch(() => {});
+
   function doneCount(items) {
     return items.filter(r => st.readings[r.id]?.done).length;
   }
+}
+
+/**
+ * streak 提示（SPEC §7 M3）：
+ * 今天還沒練且昨天有練 → 提醒別斷；已中斷 → 不責備，直接給一個小目標。
+ */
+function streakReminder(st, today, dueTotal) {
+  const practisedToday = st.streak.lastDay === today;
+  if (practisedToday || dueTotal === 0) return null;
+
+  const yesterday = srs.addDays(today, -1);
+  const atRisk = st.streak.lastDay === yesterday && (st.streak.current || 0) > 0;
+
+  if (atRisk) {
+    return div({ class: 'card streak-alert' },
+      el('div', { class: 'title', text: `🔥 ${st.streak.current} 天連續紀錄今天到期` }),
+      el('div', { class: 'small', text: `練完 ${dueTotal} 張卡就能延續，大約 ${Math.max(3, Math.round(dueTotal * 0.4))} 分鐘。` }),
+    );
+  }
+  if (!st.streak.lastDay) return null;
+
+  const gap = srs.daysBetween(st.streak.lastDay, today);
+  return div({ class: 'card streak-alert soft' },
+    el('div', { class: 'title', text: `已經 ${gap} 天沒練了` }),
+    el('div', { class: 'small', text: `今天先清掉 ${Math.min(dueTotal, 10)} 張卡，連續紀錄從 1 重新開始就好。` }),
+  );
 }
 
 function countBy(items, fn) {

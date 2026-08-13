@@ -12,9 +12,12 @@ NAND Flash 原廠工程師的商用英文練習 PWA。每天 20–30 分鐘，�
 |---|---|---|
 | M1 | Shell/路由/首頁、單字 SRS、閱讀、進度＋匯出匯入、TTS、設定、PWA | ✅ 已完成 |
 | M2 | 跟讀評分、簡報句型（含簡報模式）、Email 句型（cloze）、聽力（含數字聽寫） | ✅ 已完成 |
-| M3 | 內容補滿（vocab 600、readings 30、listening 15）、streak 提示、弱點清單匯出 | ⬜ 未開始 |
+| M3 | 內容補滿、streak 提示（首頁＋PWA 圖示數字）、弱點清單匯出 markdown | ✅ 已完成 |
 
-內容現況：vocab **300**（A100/B125/C75）、readings **20**、email **30**、presentation **40**、listening **8**。
+內容現況：vocab **600**（A200/B250/C150）、readings **30**、email **30**、presentation **40**、listening **15**。
+
+弱點清單：進度頁可把「記不住的單字、唸不好的句子、讀不懂的文章、聽不清楚的對話、寫不出來的句型」
+整理成一份 Markdown 下載或複製，貼回 Claude Project 就能生成加強教材（檔尾附了現成的指令）。
 
 ## 本機開發
 
@@ -73,6 +76,8 @@ js/srs.js           Leitner 5 盒與日期（含 dev 時間旅行）
 js/speech.js        TTS/STT 封裝，所有 iOS workaround 都在這裡
 js/scoring.js       跟讀 token 對齊評分 ＋ 數字聽寫比對（純函式）
 js/shadow.js        跟讀 UI 元件（單字／簡報／簡報模式共用）
+js/weakness.js      弱點清單 → markdown
+js/badge.js         PWA 圖示待複習數（不支援時靜默）
 js/content.js       content/*.json 載入與快取
 js/dom.js           極簡 DOM 建構工具
 js/views/           每個模組一個 view

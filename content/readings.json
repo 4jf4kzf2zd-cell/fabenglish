@@ -1372,6 +1372,714 @@
           "explain_zh": "主動提結案並綁定一個明確的前提（檢視附錄 C），比空等對方決定更有效率。"
         }
       ]
+    },
+    {
+      "id": "r021",
+      "level": 1,
+      "genre": "customer_email",
+      "title": "Meeting request for a technical review",
+      "body": "Hi Jerry,\n\nWe would like to set up a technical review before the qualification starts.\n\nProposed topics: the read disturb margin, the screening flow, and the sample schedule. One hour should be enough.\n\nWould Tuesday or Thursday next week work for you? Our team is in Boise, so anything after seven in the morning our time is fine.\n\nIf you prefer, we can also join your Friday internal meeting instead of setting up a separate call.\n\nThanks,\nEmily",
+      "body_zh": "Jerry 您好：\n\n我們想在認證開始前安排一次技術檢討會議。\n\n建議討論的主題：讀取干擾餘裕、篩選流程、樣品時程。一小時應該足夠。\n\n下週二或週四您方便嗎？我們團隊在 Boise，我方時間早上七點以後都可以。\n\n若您方便，我們也可以直接參加貴司週五的內部會議，不必另外安排。\n\n謝謝\nEmily",
+      "glossary": [
+        { "term": "technical review", "zh": "技術檢討會議" },
+        { "term": "qualification", "zh": "認證驗證" },
+        { "term": "margin", "zh": "餘裕" },
+        { "term": "screening flow", "zh": "篩選流程" }
+      ],
+      "key_patterns": [
+        {
+          "en": "Would Tuesday or Thursday next week work for you?",
+          "zh": "給兩個選項的約時間句",
+          "note": "不要問 When are you available，那會讓對方要自己想。給兩個選項最快敲定。"
+        },
+        {
+          "en": "Our team is in Boise, so anything after seven our time is fine.",
+          "zh": "主動說明時區與可行時段",
+          "note": "跨時區約會議一定要寫清楚是誰的時間，最好連城市一起寫，避免 GMT 換算出錯。"
+        },
+        {
+          "en": "If you prefer, we can also ... instead of setting up a separate call.",
+          "zh": "提供更省事的替代方案",
+          "note": "給對方一個省時間的選項，會議通常一次就約成。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "How does Emily make it easy to schedule?",
+          "options": [
+            "She asks Jerry to propose any time",
+            "She offers two specific days and states her time zone",
+            "She books the meeting without asking",
+            "She asks Jerry's assistant"
+          ],
+          "answer": 1,
+          "explain_zh": "兩個具體日期＋時區說明。約會議的效率關鍵是減少對方要做的決定。"
+        },
+        {
+          "q": "What alternative does Emily offer?",
+          "options": [
+            "Sending questions by email instead",
+            "Joining Jerry's existing Friday meeting",
+            "Postponing to next month",
+            "Visiting the fab in person"
+          ],
+          "answer": 1,
+          "explain_zh": "we can also join your Friday internal meeting instead of setting up a separate call。"
+        },
+        {
+          "q": "How long does she expect the meeting to take?",
+          "options": ["30 minutes", "One hour", "Two hours", "Half a day"],
+          "answer": 1,
+          "explain_zh": "One hour should be enough。先講長度，對方比較容易答應。"
+        }
+      ]
+    },
+    {
+      "id": "r022",
+      "level": 1,
+      "genre": "trial_run_summary",
+      "title": "Trial run summary: probe card evaluation",
+      "body": "Purpose\n\nTo evaluate a new probe card design that should reduce contact resistance at wafer sort.\n\nScope\n\nFour wafers were tested twice: once with the current probe card and once with the new one.\n\nResult\n\nContact resistance dropped from an average of 1.8 ohms to 0.9 ohms. Sort yield was the same on both cards, which is expected because contact resistance was not limiting yield.\n\nThe new card also needed fewer cleaning cycles: two per shift instead of five.\n\nRecommendation\n\nWe recommend adopting the new probe card. The benefit is not yield but uptime: fewer cleaning cycles free about six hours of tester time per week.",
+      "body_zh": "目的\n\n評估新的探針卡設計，預期可降低針測時的接觸電阻。\n\n範圍\n\n四片晶圓各測兩次：一次用現行探針卡，一次用新卡。\n\n結果\n\n接觸電阻平均從 1.8 歐姆降到 0.9 歐姆。兩種卡的針測良率相同，這符合預期，因為接觸電阻原本就不是良率的限制因素。\n\n新卡也需要較少的清針次數：每班兩次，而不是五次。\n\n建議\n\n建議採用新的探針卡。效益不在良率而在稼動：減少清針每週約可釋出六小時的測試機台時間。",
+      "glossary": [
+        { "term": "probe card", "zh": "探針卡" },
+        { "term": "contact resistance", "zh": "接觸電阻" },
+        { "term": "uptime", "zh": "稼動時間" },
+        { "term": "cleaning cycle", "zh": "清針週期" }
+      ],
+      "key_patterns": [
+        {
+          "en": "Sort yield was the same on both cards, which is expected because ...",
+          "zh": "解釋「沒有差異」也是有意義的結果",
+          "note": "沒差異不等於實驗失敗。寫出為什麼本來就不該有差異，反而顯示你懂機制。"
+        },
+        {
+          "en": "The benefit is not yield but uptime.",
+          "zh": "點出真正的效益在哪裡",
+          "note": "not A but B 的句型能一句話糾正讀者的預期，簡報時特別好用。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "Why did sort yield stay the same?",
+          "options": [
+            "The new card was faulty",
+            "Contact resistance was not limiting yield",
+            "Only four wafers were tested",
+            "The test program was wrong"
+          ],
+          "answer": 1,
+          "explain_zh": "報告主動解釋了為什麼沒有差異。這種說明能避免主管誤以為實驗白做了。"
+        },
+        {
+          "q": "What is the real benefit of the new probe card?",
+          "options": [
+            "Higher yield",
+            "Lower cost per wafer",
+            "About six hours of tester time freed per week",
+            "Better measurement accuracy"
+          ],
+          "answer": 2,
+          "explain_zh": "清針次數從五次降到兩次，換算成每週六小時的機台時間。效益要換算成可比較的單位。"
+        },
+        {
+          "q": "How was the comparison made fair?",
+          "options": [
+            "By using different wafers for each card",
+            "By testing the same four wafers with both cards",
+            "By using the same operator",
+            "By running the test twice a day"
+          ],
+          "answer": 1,
+          "explain_zh": "同樣的晶圓測兩次，差異才能歸因於探針卡本身。"
+        }
+      ]
+    },
+    {
+      "id": "r023",
+      "level": 1,
+      "genre": "spec_change_notice",
+      "title": "Notice: test site transfer",
+      "body": "Dear Partner,\n\nWe are transferring final test for your part number from our Hsinchu site to our Taichung site, effective WW44.\n\nReason: capacity balancing. The Hsinchu testers are being reassigned to a new product family.\n\nWhat stays the same: the test program, the test limits, the tester model and the handler model are all identical. The part marking and the datasheet do not change.\n\nWhat changes: the site code on the traceability label changes from HC to TC.\n\nQualification: 3,000 units were tested at both sites. Agreement between the two sites was 99.8 percent, and all disagreements were marginal units near the pass limit. The correlation report is attached.\n\nPlease confirm receipt by 10 October. If your incoming system checks the site code, please update it before WW44.",
+      "body_zh": "合作夥伴您好：\n\n貴司料號的終測作業將自 WW44 起，由本公司新竹廠移轉至台中廠。\n\n變更原因：產能平衡。新竹的測試機台將改配置給新的產品家族。\n\n不變的部分：測試程式、測試界限、測試機型號與分類機型號完全相同，產品雷刻與規格書也不變。\n\n改變的部分：履歷標籤上的廠區代碼由 HC 改為 TC。\n\n驗證：3,000 顆樣品在兩廠各測一次，兩廠判定一致率為 99.8%，所有不一致的樣品都是接近合格線的邊際品，相關性報告如附件。\n\n請於 10 月 10 日前確認收訖。若貴司的來料系統會檢查廠區代碼，請於 WW44 前更新。",
+      "glossary": [
+        { "term": "final test", "zh": "終測" },
+        { "term": "capacity", "zh": "產能" },
+        { "term": "handler", "zh": "分類機" },
+        { "term": "site code", "zh": "廠區代碼" },
+        { "term": "agreement", "zh": "一致率" }
+      ],
+      "key_patterns": [
+        {
+          "en": "What stays the same: ... What changes: ...",
+          "zh": "變更通知最有效的兩段式",
+          "note": "先列不變的，再列改變的。這樣寫客戶三十秒就能判斷要不要重新驗證。"
+        },
+        {
+          "en": "If your incoming system checks the site code, please update it before WW44.",
+          "zh": "提醒對方要配合改的地方",
+          "note": "站在對方系統的角度想一次，能避免上線當天貨被系統擋下來。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "What actually changes for the customer?",
+          "options": [
+            "The test limits",
+            "The site code on the traceability label",
+            "The part marking",
+            "The datasheet"
+          ],
+          "answer": 1,
+          "explain_zh": "只有廠區代碼從 HC 改成 TC。其他全部列在「不變的部分」。"
+        },
+        {
+          "q": "How was the transfer qualified?",
+          "options": [
+            "By a paper review only",
+            "By testing 3,000 units at both sites and comparing",
+            "By the customer's approval",
+            "By running one lot at the new site"
+          ],
+          "answer": 1,
+          "explain_zh": "3,000 顆兩地對測，一致率 99.8%。移轉類變更一定要有相關性資料。"
+        },
+        {
+          "q": "Why is the transfer happening?",
+          "options": [
+            "Quality problems at Hsinchu",
+            "Capacity balancing",
+            "A customer request",
+            "The Hsinchu site is closing"
+          ],
+          "answer": 1,
+          "explain_zh": "Reason: capacity balancing。寫出真實原因比含糊帶過更能建立信任。"
+        }
+      ]
+    },
+    {
+      "id": "r024",
+      "level": 1,
+      "genre": "customer_email",
+      "title": "Short update: no change this week",
+      "body": "Hi Mark,\n\nWeekly update for case QC-2208-17.\n\nThere is no change since last Monday. The three verification lots are still in the furnace and come out on Thursday morning.\n\nThe next meaningful data point is the sort result on Friday. I will send it the same day, pass or fail.\n\nOne thing to flag: if the lots do not pass, the WW36 release will move by about two weeks. I will confirm on Friday.\n\nBest,\nJerry",
+      "body_zh": "Mark 您好：\n\n案件 QC-2208-17 的每週更新。\n\n自上週一以來沒有變化。三個驗證批仍在爐管內，週四早上出爐。\n\n下一個有意義的資料點是週五的針測結果。不論通過與否，我都會在當天寄出。\n\n一件事先示警：若這幾批沒通過，WW36 的放行會往後約兩週。我週五會確認。\n\n此致\nJerry",
+      "glossary": [
+        { "term": "verification lot", "zh": "驗證批" },
+        { "term": "data point", "zh": "資料點" },
+        { "term": "flag", "zh": "示警" },
+        { "term": "release", "zh": "放行" }
+      ],
+      "key_patterns": [
+        {
+          "en": "There is no change since last Monday.",
+          "zh": "沒進展也要發的更新信",
+          "note": "定期更新最重要的是節奏。沒消息時照樣發，客戶才不會每天來問。"
+        },
+        {
+          "en": "I will send it the same day, pass or fail.",
+          "zh": "承諾不論結果都會回報",
+          "note": "pass or fail 這三個字很有份量，代表你不會只報喜不報憂。"
+        },
+        {
+          "en": "One thing to flag: if X, then Y. I will confirm on {date}.",
+          "zh": "提早示警＋確認日期",
+          "note": "壞消息提早講、附上何時能確定，比事後解釋有效得多。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "Why send an update when there is no change?",
+          "options": [
+            "To fill the customer's inbox",
+            "To keep a predictable rhythm so the customer does not have to chase",
+            "Because the contract requires it",
+            "To delay the bad news"
+          ],
+          "answer": 1,
+          "explain_zh": "沒進展也發，是為了維持節奏。客戶知道週一會有信，就不會週三來催。"
+        },
+        {
+          "q": "What is the flagged risk?",
+          "options": [
+            "The furnace may break down",
+            "The customer may cancel the order",
+            "A failed verification would move the release by about two weeks",
+            "The test program may be wrong"
+          ],
+          "answer": 2,
+          "explain_zh": "if the lots do not pass, the WW36 release will move by about two weeks。"
+        },
+        {
+          "q": "What makes 'pass or fail' effective here?",
+          "options": [
+            "It shows the result is already known",
+            "It commits to reporting even a bad result",
+            "It sounds more technical",
+            "It shortens the email"
+          ],
+          "answer": 1,
+          "explain_zh": "承諾不論結果都回報，是建立信任最便宜的方式。"
+        }
+      ]
+    },
+    {
+      "id": "r025",
+      "level": 2,
+      "genre": "8d_report",
+      "title": "8D D5: choosing between two corrective actions",
+      "body": "D5 Chosen Corrective Action\n\nTwo options were evaluated.\n\nOption A: tighten the pressure alarm limit and add automatic tool shutdown. Cost: about 1 percent throughput loss. Detection: immediate, at the tool. Risk: none identified.\n\nOption B: add an in-line thickness measurement after the anneal step. Cost: one extra metrology step, about four hours of cycle time. Detection: within one lot, after the fact. Risk: metrology capacity becomes a new bottleneck.\n\nWe selected Option A. Option A stops the drift before any wafer is affected, while Option B only detects material that is already processed. Option B remains as a monitoring proposal for the next capacity review, not as the corrective action.\n\nThe decision was reviewed with the process team and the quality manager on 30 August.",
+      "body_zh": "D5 選定的矯正措施\n\n共評估兩個方案。\n\n方案 A：收緊壓力警報界限並加上機台自動停機。成本：約 1% 的產出損失。偵測時機：立即，在機台端。風險：未發現。\n\n方案 B：在退火站後加一道線上厚度量測。成本：多一道量測站，約四小時生產週期。偵測時機：一個批次內，事後才知道。風險：量測產能會成為新的瓶頸。\n\n我們選擇方案 A。方案 A 在任何晶圓受影響之前就先阻止漂移，方案 B 只能偵測到已經做完的材料。方案 B 保留為下次產能檢討時的監控提案，而不是矯正措施。\n\n本決策已於 8 月 30 日與製程團隊及品質主管共同審查。",
+      "glossary": [
+        { "term": "corrective action", "zh": "矯正措施" },
+        { "term": "throughput", "zh": "產出量" },
+        { "term": "metrology", "zh": "量測" },
+        { "term": "bottleneck", "zh": "瓶頸" },
+        { "term": "monitoring", "zh": "監控" }
+      ],
+      "key_patterns": [
+        {
+          "en": "Option A: ... Cost: ... Detection: ... Risk: ...",
+          "zh": "用固定欄位比較方案",
+          "note": "每個方案都用同樣的欄位描述，讀者才能橫向比較。欄位不一致的比較表沒有說服力。"
+        },
+        {
+          "en": "Option A stops the drift before any wafer is affected, while Option B only detects material that is already processed.",
+          "zh": "用「預防 vs 偵測」說明取捨",
+          "note": "8D 的矯正措施偏好預防型。這一句直接說明選擇邏輯，稽核時很好用。"
+        },
+        {
+          "en": "Option B remains as a monitoring proposal ..., not as the corrective action.",
+          "zh": "沒被選上的方案要交代去處",
+          "note": "不要讓落選方案憑空消失。寫清楚它變成什麼，避免之後被問「為什麼不做」。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "Why was Option A chosen?",
+          "options": [
+            "It is cheaper",
+            "It prevents the problem instead of detecting it afterwards",
+            "It is faster to implement",
+            "The customer requested it"
+          ],
+          "answer": 1,
+          "explain_zh": "預防優於偵測，是矯正措施的基本原則。成本高低反而不是主要理由。"
+        },
+        {
+          "q": "What happens to Option B?",
+          "options": [
+            "It is discarded completely",
+            "It becomes a monitoring proposal for the next capacity review",
+            "It will be implemented at the same time",
+            "It is deferred to the customer"
+          ],
+          "answer": 1,
+          "explain_zh": "落選方案要交代去處，這樣報告才完整，也避免日後重複討論。"
+        },
+        {
+          "q": "What is the main risk of Option B?",
+          "options": [
+            "It costs too much money",
+            "Metrology capacity becomes a new bottleneck",
+            "It cannot detect the drift",
+            "It requires customer approval"
+          ],
+          "answer": 1,
+          "explain_zh": "加一道量測站會排擠量測產能。評估方案時要看它會不會製造新的限制。"
+        }
+      ]
+    },
+    {
+      "id": "r026",
+      "level": 2,
+      "genre": "audit_reply",
+      "title": "Reply to a finding on operator training records",
+      "body": "Finding 1: Two operators on the night shift performed the rework step without a valid training record.\n\nOur response\n\nWe accept the finding. Both operators were trained in WW22, but the records were filed under their previous employee numbers after an internal transfer and were therefore not visible in the current system.\n\nWe want to be precise here: this is a records issue, not a competence issue. Both operators completed the full training and passed the practical assessment. The original signed records are attached as Appendix D.\n\nImpact assessment: we reviewed all 38 lots reworked by these two operators since WW22. Rework quality data shows no difference from the shift average, and no customer complaint is linked to those lots.\n\nCorrective action: the training database now keys on the national identity number instead of the employee number, so an internal transfer cannot break the link. All 214 active operators were re-checked in WW33; two other records with the same problem were found and corrected.\n\nWe propose closing this finding with the attached evidence.",
+      "body_zh": "缺失事項 1：夜班有兩位操作員在沒有有效訓練紀錄的情況下執行重工作業。\n\n我方回覆\n\n我們接受此項缺失。這兩位操作員在 WW22 已完成訓練，但內部調動後，紀錄仍歸檔在舊員工編號下，因此在現行系統中查不到。\n\n我們要精確說明：這是紀錄問題，不是能力問題。兩位操作員都完成了完整訓練並通過實作考核，原始簽核紀錄如附錄 D。\n\n影響評估：我們檢視了這兩位操作員自 WW22 以來重工的全部 38 個批次。重工品質資料與該班平均沒有差異，也沒有任何客訴與這些批次相關。\n\n矯正措施：訓練資料庫已改以身分證字號而非員工編號為索引鍵，內部調動不會再切斷連結。WW33 已重新檢查全部 214 位在職操作員，另發現兩筆相同問題的紀錄並已更正。\n\n我們建議依附件證據結案本缺失。",
+      "glossary": [
+        { "term": "night shift", "zh": "夜班" },
+        { "term": "training record", "zh": "訓練紀錄" },
+        { "term": "competence", "zh": "能力資格" },
+        { "term": "practical assessment", "zh": "實作考核" },
+        { "term": "impact assessment", "zh": "影響評估" }
+      ],
+      "key_patterns": [
+        {
+          "en": "We want to be precise here: this is a records issue, not a competence issue.",
+          "zh": "精確界定問題性質",
+          "note": "紀錄問題與能力問題在稽核上是完全不同等級。這一句能把缺失從紅燈拉回黃燈，但前提是你真的有原始紀錄。"
+        },
+        {
+          "en": "We reviewed all 38 lots reworked by these two operators since WW22.",
+          "zh": "把影響評估做滿",
+          "note": "不要只說「應該沒影響」。把範圍算出來、全部查過，才是稽核員接受的說法。"
+        },
+        {
+          "en": "All 214 active operators were re-checked; two other records with the same problem were found and corrected.",
+          "zh": "主動橫向展開並誠實報告新發現",
+          "note": "自己查出另外兩筆並修正，比宣稱「只有這兩筆」更可信。稽核員最怕的是你沒查。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "What was the actual cause of the missing records?",
+          "options": [
+            "The operators never attended training",
+            "Records were filed under previous employee numbers after a transfer",
+            "The training system was down",
+            "The trainer forgot to sign"
+          ],
+          "answer": 1,
+          "explain_zh": "內部調動後紀錄留在舊員編下，系統查不到。找出「連結斷在哪裡」才是根因。"
+        },
+        {
+          "q": "Why does the reply distinguish records from competence?",
+          "options": [
+            "To avoid the finding entirely",
+            "Because the two have very different severity in an audit",
+            "To blame the HR department",
+            "To delay the response"
+          ],
+          "answer": 1,
+          "explain_zh": "能力不足是產品風險，紀錄缺漏是系統風險。界定清楚才能對應正確的矯正措施。"
+        },
+        {
+          "q": "What makes the corrective action convincing?",
+          "options": [
+            "The operators were retrained",
+            "The database key was changed so transfers cannot break the link",
+            "A reminder email was sent",
+            "The night shift was cancelled"
+          ],
+          "answer": 1,
+          "explain_zh": "改索引鍵是結構性修正，不依賴人記得做事。再教育無法驗證有效性。"
+        },
+        {
+          "q": "Why mention the two additional records found?",
+          "options": [
+            "To make the report longer",
+            "To show the horizontal check was genuinely done",
+            "To shift blame to other operators",
+            "Because the auditor asked"
+          ],
+          "answer": 1,
+          "explain_zh": "誠實報告自己查到的新問題，是橫向展開真的有做的證據。藏起來被查到才是災難。"
+        }
+      ]
+    },
+    {
+      "id": "r027",
+      "level": 3,
+      "genre": "fa_report",
+      "title": "FA report: distinguishing two failure mechanisms",
+      "body": "Objective\n\nTo determine whether the 22 field returns share a single failure mechanism.\n\nObservations\n\nElectrical characterisation splits the population into two groups.\n\nGroup 1 (16 units): failures appear only above 70 degrees Celsius and disappear after an erase. The threshold voltage distribution of the adjacent page is shifted upward. This is consistent with read disturb.\n\nGroup 2 (6 units): failures are present at room temperature and persist after an erase. Cross-section on two of these units shows a physical void in the word line contact.\n\nDiscussion\n\nThe two groups are not variations of one mechanism. Group 1 is reversible and use-condition dependent; Group 2 is a permanent structural defect. Treating them together would average out both signals and point to neither cause.\n\nThe wafer maps support the split. Group 2 units come from three lots processed in WW29, while Group 1 units are spread across eleven lots with no common tool.\n\nRecommendation\n\nOpen a separate 8D for Group 2. Group 1 should be handled through the usage-model review already agreed with the customer.",
+      "body_zh": "目的\n\n判斷 22 顆現場退回品是否屬於單一失效機制。\n\n觀察\n\n電性分析把樣品分成兩群。\n\n第一群（16 顆）：失效只在 70°C 以上出現，抹除後消失，鄰近 page 的臨界電壓分佈往上位移，與讀取干擾一致。\n\n第二群（6 顆）：室溫下即失效，抹除後仍然存在。其中兩顆的剖面顯示 word line 接觸處有實體空洞。\n\n討論\n\n這兩群不是同一機制的變形。第一群可逆且與使用條件相關；第二群是永久性的結構缺陷。把兩群一起處理會把兩個訊號互相稀釋，最後哪個原因都指不到。\n\n晶圓分佈圖也支持這個切分。第二群來自 WW29 的三個批次，第一群則分散在十一個批次、沒有共同機台。\n\n建議\n\n為第二群另開一份 8D。第一群依先前與客戶議定的使用模型檢視流程處理。",
+      "glossary": [
+        { "term": "field return", "zh": "現場退回品" },
+        { "term": "characterisation", "zh": "特性分析" },
+        { "term": "reversible", "zh": "可逆的" },
+        { "term": "structural defect", "zh": "結構缺陷" },
+        { "term": "wafer map", "zh": "晶圓分佈圖" }
+      ],
+      "key_patterns": [
+        {
+          "en": "Group 1 ... This is consistent with read disturb. Group 2 ... shows a physical void.",
+          "zh": "分群描述時每群都給獨立證據",
+          "note": "分群的說服力來自「每一群都有自己的證據鏈」，不是來自數量多寡。"
+        },
+        {
+          "en": "Treating them together would average out both signals and point to neither cause.",
+          "zh": "說明為什麼一定要分開處理",
+          "note": "這一句是整份報告的核心。沒有它，讀者會覺得分群只是把事情複雜化。"
+        },
+        {
+          "en": "Open a separate 8D for Group 2.",
+          "zh": "給出明確可執行的下一步",
+          "note": "分析報告的結尾要落在動作上，不能停在「還需要進一步研究」。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "What distinguishes Group 2 from Group 1?",
+          "options": [
+            "Group 2 fails only at high temperature",
+            "Group 2 failures persist after erase and show a physical void",
+            "Group 2 has more units",
+            "Group 2 comes from eleven different lots"
+          ],
+          "answer": 1,
+          "explain_zh": "可逆 vs 不可逆是關鍵分野。抹除後仍存在＋剖面看到空洞＝結構性損傷。"
+        },
+        {
+          "q": "Why is it wrong to analyse both groups together?",
+          "options": [
+            "It would take too long",
+            "The signals would average out and point to no clear cause",
+            "The customer prefers separate reports",
+            "The sample size is too small"
+          ],
+          "answer": 1,
+          "explain_zh": "兩個不同機制混在一起統計，會把兩邊的特徵都稀釋掉，最後什麼都證明不了。"
+        },
+        {
+          "q": "How do the wafer maps support the split?",
+          "options": [
+            "Both groups come from the same three lots",
+            "Group 2 clusters in three WW29 lots while Group 1 is spread out",
+            "All units come from the wafer edge",
+            "The maps show no pattern at all"
+          ],
+          "answer": 1,
+          "explain_zh": "集中 vs 分散的分佈本身就是證據。第二群集中在特定批次，指向製程事件。"
+        },
+        {
+          "q": "What is recommended for Group 1?",
+          "options": [
+            "A separate 8D",
+            "Scrapping the material",
+            "The usage-model review already agreed with the customer",
+            "No action"
+          ],
+          "answer": 2,
+          "explain_zh": "第一群是使用條件相關，走既有的使用模型檢視，不必另開 8D。"
+        }
+      ]
+    },
+    {
+      "id": "r028",
+      "level": 3,
+      "genre": "customer_email",
+      "title": "Declining a customer request without damaging the relationship",
+      "body": "Dear Steve,\n\nThank you for the detailed proposal on adding a dedicated screening flow for your parts.\n\nWe have evaluated it seriously. Unfortunately we cannot commit to it in its current form, and I want to explain why rather than simply decline.\n\nThe proposed flow requires a 48-hour bake on every lot. At your current volume that is 1,400 lots per quarter, which exceeds our total bake capacity even if we stopped all other products. This is a physical constraint, not a commercial one.\n\nWhat we can offer instead:\n\nFirst, a 48-hour bake on a sampling basis, 32 units per lot, which covers the same failure mode statistically at 90 percent confidence. Second, the full bake on any lot you flag as high risk, with a 3-day lead time.\n\nBoth options can start from WW42. If neither works, I would like to set up a call with our capacity planner so we can look at the numbers together.\n\nBest regards,\nJerry",
+      "body_zh": "Steve 您好：\n\n感謝您就貴司產品增設專屬篩選流程提出的詳細提案。\n\n我們認真評估過。很遺憾，以目前的形式我們無法承諾執行，而我想說明原因，而不是單純拒絕。\n\n該提案要求每一批都做 48 小時烘烤。以貴司目前的量計算，每季是 1,400 個批次，這個量即使我們停掉所有其他產品，也超過我方的總烘烤產能。這是物理上的限制，不是商業上的考量。\n\n我們可以提供的替代方案：\n\n第一，改為抽樣式的 48 小時烘烤，每批 32 顆，在統計上以 90% 信賴水準涵蓋同樣的失效模式。第二，貴司標記為高風險的批次可做全數烘烤，前置時間 3 天。\n\n兩個方案都可以從 WW42 開始。若兩者皆不適用，我希望安排一次會議，與我方產能規劃人員一起看數字。\n\n此致\nJerry",
+      "glossary": [
+        { "term": "dedicated", "zh": "專屬的" },
+        { "term": "commit", "zh": "承諾" },
+        { "term": "constraint", "zh": "限制條件" },
+        { "term": "sampling basis", "zh": "抽樣方式" },
+        { "term": "confidence", "zh": "信賴水準" },
+        { "term": "lead time", "zh": "前置時間" }
+      ],
+      "key_patterns": [
+        {
+          "en": "We cannot commit to it in its current form, and I want to explain why rather than simply decline.",
+          "zh": "拒絕但保留討論空間",
+          "note": "in its current form 留下了修改後可行的可能。加上「我想解釋原因」，語氣就從拒絕變成協商。"
+        },
+        {
+          "en": "This is a physical constraint, not a commercial one.",
+          "zh": "區分做不到與不想做",
+          "note": "客戶最怕聽到的是「你只是不想做」。點明是產能物理限制，對方才不會覺得你在殺價。"
+        },
+        {
+          "en": "What we can offer instead: First, ... Second, ...",
+          "zh": "拒絕之後立刻給替代方案",
+          "note": "沒有替代方案的拒絕會直接升級到管理層。給兩個選項讓對方做選擇題。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "Why can't the supplier accept the proposal?",
+          "options": [
+            "It is too expensive",
+            "The required bake volume exceeds total bake capacity",
+            "The customer's volume is too small",
+            "The failure mode does not exist"
+          ],
+          "answer": 1,
+          "explain_zh": "1,400 批/季超過總烘烤產能。用具體數字說明限制，遠比說「做不到」有說服力。"
+        },
+        {
+          "q": "What is the effect of saying 'physical constraint, not commercial'?",
+          "options": [
+            "It shows the supplier wants more money",
+            "It stops the customer reading the refusal as a negotiation tactic",
+            "It transfers the problem to the customer",
+            "It ends the discussion"
+          ],
+          "answer": 1,
+          "explain_zh": "把限制歸因於產能而非意願，對方就不會用商業手段來施壓，而會一起想辦法。"
+        },
+        {
+          "q": "What does the second alternative offer?",
+          "options": [
+            "A full bake on customer-flagged high-risk lots with 3-day lead time",
+            "A discount on the affected parts",
+            "A new supplier",
+            "A design change"
+          ],
+          "answer": 0,
+          "explain_zh": "把決定權交回客戶：你認為哪批風險高，那批就做全數烘烤。"
+        },
+        {
+          "q": "What is the fallback if neither option works?",
+          "options": [
+            "Escalate to management",
+            "A call with the capacity planner to look at the numbers together",
+            "Cancel the business",
+            "Repeat the evaluation"
+          ],
+          "answer": 1,
+          "explain_zh": "把最後一手留成「一起看數字」，比丟給管理層更能維持關係。"
+        }
+      ]
+    },
+    {
+      "id": "r029",
+      "level": 3,
+      "genre": "spec_change_notice",
+      "title": "Notice: process node transition and its qualification plan",
+      "body": "Dear Partner,\n\nThis notice describes the transition of your part number from our N1 process to our N2 process, planned for WW02 next year.\n\nWhy: N1 will reach end of life as the fab converts capacity. N2 is our current volume node and has been in production for six quarters.\n\nProduct impact: the part number, package, pin-out and datasheet limits do not change. Two parameters improve: standby current drops by about 30 percent, and program time improves by about 15 percent. Both remain within the published limits, so no datasheet revision is required.\n\nWhat we ask you to note: because both parameters move in the same direction, any system that has been tuned to the N1 typical values may see different margins. If your firmware uses a fixed timing assumption rather than the ready signal, please review it.\n\nQualification plan: full reliability qualification per JEDEC, 77 units per condition across three lots, plus a 3,000-unit correlation between N1 and N2 material. Samples for your own evaluation will be available in WW46.\n\nWe would like your feedback on the sample quantity by 15 October. The qualification report will be issued in WW52.",
+      "body_zh": "合作夥伴您好：\n\n本通知說明貴司料號自本公司 N1 製程移轉至 N2 製程的計畫，預計於明年 WW02 實施。\n\n變更原因：隨著晶圓廠產能轉換，N1 將進入生命週期末期。N2 是本公司現行的量產節點，已量產六個季度。\n\n產品影響：料號、封裝、腳位與規格書界限均不變。兩項參數改善：待機電流下降約 30%，寫入時間改善約 15%。兩者都仍在公告界限內，因此不需修訂規格書。\n\n需請貴司留意之處：由於這兩項參數同向變動，任何依 N1 典型值調校過的系統，餘裕可能會改變。若貴司韌體使用固定時序假設而非 ready 訊號，請一併檢視。\n\n驗證計畫：依 JEDEC 執行完整可靠度認證，每個條件 77 顆、共三個批次，另加 N1 與 N2 材料 3,000 顆的相關性驗證。供貴司自行評估的樣品將於 WW46 提供。\n\n請於 10 月 15 日前回覆對樣品數量的意見。認證報告將於 WW52 發出。",
+      "glossary": [
+        { "term": "end of life", "zh": "生命週期末期（EOL）" },
+        { "term": "pin-out", "zh": "腳位定義" },
+        { "term": "typical value", "zh": "典型值" },
+        { "term": "firmware", "zh": "韌體" },
+        { "term": "correlation", "zh": "相關性驗證" }
+      ],
+      "key_patterns": [
+        {
+          "en": "Both remain within the published limits, so no datasheet revision is required.",
+          "zh": "說明為什麼不必改規格書",
+          "note": "參數變好也是變化。主動說明為何不改規格書，能省掉客戶一輪追問。"
+        },
+        {
+          "en": "What we ask you to note: because both parameters move in the same direction, any system tuned to the typical values may see different margins.",
+          "zh": "提醒對方檢查自己那一側的風險",
+          "note": "這是專業與敷衍的分界線。變好的參數也可能打破對方的假設，主動點名才叫負責。"
+        },
+        {
+          "en": "If your firmware uses a fixed timing assumption rather than the ready signal, please review it.",
+          "zh": "指出具體要檢查什麼",
+          "note": "不要只說 please evaluate。指名要看哪一段設計，對方才知道怎麼動手。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "Why is no datasheet revision needed?",
+          "options": [
+            "The parameters did not change",
+            "Both changed parameters stay within the published limits",
+            "The customer waived the requirement",
+            "The datasheet was revised last year"
+          ],
+          "answer": 1,
+          "explain_zh": "典型值改變但仍在公告界限內，所以規格書不動。這個邏輯要寫出來。"
+        },
+        {
+          "q": "What is the risk the notice asks the customer to check?",
+          "options": [
+            "The package may not fit",
+            "Systems tuned to N1 typical values may see different margins",
+            "The part number will change",
+            "Delivery will be delayed"
+          ],
+          "answer": 1,
+          "explain_zh": "參數變好也可能打破客戶端的假設，尤其是用固定時序而非 ready 訊號的韌體。"
+        },
+        {
+          "q": "What does the qualification plan include beyond reliability stress?",
+          "options": [
+            "A customer audit",
+            "A 3,000-unit correlation between N1 and N2 material",
+            "A new datasheet",
+            "A price adjustment"
+          ],
+          "answer": 1,
+          "explain_zh": "製程移轉除了可靠度，一定要有新舊材料的相關性驗證。"
+        },
+        {
+          "q": "What is the customer asked to do by 15 October?",
+          "options": [
+            "Approve the transition",
+            "Give feedback on the sample quantity",
+            "Update their firmware",
+            "Place a new purchase order"
+          ],
+          "answer": 1,
+          "explain_zh": "只要求一件小事並附期限，回覆率比要求「全面確認」高得多。"
+        }
+      ]
+    },
+    {
+      "id": "r030",
+      "level": 3,
+      "genre": "trial_run_summary",
+      "title": "Trial run summary: a negative result worth reporting",
+      "body": "Purpose\n\nTo test the hypothesis that lowering the anneal temperature by 15 degrees would reduce the edge thickness variation without hurting device performance.\n\nMethod\n\nThree lots were split three ways: current temperature, minus 10 degrees, and minus 15 degrees. All other conditions were held constant. Sort yield, edge thickness and endurance were measured.\n\nResult\n\nEdge thickness variation did improve, from 4.2 to 2.8 percent at minus 15 degrees. However, endurance dropped from 3,400 to 2,600 cycles, which is below the 3,000-cycle specification.\n\nThe minus 10 degree split showed almost no improvement in thickness variation, so there is no useful window between the two conditions.\n\nConclusion\n\nThe hypothesis is rejected. Lower anneal temperature trades reliability for uniformity at an unacceptable rate.\n\nWhat we learned: edge thickness variation is not the dominant factor in the excursion. The pressure control fix already released in WW35 addresses the real cause, and this experiment confirms we should not add a temperature change on top of it.",
+      "body_zh": "目的\n\n驗證一個假說：把退火溫度降低 15 度，可在不影響元件性能的前提下降低邊緣厚度變異。\n\n方法\n\n三個批次各分三組：現行溫度、負 10 度、負 15 度，其餘條件全部固定。量測針測良率、邊緣厚度與耐久度。\n\n結果\n\n邊緣厚度變異確實改善，在負 15 度時由 4.2% 降到 2.8%。但耐久度從 3,400 次掉到 2,600 次，低於 3,000 次的規格。\n\n負 10 度組的厚度變異幾乎沒有改善，因此兩個條件之間並不存在可用的窗口。\n\n結論\n\n假說被否定。降低退火溫度是以不可接受的比例，用可靠度換取均勻性。\n\n學到的事：邊緣厚度變異並非本次異常的主因。WW35 已放行的壓力控制修正才是針對真正原因，而本實驗確認我們不應該在其上再疊加溫度變更。",
+      "glossary": [
+        { "term": "hypothesis", "zh": "假說" },
+        { "term": "split", "zh": "分組實驗" },
+        { "term": "held constant", "zh": "維持固定" },
+        { "term": "endurance", "zh": "耐久度" },
+        { "term": "trade", "zh": "以⋯換取" }
+      ],
+      "key_patterns": [
+        {
+          "en": "The hypothesis is rejected.",
+          "zh": "直接寫出否定結論",
+          "note": "否定結果也是結果。用一句話講清楚，不要用「效果不如預期」這種模糊說法。"
+        },
+        {
+          "en": "X trades reliability for uniformity at an unacceptable rate.",
+          "zh": "用「以 A 換 B」描述取捨",
+          "note": "trade A for B 這個句型能把兩個互斥的指標一句話講完，比列兩組數字更清楚。"
+        },
+        {
+          "en": "What we learned: ...",
+          "zh": "把失敗實驗的價值寫出來",
+          "note": "否定實驗最重要的一段。它排除了一個方向，也支持了現行方案，這就是價值。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "Why was the hypothesis rejected?",
+          "options": [
+            "Edge thickness variation did not improve",
+            "Endurance fell below the specification",
+            "The experiment used too few lots",
+            "Sort yield dropped"
+          ],
+          "answer": 1,
+          "explain_zh": "厚度變異確實改善了，但耐久度掉到 2,600 次、低於 3,000 次規格。改善一項卻打破另一項，就是不可接受的取捨。"
+        },
+        {
+          "q": "Why is the minus 10 degree split important to report?",
+          "options": [
+            "It performed best overall",
+            "It shows there is no useful window between the two conditions",
+            "It was the control group",
+            "It had the highest yield"
+          ],
+          "answer": 1,
+          "explain_zh": "中間條件沒有改善，代表無法折衷。少了這一組，別人會問「那降 10 度呢」。"
+        },
+        {
+          "q": "What is the value of this negative result?",
+          "options": [
+            "It proves the team works hard",
+            "It rules out a direction and supports the fix already released",
+            "It justifies buying new equipment",
+            "It has no value"
+          ],
+          "answer": 1,
+          "explain_zh": "排除一個方向就是收斂。它同時佐證了 WW35 的壓力修正才是對的路。"
+        },
+        {
+          "q": "What was held constant in the experiment?",
+          "options": [
+            "The anneal temperature",
+            "All conditions except the anneal temperature",
+            "The number of wafers only",
+            "Nothing"
+          ],
+          "answer": 1,
+          "explain_zh": "All other conditions were held constant。只變一個變數，結果才能歸因。"
+        }
+      ]
     }
   ]
 }

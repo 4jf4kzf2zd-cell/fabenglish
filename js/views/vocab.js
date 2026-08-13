@@ -62,6 +62,7 @@ export async function render(root, ctx) {
       }
       session.finished = true;
       host.replaceChildren(summary());
+      import('../badge.js').then(b => b.refresh()).catch(() => {});
       return;
     }
 

@@ -8,6 +8,7 @@ export const DEFAULT_SETTINGS = {
   newPerDay: 10,
   voice: 'auto',
   rate: 1.0,
+  badge: true,     // PWA 圖示上顯示待複習數
   dev: false,
 };
 

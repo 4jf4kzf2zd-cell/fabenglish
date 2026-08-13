@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FabEnglish · 商用英文練習</title>
+<meta name="description" content="NAND Flash 原廠工程師的商用英文練習 App">
+<meta name="theme-color" content="#0B1E2D">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/app.css">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FabEnglish">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+
+<div id="banner" class="banner" hidden></div>
+
+<header id="topbar">
+  <h1 id="title">FabEnglish</h1>
+  <div id="topbar-actions"></div>
+</header>
+
+<main id="view" tabindex="-1">
+  <p class="loading">載入中⋯</p>
+</main>
+
+<nav id="tabbar" aria-label="主選單">
+  <a href="#/home"     data-tab="/home"><span class="ico">☰</span><span>首頁</span></a>
+  <a href="#/vocab"    data-tab="/vocab"><span class="ico">A</span><span>單字</span></a>
+  <a href="#/reading"  data-tab="/reading"><span class="ico">¶</span><span>閱讀</span></a>
+  <a href="#/progress" data-tab="/progress"><span class="ico">▤</span><span>進度</span></a>
+  <a href="#/settings" data-tab="/settings"><span class="ico">⚙</span><span>設定</span></a>
+</nav>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

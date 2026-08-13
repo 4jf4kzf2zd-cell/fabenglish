@@ -1,0 +1,684 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "r001",
+      "level": 1,
+      "genre": "customer_email",
+      "title": "Customer inquiry on WW32 yield excursion",
+      "body": "Dear Jerry,\n\nDuring incoming inspection this week we found a higher than usual fail rate on lot A123. Our data shows 1.8 percent, while your shipping report shows 0.3 percent.\n\nCould you share the containment plan and the estimated date for the 8D report? We also need to know whether other lots from the same work week are affected.\n\nOur line is still running, but we will have to stop it on Friday if we do not receive your reply.\n\nBest regards,\nMark Chen\nQuality Engineering, Northstar Memory",
+      "body_zh": "Jerry 您好：\n\n本週來料檢驗時，我們發現批號 A123 的失效率高於平常。我們的數據是 1.8%，但貴司的出貨報告寫的是 0.3%。\n\n可否提供圍堵對策，以及 8D 報告的預計完成日期？我們也需要知道同一個 WW 的其他批次是否受到影響。\n\n我們的產線目前仍在運轉，但如果週五前沒收到回覆，就必須停線。\n\n此致\nMark Chen\nNorthstar Memory 品質工程部",
+      "glossary": [
+        { "term": "incoming inspection", "zh": "來料檢驗" },
+        { "term": "fail rate", "zh": "失效率" },
+        { "term": "containment plan", "zh": "圍堵對策" },
+        { "term": "8D report", "zh": "8D 報告（八大步驟問題解決報告）" },
+        { "term": "work week", "zh": "工作週（WW）" }
+      ],
+      "key_patterns": [
+        {
+          "en": "Could you share ... and the estimated date for ...?",
+          "zh": "索取資料＋要求時程的標準句式",
+          "note": "客戶這樣問代表在要 commitment，回信必須給日期，寫「盡快」等於沒回答。"
+        },
+        {
+          "en": "Our data shows X, while your report shows Y.",
+          "zh": "指出雙方資料落差的中性說法",
+          "note": "用 while 對比事實，不指控對方造假；焦點放在數字，不放在責任。"
+        },
+        {
+          "en": "We will have to ... if we do not receive your reply.",
+          "zh": "軟性施壓的期限句",
+          "note": "這是最後通牒的禮貌版。看到這種句子代表當天就要回，即使只能先回「收到，明天給日期」。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "What is the customer actually asking for?",
+          "options": [
+            "A price discount for the affected lot",
+            "A written apology from the supplier",
+            "A containment plan and a date for the 8D report",
+            "Replacement samples for evaluation"
+          ],
+          "answer": 2,
+          "explain_zh": "信裡最核心的一句是 Could you share the containment plan and the estimated date for the 8D report。其他選項信中都沒提到。"
+        },
+        {
+          "q": "Why does Mark mention 1.8 percent and 0.3 percent together?",
+          "options": [
+            "To point out a discrepancy between the two sides' data",
+            "To show that the yield is improving",
+            "To explain how his test equipment works",
+            "To request a new specification limit"
+          ],
+          "answer": 0,
+          "explain_zh": "兩個數字並列是為了凸顯 discrepancy（資料落差）。回信時要先承認落差存在，再說明你會怎麼查，不要急著否認對方的數字。"
+        },
+        {
+          "q": "What will happen if there is no reply by Friday?",
+          "options": [
+            "The customer will place a new order",
+            "The customer will stop their production line",
+            "The customer will scrap the material",
+            "The customer will visit the fab"
+          ],
+          "answer": 1,
+          "explain_zh": "Our line is still running, but we will have to stop it on Friday。停線代表損失金額會開始累積，這封信的優先級是最高的。"
+        }
+      ]
+    },
+    {
+      "id": "r002",
+      "level": 1,
+      "genre": "customer_email",
+      "title": "Request for failure analysis samples",
+      "body": "Hi Jerry,\n\nThank you for the quick update yesterday. We would like to return four failing units for failure analysis.\n\nCould you confirm the shipping address and the RMA number we should write on the box? We also need to know the expected turnaround time so that we can inform our customer.\n\nIf a cross-section is required, please let us know in advance, since we will then send eight units instead of four.\n\nThanks,\nAnna\nSupplier Quality, Northstar Memory",
+      "body_zh": "Jerry 您好：\n\n謝謝您昨天迅速更新狀況。我們想寄回四顆失效品做失效分析。\n\n可否確認寄送地址，以及外箱要寫的 RMA 編號？我們也需要知道預計的處理週期，好讓我們通知終端客戶。\n\n如果需要做剖面分析，請提前告知，我們就會寄八顆而不是四顆。\n\n謝謝\nAnna\nNorthstar Memory 供應商品質部",
+      "glossary": [
+        { "term": "failure analysis", "zh": "失效分析（FA）" },
+        { "term": "turnaround time", "zh": "處理週期" },
+        { "term": "cross-section", "zh": "剖面分析" },
+        { "term": "RMA number", "zh": "退貨授權編號" }
+      ],
+      "key_patterns": [
+        {
+          "en": "Could you confirm A and B?",
+          "zh": "一次確認兩件事的簡潔問法",
+          "note": "回信時照順序逐項回答，客戶問兩件就回兩件，漏一件會被再問一次。"
+        },
+        {
+          "en": "If X is required, please let us know in advance, since we will then ...",
+          "zh": "條件句＋提前告知的請求",
+          "note": "since 後面說明為什麼要提前知道，讓對方理解這不是多問，而是會改變他們的動作。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "How many units will Anna send if a cross-section is needed?",
+          "options": ["Four", "Six", "Eight", "Twelve"],
+          "answer": 2,
+          "explain_zh": "we will then send eight units instead of four。這種數量條件在回信時要明確確認，避免收到數量不足無法分析。"
+        },
+        {
+          "q": "Why does Anna need the turnaround time?",
+          "options": [
+            "To decide whether to pay for express shipping",
+            "To inform her own customer",
+            "To schedule a factory visit",
+            "To close the RMA immediately"
+          ],
+          "answer": 1,
+          "explain_zh": "so that we can inform our customer。她背後也有客戶在等，所以給的日期一旦承諾就很難改。"
+        },
+        {
+          "q": "Which reply below answers the email completely?",
+          "options": [
+            "\"We will check and get back to you soon.\"",
+            "\"Please send the units to our Hsinchu site. FA takes about ten working days, and a cross-section is not required at this stage.\"",
+            "\"Thank you for your email. We are sorry for the inconvenience.\"",
+            "\"The failure rate is only 0.3 percent, so analysis may not be necessary.\""
+          ],
+          "answer": 1,
+          "explain_zh": "完整回覆＝地址＋處理週期＋是否需要剖面，三個問題全部回到。A 和 C 沒有資訊量，D 迴避了問題。"
+        }
+      ]
+    },
+    {
+      "id": "r003",
+      "level": 2,
+      "genre": "customer_email",
+      "title": "Escalation: the 8D report is overdue",
+      "body": "Dear Jerry,\n\nI am following up on our request from WW33. The interim 8D report was committed for last Friday, but we have not received anything so far.\n\nOur management reviewed the case this morning and asked me to escalate. To be clear, we are not questioning your technical work; the issue is that we cannot plan without a date we can rely on.\n\nPlease send the interim report by Wednesday, even if the root cause is not fully confirmed. A report that states what is known, what is still open, and when it will close is enough for us at this stage.\n\nIf Wednesday is not realistic, tell me today and give me a date that is.\n\nRegards,\nMark Chen\nQuality Engineering, Northstar Memory",
+      "body_zh": "Jerry 您好：\n\n我在追蹤我們 WW33 提出的需求。8D 期中報告原本承諾上週五交，但到目前為止我們什麼都沒收到。\n\n管理層今天早上檢視了這個案子，要求我升級處理。把話說清楚：我們不是在質疑貴司的技術工作，問題在於沒有一個可靠的日期，我們無法安排計畫。\n\n請在週三前寄出期中報告，即使根本原因還沒完全確認也沒關係。一份說明「已知什麼、還有什麼未結、何時會結案」的報告，在現階段對我們就足夠了。\n\n如果週三並不實際，今天就告訴我，並給我一個做得到的日期。\n\n此致\nMark Chen\nNorthstar Memory 品質工程部",
+      "glossary": [
+        { "term": "interim", "zh": "期中的、階段性的" },
+        { "term": "escalate", "zh": "上呈升級處理" },
+        { "term": "root cause", "zh": "根本原因" },
+        { "term": "realistic", "zh": "實際可行的" }
+      ],
+      "key_patterns": [
+        {
+          "en": "To be clear, we are not questioning ...; the issue is that ...",
+          "zh": "先降溫再指出真正問題",
+          "note": "客戶用這個句式時是在保護關係、但不放過事情。回信也要照做：先謝謝理解，再給日期。"
+        },
+        {
+          "en": "A report that states what is known, what is still open, and when it will close is enough.",
+          "zh": "定義可接受的最低交付內容",
+          "note": "這句其實是幫你解套——不必等完整結論才回。期中報告的三段式結構可以直接沿用。"
+        },
+        {
+          "en": "If X is not realistic, tell me today and give me a date that is.",
+          "zh": "要求對方主動提出可行日期",
+          "note": "最忌諱的回應是沉默。就算做不到，當天回一句「週五可以，週三不行」也遠好過不回。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "What is Mark's main complaint?",
+          "options": [
+            "The technical analysis is wrong",
+            "A committed date was missed and no new date was given",
+            "The failure rate is too high",
+            "The supplier sent the wrong report format"
+          ],
+          "answer": 1,
+          "explain_zh": "他明說 we are not questioning your technical work，問題是承諾的日期跳票且沒有補上新日期。"
+        },
+        {
+          "q": "What does Mark accept as the minimum deliverable?",
+          "options": [
+            "A confirmed root cause with full data",
+            "A phone call from the supplier's management",
+            "An interim report stating what is known, what is open, and the closing date",
+            "A replacement shipment"
+          ],
+          "answer": 2,
+          "explain_zh": "他直接寫出了可接受的最低內容：已知／未結／何時結案。這是寫期中報告最安全的三段結構。"
+        },
+        {
+          "q": "Which reply best matches what the customer asked for?",
+          "options": [
+            "\"We are still analysing and will update you as soon as possible.\"",
+            "\"Wednesday is difficult. We will send the interim report on Friday WW35 with the containment status and the open items.\"",
+            "\"Sorry for the delay. The furnace tool was down last week.\"",
+            "\"We will send the full 8D report once the root cause is confirmed.\""
+          ],
+          "answer": 1,
+          "explain_zh": "客戶要的是「做不到就給可行日期」。B 直接給了新日期與內容範圍。A 沒有日期，C 只有藉口，D 等於拒絕交期中報告。"
+        }
+      ]
+    },
+    {
+      "id": "r004",
+      "level": 2,
+      "genre": "8d_report",
+      "title": "8D interim report: containment section",
+      "body": "D3 Containment Actions\n\nOn 12 August we placed a lot hold on all material processed on furnace F02 between WW30 and WW32. In total, 46 lots are affected, of which 12 have already been shipped.\n\nFor the shipped material, we asked the customer to quarantine the remaining stock. Two lots had already entered their production line; both were screened at incoming inspection with no additional failures found.\n\nFor material still in the fab, we added a temporary burn-in step before final test. This screening does not remove the root cause, but it prevents suspect units from reaching the customer while the investigation continues.\n\nContainment will stay in place until the corrective action is verified on three consecutive production lots.",
+      "body_zh": "D3 圍堵措施\n\n8 月 12 日，我們對 WW30 至 WW32 期間經過 F02 爐管的所有材料下了批次扣留。受影響批次共 46 批，其中 12 批已出貨。\n\n已出貨的部分，我們請客戶隔離剩餘庫存。其中兩批已投入客戶產線，這兩批都在來料檢驗階段做了篩選，沒有發現額外失效。\n\n仍在廠內的材料，我們在終測前加了一道臨時的高溫老化測試。這道篩選並不能移除根本原因，但可以在調查期間避免可疑品流到客戶端。\n\n圍堵措施會持續到矯正措施在連續三個量產批上驗證通過為止。",
+      "glossary": [
+        { "term": "lot hold", "zh": "批次扣留" },
+        { "term": "quarantine", "zh": "隔離" },
+        { "term": "burn-in", "zh": "高溫老化測試" },
+        { "term": "final test", "zh": "終測" },
+        { "term": "corrective action", "zh": "矯正措施" },
+        { "term": "consecutive", "zh": "連續的" }
+      ],
+      "key_patterns": [
+        {
+          "en": "In total, N lots are affected, of which M have already been shipped.",
+          "zh": "先給總數再拆出已出貨數",
+          "note": "客戶最想知道的永遠是「有多少已經到我這裡」。of which 讓你一句話交代兩個數字。"
+        },
+        {
+          "en": "This screening does not remove the root cause, but it prevents ...",
+          "zh": "誠實說明圍堵的極限",
+          "note": "主動講出「這只是圍堵、不是解決」反而建立信任；藏起來被客戶問出來就變成隱瞞。"
+        },
+        {
+          "en": "Containment will stay in place until ... is verified on three consecutive lots.",
+          "zh": "定義解除圍堵的客觀條件",
+          "note": "解除條件要寫成可驗證的數字（連續三批），不要寫 until the issue is solved。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "How many affected lots had already been shipped?",
+          "options": ["12", "30", "46", "3"],
+          "answer": 0,
+          "explain_zh": "46 lots are affected, of which 12 have already been shipped。46 是總數，12 是已出貨數。"
+        },
+        {
+          "q": "What is the purpose of the temporary burn-in step?",
+          "options": [
+            "To remove the root cause of the failure",
+            "To screen out suspect units while the investigation continues",
+            "To reduce the test cost",
+            "To qualify a new furnace tool"
+          ],
+          "answer": 1,
+          "explain_zh": "報告明說 does not remove the root cause, but it prevents suspect units from reaching the customer。圍堵＝擋住，不等於解決。"
+        },
+        {
+          "q": "When will the containment actions be removed?",
+          "options": [
+            "After the customer approves the 8D report",
+            "After WW32 material is fully shipped",
+            "After the corrective action is verified on three consecutive production lots",
+            "After the burn-in step is automated"
+          ],
+          "answer": 2,
+          "explain_zh": "最後一句就是解除條件。寫 8D 時這一句一定要有，否則客戶會一直問「圍堵要做到什麼時候」。"
+        }
+      ]
+    },
+    {
+      "id": "r005",
+      "level": 3,
+      "genre": "8d_report",
+      "title": "8D D4/D5: root cause and corrective action",
+      "body": "D4 Root Cause\n\nTool commonality analysis showed that all 46 affected lots passed through furnace F02. Chamber pressure logs for the same period show a slow upward drift of 4 percent, which stayed inside the alarm limit but outside the process window used during qualification.\n\nThe drift changed the film thickness at the wafer edge. Cross-section analysis on three failing die confirmed a thinner tunnel oxide at the edge, which is consistent with the read disturb signature seen at wafer sort.\n\nWe reproduced the failure by running a split at the drifted pressure. The split yield matched the excursion lots within 0.4 points, so the mechanism is considered confirmed.\n\nD5 Corrective Action\n\nThe pressure alarm limit will be tightened from plus or minus 8 percent to plus or minus 3 percent, with automatic tool shutdown when the limit is crossed. The change is effective from WW35 on all furnaces of the same type.",
+      "body_zh": "D4 根本原因\n\n機台共通性分析顯示，46 個受影響批次全部經過 F02 爐管。同期的腔體壓力記錄顯示有 4% 的緩慢上飄，這個飄移仍在警報界限內，卻已超出認證時使用的製程窗口。\n\n這個飄移改變了晶圓邊緣的薄膜厚度。三顆失效晶粒的剖面分析確認邊緣的穿隧氧化層偏薄，這與 wafer sort 觀察到的讀取干擾特徵一致。\n\n我們以飄移後的壓力做了一組分組實驗，成功重現失效。該分組的良率與異常批次相差在 0.4 個百分點以內，因此判定機制已確認。\n\nD5 矯正措施\n\n壓力警報界限將從 ±8% 收緊至 ±3%，並在超出時自動停機。此變更自 WW35 起適用於所有同型爐管。",
+      "glossary": [
+        { "term": "tool commonality", "zh": "機台共通性" },
+        { "term": "drift", "zh": "漂移" },
+        { "term": "process window", "zh": "製程窗口" },
+        { "term": "cross-section", "zh": "剖面分析" },
+        { "term": "read disturb", "zh": "讀取干擾" },
+        { "term": "split", "zh": "分組實驗" },
+        { "term": "consistent with", "zh": "與⋯相符" }
+      ],
+      "key_patterns": [
+        {
+          "en": "X stayed inside the alarm limit but outside the process window.",
+          "zh": "區分「沒觸發警報」與「超出製程窗口」",
+          "note": "這句是很多 8D 的關鍵轉折：監控沒響不代表製程沒跑掉。客戶最常追問的就是這一點。"
+        },
+        {
+          "en": "..., which is consistent with the ... signature seen at ...",
+          "zh": "把物理證據連回失效特徵",
+          "note": "consistent with 是留有餘地的說法（相符，但不宣稱唯一解），比 proves 安全且更專業。"
+        },
+        {
+          "en": "We reproduced the failure by running a split at ... so the mechanism is considered confirmed.",
+          "zh": "以重現實驗作為結論的依據",
+          "note": "8D 的 D4 沒有重現實驗就只是推測。寫出重現條件與吻合程度（0.4 points）最有說服力。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "Why was the pressure drift not caught earlier?",
+          "options": [
+            "The pressure sensor was broken",
+            "The drift stayed inside the alarm limit",
+            "The logs were not recorded",
+            "The tool was not in production"
+          ],
+          "answer": 1,
+          "explain_zh": "stayed inside the alarm limit but outside the process window。警報設得太寬，所以沒響。這也正是 D5 收緊界限的理由。"
+        },
+        {
+          "q": "What evidence confirmed the failure mechanism?",
+          "options": [
+            "A customer complaint from the same work week",
+            "A supplier certificate for the furnace tool",
+            "A split experiment that reproduced the yield loss",
+            "A simulation of the tunnel oxide"
+          ],
+          "answer": 2,
+          "explain_zh": "We reproduced the failure by running a split ... matched within 0.4 points。重現才算確認，剖面只是佐證。"
+        },
+        {
+          "q": "What exactly changes in the corrective action?",
+          "options": [
+            "The furnace tool is replaced",
+            "The alarm limit is tightened and the tool shuts down automatically",
+            "The wafer edge die are scrapped by default",
+            "The qualification is repeated every work week"
+          ],
+          "answer": 1,
+          "explain_zh": "from plus or minus 8 percent to plus or minus 3 percent, with automatic tool shutdown。矯正措施要寫成具體可稽核的規格變更。"
+        },
+        {
+          "q": "Which sentence would be too strong for a D4 section?",
+          "options": [
+            "The data is consistent with a thinner tunnel oxide at the edge.",
+            "The split result matched the excursion lots within 0.4 points.",
+            "This proves that pressure drift is the only possible cause.",
+            "Tool commonality analysis showed all affected lots passed through F02."
+          ],
+          "answer": 2,
+          "explain_zh": "在 8D 裡宣稱 the only possible cause 幾乎不可能被證明，客戶只要找到一個反例就會推翻整份報告。用 consistent with、considered confirmed 比較安全。"
+        }
+      ]
+    },
+    {
+      "id": "r006",
+      "level": 2,
+      "genre": "fa_report",
+      "title": "FA report summary: edge ring failures",
+      "body": "Summary\n\nFour units returned from the customer were analysed between 5 and 14 August. All four failed the same read operation at high temperature.\n\nElectrical testing narrowed the failure down to two word lines in the same block. Optical inspection found no visible defect, so the units were prepared for cross-section.\n\nThe cross-section showed a thinner oxide layer at the die edge. The wafer map for the parent lots shows a clear edge ring, which rules out a random particle defect and points to a process step that affects the whole wafer edge.\n\nWe recommend that the device team check the anneal step, since the edge ring pattern matches the temperature profile of furnace F02.\n\nOpen item: two more units are still in queue for cross-section; the result is expected in WW36.",
+      "body_zh": "摘要\n\n客戶退回的四顆樣品於 8 月 5 日至 14 日完成分析。四顆都在高溫下同一個讀取動作失效。\n\n電性測試把失效縮小到同一個 block 內的兩條 word line。光學檢查沒有發現可見缺陷，因此送去做剖面。\n\n剖面顯示晶粒邊緣的氧化層偏薄。母批的晶圓分佈圖呈現明顯的邊緣環，這排除了隨機顆粒缺陷，並指向影響整個晶圓邊緣的某道製程。\n\n我們建議元件團隊檢查退火製程，因為邊緣環的分佈與 F02 爐管的溫度分佈相符。\n\n未結項目：另有兩顆樣品仍在剖面排隊中，結果預計 WW36 出爐。",
+      "glossary": [
+        { "term": "word line", "zh": "字元線" },
+        { "term": "optical inspection", "zh": "光學檢查" },
+        { "term": "wafer map", "zh": "晶圓分佈圖" },
+        { "term": "edge ring", "zh": "邊緣環（分佈形態）" },
+        { "term": "rules out", "zh": "排除" },
+        { "term": "anneal", "zh": "退火" }
+      ],
+      "key_patterns": [
+        {
+          "en": "Electrical testing narrowed the failure down to ...",
+          "zh": "描述定位過程的動詞",
+          "note": "FA 報告的敘事順序固定：narrow down → rule out → point to。照這個順序寫，讀者不會迷路。"
+        },
+        {
+          "en": "..., which rules out A and points to B.",
+          "zh": "一句同時排除與指向",
+          "note": "rules out 與 points to 成對出現，是 FA 報告最省字的寫法。"
+        },
+        {
+          "en": "Open item: ... the result is expected in WW36.",
+          "zh": "把未結事項單獨列出",
+          "note": "未結項目一定要獨立一段並附日期，否則客戶會以為報告已經完整。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "What did the optical inspection find?",
+          "options": [
+            "A particle on the die surface",
+            "Nothing visible",
+            "A crack in the package",
+            "A thinner oxide layer"
+          ],
+          "answer": 1,
+          "explain_zh": "Optical inspection found no visible defect。氧化層偏薄是後面剖面才看到的，不是光學檢查的結果。"
+        },
+        {
+          "q": "Why does the edge ring pattern matter?",
+          "options": [
+            "It shows the failures are random",
+            "It proves the customer mishandled the units",
+            "It rules out a random particle defect",
+            "It means only one die per wafer failed"
+          ],
+          "answer": 2,
+          "explain_zh": "分佈形態是 FA 最有力的線索：有規律的分佈代表系統性製程問題，隨機分佈才是顆粒缺陷。"
+        },
+        {
+          "q": "What is still unfinished in this report?",
+          "options": [
+            "The electrical testing of all four units",
+            "The cross-section of two additional units",
+            "The wafer map analysis",
+            "The customer's incoming inspection"
+          ],
+          "answer": 1,
+          "explain_zh": "Open item 那一段：two more units are still in queue for cross-section，預計 WW36。"
+        }
+      ]
+    },
+    {
+      "id": "r007",
+      "level": 3,
+      "genre": "fa_report",
+      "title": "FA report: read disturb investigation",
+      "body": "Background\n\nThe customer reported single-bit failures after long read-intensive operation. The units passed final test and the failures appeared only in the field, which suggested a use-condition-dependent mechanism rather than a screening escape.\n\nMethod\n\nWe applied one million read cycles on the same word line at 85 degrees Celsius and monitored the threshold voltage distribution of the neighbouring pages after every one hundred thousand cycles.\n\nResult\n\nThe distribution of the adjacent page shifted upward by 120 millivolts, and the raw bit error rate rose from 3E-5 to 8E-4. The shift is a classic read disturb behaviour and is fully recovered after an erase, which confirms that the cells are not physically damaged.\n\nConclusion\n\nThe parts meet the endurance and retention specifications. The failures occur because the customer's read count per block exceeds the value assumed in our qualification. We propose a joint review of the usage model before any design change is considered.",
+      "body_zh": "背景\n\n客戶回報在長時間大量讀取後出現單一位元失效。這些樣品都通過終測，失效只在現場出現，顯示這是與使用條件相關的機制，而不是測試漏檢。\n\n方法\n\n我們在 85°C 下對同一條 word line 施加一百萬次讀取，每十萬次量測一次鄰近 page 的臨界電壓分佈。\n\n結果\n\n鄰近 page 的分佈往上位移了 120 mV，原始位元錯誤率從 3E-5 上升到 8E-4。這個位移是典型的讀取干擾行為，而且在 erase 之後完全恢復，證實記憶胞並未受到物理性損傷。\n\n結論\n\n這批產品符合耐久度與資料保存力規格。失效之所以發生，是因為客戶每個 block 的讀取次數超過我們認證時所假設的數值。我們建議在考慮任何設計變更之前，先共同檢視使用模型。",
+      "glossary": [
+        { "term": "read disturb", "zh": "讀取干擾" },
+        { "term": "threshold voltage", "zh": "臨界電壓" },
+        { "term": "raw bit error rate", "zh": "原始位元錯誤率" },
+        { "term": "endurance", "zh": "耐久度" },
+        { "term": "retention", "zh": "資料保存力" },
+        { "term": "usage model", "zh": "使用模型" }
+      ],
+      "key_patterns": [
+        {
+          "en": "The failures appeared only in the field, which suggested ... rather than ...",
+          "zh": "用觀察推出機制方向",
+          "note": "rather than 後面放你要排除的假設。工程英文裡「A 而非 B」的對比句比單講 A 更有說服力。"
+        },
+        {
+          "en": "The shift is fully recovered after an erase, which confirms that the cells are not physically damaged.",
+          "zh": "以可逆性證明沒有永久損傷",
+          "note": "可逆＝沒壞，這是 disturb 類問題最關鍵的一句話，能直接把責任範圍講清楚。"
+        },
+        {
+          "en": "We propose a joint review of the usage model before any design change is considered.",
+          "zh": "把球丟回去但保持合作語氣",
+          "note": "當問題出在客戶的使用條件時，不要寫 this is not our problem；用 joint review 讓對方有台階下。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "Why does the report say this is not a screening escape?",
+          "options": [
+            "Because the units failed at final test",
+            "Because the failures appeared only after long field use",
+            "Because only one customer reported the issue",
+            "Because the bit error rate was below spec"
+          ],
+          "answer": 1,
+          "explain_zh": "The units passed final test and the failures appeared only in the field。測試時是好的、用久了才壞，指向使用條件相關的機制。"
+        },
+        {
+          "q": "What does the full recovery after erase prove?",
+          "options": [
+            "The test equipment was miscalibrated",
+            "The endurance spec is too loose",
+            "The cells are not physically damaged",
+            "The customer's read count is acceptable"
+          ],
+          "answer": 2,
+          "explain_zh": "which confirms that the cells are not physically damaged。可逆的位移代表電荷被干擾，而不是元件損毀。"
+        },
+        {
+          "q": "What is the report's position on responsibility?",
+          "options": [
+            "The product is out of spec and will be replaced",
+            "The product meets spec, but the customer's read count exceeds the qualified assumption",
+            "The failure is caused by a process drift in the fab",
+            "No conclusion can be drawn from the data"
+          ],
+          "answer": 1,
+          "explain_zh": "The parts meet the endurance and retention specifications ... exceeds the value assumed in our qualification。立場明確但語氣合作，這是這類報告的標準寫法。"
+        },
+        {
+          "q": "Which phrase keeps the tone cooperative rather than defensive?",
+          "options": [
+            "\"This is not our problem.\"",
+            "\"The customer used the product incorrectly.\"",
+            "\"We propose a joint review of the usage model.\"",
+            "\"No design change will be made.\""
+          ],
+          "answer": 2,
+          "explain_zh": "joint review 把問題變成雙方一起解的題目。前兩個選項在正式報告裡等於指責客戶，會讓案子升級。"
+        }
+      ]
+    },
+    {
+      "id": "r008",
+      "level": 1,
+      "genre": "trial_run_summary",
+      "title": "Trial run summary: new anneal recipe",
+      "body": "Purpose\n\nThe trial run was carried out to evaluate the new anneal recipe with a tighter pressure control before we roll it out to all furnaces.\n\nScope\n\nThree lots were processed in WW34 on furnace F05. One control lot used the current recipe.\n\nResult\n\nSort yield of the trial lots was 94.1 percent, compared with 91.8 percent for the control lot. No new failure modes were observed. The edge ring pattern seen in the WW32 excursion did not appear in any of the trial lots.\n\nNext step\n\nWe will run three more lots in WW35 to confirm that the result is repeatable. If the yield stays above 93 percent, we will request approval to release the recipe to production in WW36.",
+      "body_zh": "目的\n\n本次試產是為了評估壓力控制更嚴的新退火配方，作為全爐管推行前的驗證。\n\n範圍\n\nWW34 於 F05 爐管投了三個批次，另有一個對照批使用現行配方。\n\n結果\n\n試產批的 sort yield 為 94.1%，對照批為 91.8%。沒有觀察到新的失效模式。WW32 異常事件看到的邊緣環，在任何一個試產批上都沒有出現。\n\n下一步\n\n我們會在 WW35 再投三個批次，確認結果可重現。若良率維持在 93% 以上，將申請核准於 WW36 放行到量產。",
+      "glossary": [
+        { "term": "trial run", "zh": "試產" },
+        { "term": "anneal", "zh": "退火" },
+        { "term": "control lot", "zh": "對照批" },
+        { "term": "sort yield", "zh": "針測良率" },
+        { "term": "failure mode", "zh": "失效模式" },
+        { "term": "repeatable", "zh": "可重現的" }
+      ],
+      "key_patterns": [
+        {
+          "en": "X was 94.1 percent, compared with 91.8 percent for the control lot.",
+          "zh": "有對照組的數據比較句",
+          "note": "報良率一定要附對照組，否則 94.1% 本身沒有意義。compared with 後面放基準。"
+        },
+        {
+          "en": "If the yield stays above X, we will request approval to ...",
+          "zh": "條件式的下一步",
+          "note": "把放行條件先寫成數字，主管才知道要批准什麼；也保護自己不被要求提前放行。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "How much did the trial recipe improve sort yield?",
+          "options": ["0.9 points", "2.3 points", "3.1 points", "6.2 points"],
+          "answer": 1,
+          "explain_zh": "94.1 減 91.8 等於 2.3 個百分點。英文用 points（百分點），不要說 percent，否則意思會變成相對成長率。"
+        },
+        {
+          "q": "Why is a control lot included in the trial?",
+          "options": [
+            "To increase the total output",
+            "To give a baseline for comparison",
+            "To test a second new recipe",
+            "To satisfy the customer audit"
+          ],
+          "answer": 1,
+          "explain_zh": "對照批的作用就是提供基準。沒有基準的良率數字在會議上一定會被挑戰。"
+        },
+        {
+          "q": "What must happen before the recipe goes into production?",
+          "options": [
+            "The customer must approve the anneal step",
+            "Three more lots must confirm the result is repeatable",
+            "The furnace tool must be replaced",
+            "A cross-section must be completed"
+          ],
+          "answer": 1,
+          "explain_zh": "Next step 段落：再投三批確認可重現，且良率維持 93% 以上才申請放行。"
+        }
+      ]
+    },
+    {
+      "id": "r009",
+      "level": 1,
+      "genre": "spec_change_notice",
+      "title": "Spec change notice: tightened chamber pressure limit",
+      "body": "Dear Partner,\n\nThis notice informs you of a process change that will take effect from WW35.\n\nChange: the chamber pressure alarm limit on our anneal furnaces will be tightened from plus or minus 8 percent to plus or minus 3 percent. The tool will shut down automatically when the limit is crossed.\n\nReason: the wider limit allowed a slow drift that was linked to the WW32 yield excursion. The tighter limit removes that risk.\n\nImpact on the product: none. Form, fit and function remain unchanged, and no electrical parameter in the datasheet is affected. Throughput may drop by about 1 percent because of additional tool downtime.\n\nQualification: three production lots processed under the new limit passed all reliability stress tests. The data package is attached.\n\nPlease confirm receipt of this notice by 30 August. If we do not hear from you, we will assume the change is accepted.\n\nBest regards,\nProcess Integration Team",
+      "body_zh": "合作夥伴您好：\n\n本通知說明一項自 WW35 起生效的製程變更。\n\n變更內容：退火爐管的腔體壓力警報界限將從 ±8% 收緊至 ±3%，超出時機台會自動停機。\n\n變更原因：原本較寬的界限容許了一段緩慢漂移，該漂移與 WW32 的良率異常有關。收緊界限可移除此風險。\n\n對產品的影響：無。外形、配合與功能均不變，規格書上的電性參數也不受影響。因機台停機時間增加，產出可能下降約 1%。\n\n驗證：以新界限投產的三個量產批已通過所有可靠度應力測試，資料包如附件。\n\n請於 8 月 30 日前確認收到本通知。若未收到回覆，我們將視為本變更已被接受。\n\n此致\n製程整合團隊",
+      "glossary": [
+        { "term": "take effect", "zh": "生效" },
+        { "term": "alarm limit", "zh": "警報界限" },
+        { "term": "form, fit and function", "zh": "外形、配合與功能（產品是否實質改變的判準）" },
+        { "term": "throughput", "zh": "產出量" },
+        { "term": "reliability stress", "zh": "可靠度應力測試" },
+        { "term": "confirm receipt", "zh": "確認收訖" }
+      ],
+      "key_patterns": [
+        {
+          "en": "Impact on the product: none. Form, fit and function remain unchanged.",
+          "zh": "變更通知的核心保證句",
+          "note": "客戶收到 PCN 只關心一件事：產品會不會變。這句話講不清楚，後面一定被追問。"
+        },
+        {
+          "en": "Please confirm receipt of this notice by [date]. If we do not hear from you, we will assume ...",
+          "zh": "設定回覆期限與預設結果",
+          "note": "這是正式通知的標準結尾。對外發文時要注意：預設接受的寫法必須事先在合約或品質協議中允許。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "What is the reason for the change?",
+          "options": [
+            "To increase throughput",
+            "To remove the drift risk linked to the WW32 excursion",
+            "To meet a new customer specification",
+            "To qualify a new furnace supplier"
+          ],
+          "answer": 1,
+          "explain_zh": "Reason 段落直接說明：寬界限容許漂移，而漂移與 WW32 異常有關。"
+        },
+        {
+          "q": "What is the impact on the product?",
+          "options": [
+            "Electrical parameters will shift slightly",
+            "The datasheet will be revised",
+            "No impact on form, fit and function",
+            "The package size changes"
+          ],
+          "answer": 2,
+          "explain_zh": "Impact on the product: none。產出下降 1% 是對工廠的影響，不是對產品的影響，兩者不要混為一談。"
+        },
+        {
+          "q": "What happens if the customer does not reply by 30 August?",
+          "options": [
+            "The change is cancelled",
+            "The change is treated as accepted",
+            "The notice is sent again",
+            "The shipment is put on hold"
+          ],
+          "answer": 1,
+          "explain_zh": "If we do not hear from you, we will assume the change is accepted。這種預設條款要看清楚，收到別人的通知時也一樣。"
+        }
+      ]
+    },
+    {
+      "id": "r010",
+      "level": 3,
+      "genre": "audit_reply",
+      "title": "Reply to customer audit finding on traceability",
+      "body": "Finding 3: Traceability records for reworked wafers were incomplete for two of the ten lots sampled.\n\nOur response\n\nWe accept the finding. The two lots were reworked during a system upgrade in WW28, when rework events were recorded manually and the operator did not enter the second rework step.\n\nWe would like to clarify one point: the missing entries affect the record, not the material. Physical traceability was maintained through the lot travel card, and we were able to reconstruct the full history of both lots from the tool logs. Evidence is attached in Appendix B.\n\nCorrective action\n\nSince WW31, manual entry has been disabled. Every rework event is now written automatically by the tool, and a lot cannot move to the next step until the record is complete. An internal audit of 200 lots processed after WW31 found no missing entries.\n\nWe propose to close this finding at the next quarterly review, and we welcome a follow-up audit of the new system at any time.",
+      "body_zh": "缺失事項 3：抽樣的十個批次中，有兩個批次的重工履歷紀錄不完整。\n\n我方回覆\n\n我們接受此項缺失。這兩個批次是在 WW28 系統升級期間重工的，當時重工事件以人工記錄，操作員漏填了第二道重工步驟。\n\n我們想澄清一點：缺漏影響的是紀錄，不是材料本身。實體履歷透過批次流程卡完整維持，我們也能從機台日誌重建兩個批次的完整歷史，佐證資料如附錄 B。\n\n矯正措施\n\n自 WW31 起，人工輸入已被停用。每一次重工事件都由機台自動寫入，且紀錄未完成前批次無法流到下一站。我們針對 WW31 之後的 200 個批次做了內部稽核，未發現任何缺漏。\n\n我們建議在下次季度審查時結案此缺失，並隨時歡迎針對新系統進行追蹤稽核。",
+      "glossary": [
+        { "term": "traceability", "zh": "履歷追溯" },
+        { "term": "rework", "zh": "重工" },
+        { "term": "finding", "zh": "稽核缺失事項" },
+        { "term": "travel card", "zh": "批次流程卡" },
+        { "term": "internal audit", "zh": "內部稽核" },
+        { "term": "close", "zh": "結案" }
+      ],
+      "key_patterns": [
+        {
+          "en": "We accept the finding.",
+          "zh": "先接受缺失，不辯解",
+          "note": "稽核回覆的第一句就要表態。先承認再澄清，順序反過來會被讀成狡辯。"
+        },
+        {
+          "en": "We would like to clarify one point: the missing entries affect the record, not the material.",
+          "zh": "接受之後才做範圍澄清",
+          "note": "clarify 不等於 disagree。把影響範圍講清楚（紀錄 vs 材料）能避免缺失被無限放大。"
+        },
+        {
+          "en": "We propose to close this finding at ... and we welcome a follow-up audit.",
+          "zh": "主動提結案並開放複查",
+          "note": "主動邀請複查是最強的可信度訊號，前提是你的系統真的改好了。"
+        }
+      ],
+      "questions": [
+        {
+          "q": "How does the supplier open its response?",
+          "options": [
+            "By disputing the finding",
+            "By accepting the finding",
+            "By asking for more time",
+            "By blaming the operator"
+          ],
+          "answer": 1,
+          "explain_zh": "第一句就是 We accept the finding。稽核回覆的黃金順序是：接受 → 澄清範圍 → 矯正措施 → 提議結案。"
+        },
+        {
+          "q": "What is the point of the clarification paragraph?",
+          "options": [
+            "To show that the audit was wrong",
+            "To limit the scope: the records were incomplete, but the material history is known",
+            "To request a waiver for the two lots",
+            "To explain that the system upgrade failed"
+          ],
+          "answer": 1,
+          "explain_zh": "affect the record, not the material，並附上可從機台日誌重建的佐證。這是縮小影響範圍，不是否認缺失。"
+        },
+        {
+          "q": "Which evidence best supports closing the finding?",
+          "options": [
+            "The operator has been retrained",
+            "The two lots were shipped without complaints",
+            "An internal audit of 200 lots after WW31 found no missing entries",
+            "The system upgrade is now complete"
+          ],
+          "answer": 2,
+          "explain_zh": "稽核員只認可以量化驗證的證據。200 批零缺漏是數據，「已再教育」則無法驗證有效性。"
+        },
+        {
+          "q": "Why does the supplier invite a follow-up audit?",
+          "options": [
+            "Because the customer contract requires it",
+            "To delay closing the finding",
+            "To signal confidence that the new system works",
+            "To avoid paying a penalty"
+          ],
+          "answer": 2,
+          "explain_zh": "主動開放複查是信心的訊號。但只有在系統真的改好時才能這樣寫，否則複查失敗會更嚴重。"
+        }
+      ]
+    }
+  ]
+}

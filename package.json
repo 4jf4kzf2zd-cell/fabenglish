@@ -1,0 +1,14 @@
+{
+  "name": "fabenglish",
+  "version": "0.1.0",
+  "private": true,
+  "description": "商用英文練習 PWA（vanilla JS，零 runtime 依賴）",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.js",
+    "icons": "node scripts/make-icons.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

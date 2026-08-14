@@ -105,7 +105,7 @@ export function answer(id, correct) {
     rec.last = t;
     s.srs[id] = rec;
   });
-  store.touchDay(t, addDays(t, -1));
+  store.touchDay(t, addDays(t, -1), 'vocab');
   return store.get().srs[id];
 }
 

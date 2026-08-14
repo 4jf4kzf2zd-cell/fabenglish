@@ -1,10 +1,12 @@
 // views/loop.js — 循環聽：把常用句一直重複播放（洗耳朵用，可以不看螢幕）
-// SPEC §4.5 的延伸模式。這裡只用 TTS，不需要網路（STT 才需要）。
+// SPEC §4.5.1。這裡只用 TTS，不需要網路（STT 才需要）。
+// M5：加上背景播放嘗試（js/wake.js）與播放時數累計（每日任務用）。
 
 import { el, div, card, p, append } from '../dom.js';
 import * as store from '../store.js';
 import * as speech from '../speech.js';
 import * as content from '../content.js';
+import * as wake from '../wake.js';
 
 const SOURCES = [
   { key: 'present',   label: '簡報句型' },
@@ -16,11 +18,14 @@ const SOURCES = [
 
 let playing = false;
 let token = 0;          // 每次重新開始就換 token，舊迴圈自己結束
+let detach = null;      // 移除 visibilitychange 監聽
 
 export function destroy() {
   playing = false;
   token++;
-  clearWakeHint();
+  detach?.();
+  detach = null;
+  wake.stop();
   speech.cancel();
 }
 
@@ -42,6 +47,7 @@ export async function render(root, ctx) {
   const st = store.settings();
   let repeat = Number(st.loopRepeat) || 2;
   let gap = Number(st.loopGap ?? 1);
+  let background = st.loopBackground !== false;
   let showZh = true;
 
   /* ---------------- 畫面 ---------------- */
@@ -60,16 +66,29 @@ export async function render(root, ctx) {
   const enEl = el('div', { class: 'loop-en' });
   const zhEl = el('div', { class: 'loop-zh small dim' });
   const metaEl = el('div', { class: 'loop-meta small dim' });
+  const noteEl = el('div', { class: 'loop-note small' });
 
   const playBtn = el('button', { class: 'primary', onClick: toggle }, '▶ 開始');
   const prevBtn = el('button', { class: 'ghost', onClick: () => jump(-1) }, '⏮');
   const nextBtn = el('button', { class: 'ghost', onClick: () => jump(1) }, '⏭');
+
+  const bgBtn = el('button', {
+    class: 'ghost',
+    onClick: e => {
+      background = !background;
+      store.setSetting('loopBackground', background);
+      e.currentTarget.textContent = background ? '嘗試' : '不嘗試';
+      if (!background) wake.stop();
+      paintNote();
+    },
+  }, background ? '嘗試' : '不嘗試');
 
   append(root,
     card(
       div({ class: 'filters' }, sourceSel),
       div({ class: 'loop-stage' }, enEl, zhEl, metaEl),
       div({ class: 'row' }, prevBtn, playBtn, nextBtn),
+      noteEl,
     ),
 
     card(
@@ -95,13 +114,50 @@ export async function render(root, ctx) {
           },
         }, '照順序'),
       ),
+      div({ class: 'kv' },
+        el('span', { text: '關螢幕繼續播' }),
+        bgBtn,
+      ),
+      p('「關螢幕繼續播」會播一段幾乎無聲的音軌把 iOS 的音訊通道抓住，並在鎖定畫面放上播放控制。'
+        + 'iOS 沒有正式支援網頁背景朗讀，所以這是盡力而為——若你的 iOS 版本不吃，鎖屏還是會停。', 'small dim'),
     ),
 
-    p('通勤或做別的事時開著，重複到句子自己會從嘴巴跑出來為止。'
-      + 'iPhone 螢幕鎖上或切到其他 App 時，Safari 會停止朗讀——把螢幕保持開著。', 'small dim'),
+    p('通勤或做別的事時開著，重複到句子自己會從嘴巴跑出來為止。', 'small dim'),
   );
 
   paint();
+  paintNote();
+
+  /* 回到前景時：拿回 wakeLock；若被系統中斷就接著播下去 */
+  const onVis = () => {
+    if (document.visibilityState !== 'visible') { flushSeconds(); return; }
+    wake.reacquireWakeLock();
+    if (playing && !speech.speaking()) {
+      noteEl.textContent = '⚠️ 剛剛被系統中斷了，已從這一句接著播。';
+      noteEl.className = 'loop-note small warn-text';
+      run(++token);
+    }
+  };
+  document.addEventListener('visibilitychange', onVis);
+  detach = () => document.removeEventListener('visibilitychange', onVis);
+
+  /* ---------------- 播放時數（每日任務用） ---------------- */
+
+  let acc = 0;          // 尚未寫進 store 的秒數
+  let lastTick = 0;
+
+  function markTick() { lastTick = Date.now(); }
+
+  function flushSeconds(force = false) {
+    if (lastTick) {
+      acc += (Date.now() - lastTick) / 1000;
+      lastTick = playing ? Date.now() : 0;
+    }
+    if (acc < (force ? 1 : 20)) return;
+    const n = Math.round(acc);
+    acc = 0;
+    import('../srs.js').then(srs => store.logDaily(srs.today(), 'loopSec', n));
+  }
 
   /* ---------------- 播放 ---------------- */
 
@@ -112,6 +168,18 @@ export async function render(root, ctx) {
     metaEl.textContent = item ? `${idx + 1} / ${list.length}` : '';
   }
 
+  function paintNote() {
+    if (!background) {
+      noteEl.className = 'loop-note small dim';
+      noteEl.textContent = '關螢幕會停止朗讀（已關閉背景播放嘗試）。';
+      return;
+    }
+    noteEl.className = 'loop-note small dim';
+    noteEl.textContent = wake.mediaSessionSupported()
+      ? '鎖定畫面可以按上一句／下一句。'
+      : '這個瀏覽器沒有鎖定畫面控制，關螢幕多半會停。';
+  }
+
   function toggle() {
     if (playing) stop(); else start();
   }
@@ -119,9 +187,18 @@ export async function render(root, ctx) {
   function start() {
     if (!list.length) return;
     speech.unlock();                 // iOS：一定要在點擊的同步呼叫鏈裡解鎖
+    if (background) {
+      wake.start(mediaMeta(), {      // 同上，也必須是同步呼叫
+        onPlay: () => { if (!playing) start(); },
+        onPause: () => stop(),
+        onNext: () => jump(1),
+        onPrev: () => jump(-1),
+      });
+    }
     playing = true;
     playBtn.textContent = '⏸ 暫停';
-    keepAwakeHint();
+    paintNote();
+    markTick();
     run(++token);
   }
 
@@ -129,7 +206,9 @@ export async function render(root, ctx) {
     playing = false;
     token++;
     playBtn.textContent = '▶ 開始';
-    clearWakeHint();
+    flushSeconds(true);
+    lastTick = 0;
+    wake.stop();
     speech.cancel();
   }
 
@@ -141,17 +220,27 @@ export async function render(root, ctx) {
     if (wasPlaying) start();
   }
 
+  function mediaMeta() {
+    const item = list[idx];
+    return {
+      title: item ? item.en : 'FabEnglish 循環聽',
+      artist: SOURCES.find(s => s.key === source)?.label || 'FabEnglish',
+    };
+  }
+
   async function run(myToken) {
     while (playing && myToken === token) {
       const item = list[idx];
       if (!item) break;
       paint();
+      if (background) wake.setMeta(mediaMeta());
 
       for (let r = 0; r < repeat; r++) {
         if (!playing || myToken !== token) return;
         metaEl.textContent = `${idx + 1} / ${list.length}　·　第 ${r + 1} 次 / 共 ${repeat} 次`;
         const res = await speech.speak(item.en, { lang: 'en-US' });
         if (res?.cancelled || !playing || myToken !== token) return;
+        flushSeconds();
         if (gap > 0) await sleep(gap * 1000);
       }
 
@@ -215,17 +304,3 @@ function shuffle(arr) {
 }
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-/* ---------------- 螢幕保持喚醒（有就用，沒有就算了） ---------------- */
-
-let wakeLock = null;
-
-function keepAwakeHint() {
-  if (!('wakeLock' in navigator)) return;
-  navigator.wakeLock.request('screen').then(l => { wakeLock = l; }).catch(() => {});
-}
-
-function clearWakeHint() {
-  try { wakeLock?.release(); } catch (_) { /* noop */ }
-  wakeLock = null;
-}

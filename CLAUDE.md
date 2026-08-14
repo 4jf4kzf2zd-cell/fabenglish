@@ -18,22 +18,24 @@
 ```bash
 npm run serve      # http://localhost:8080（localhost 會自動進 dev 模式）
 npm run validate   # 驗證 content/*.json
-npm test           # scoring.js 單元測試
+npm test           # scoring.js + daily.js/store.js 單元測試（48 + 56 項）
 npm run icons      # 重新產生 icons/（改圖案時才需要）
-PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 95 項無頭測試（選用）
+PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 114 項無頭測試（選用）
 ```
 
 > ES modules 與 fetch 不能用 `file://` 開，一定要走 http。
 
 ## 目前進度
 
-**M1 / M2 / M3 / M4 全部完成**，SPEC 第 7 節的自動化驗收項目都已打勾，只剩需要 iPhone 實機的項目。
+**M1 / M2 / M3 / M4 / M5 全部完成**，SPEC 第 7 節的自動化驗收項目都已打勾，只剩需要 iPhone 實機的項目。
 
 - M1：Shell/路由/首頁、單字 SRS、閱讀、進度＋匯出匯入、TTS、設定、PWA
 - M2：跟讀（`js/scoring.js` ＋ `js/shadow.js`）、Email 句型（cloze）、簡報句型（含簡報模式）、聽力（四階段＋數字聽寫）
 - M3：內容補滿、streak 提示（首頁卡片＋`js/badge.js` PWA 圖示數字）、弱點清單匯出 markdown（`js/weakness.js`）
 - M4：面試常見問題（`js/views/interview.js`＋模擬面試）、循環聽（`js/views/loop.js`）、
   跟讀改成直接錄音且**不顯示分數**、各練習可回上一題
+- M5：每日任務（`js/daily.js`＋首頁改版）、schema v2（`daily` 每日紀錄）、儲存空間持久化、
+  循環聽背景播放嘗試（`js/wake.js`）、badge 改成未完成任務數
 - 內容：vocab **600**（A200/B250/C150）／readings **30**／email **30**／presentation **40**／listening **15**／interview **40**
 
 往後主要是加內容與微調，不要再擴功能（附錄 B 的邊界仍然有效）。
@@ -47,6 +49,8 @@ PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 95 項無頭測�
 4. **不要用 PowerShell 的字串取代去改含中文的檔案**，會把 UTF-8 毀成亂碼；一律用 Edit 工具。
 5. **跟讀分數不准出現在任何 UI**（辨識誤差太大會誤導）。分數只在內部保留，用來排弱點順序。
 6. 面試題的 `core` 必須是 `answer` 裡真的出現的句子且 ≤ 28 字，否則跟讀對不上；`validate.js` 會擋。
+7. 每日任務**一天就是三項**，不要加第四項；重做已完成的東西不准重複計入（否則同一句跟讀五次就達標）。
+8. `wake.js` 的背景播放是**盡力而為**，不是保證。任何文案都不准寫成「鎖屏一定會繼續播」。
 
 ## 邊界（附錄 B）
 

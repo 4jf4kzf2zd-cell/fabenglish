@@ -92,17 +92,19 @@ export async function render(root, ctx) {
     h2('提醒'),
     badgeCard(),
 
+    h2('儲存'),
+    storageCard(),
+
     h2('其他'),
     card(
       el('label', { class: 'field', style: 'display:flex;align-items:center;gap:10px' },
         devChk,
         el('span', { style: 'margin:0', text: '開發者模式（首頁顯示時間旅行工具）' }),
       ),
-      p(`儲存空間：${store.isWritable() ? '正常' : '⚠️ 無法寫入，進度不會被保存'}`, 'small dim'),
       el('button', { class: 'block danger', onClick: reset }, '清除所有進度'),
     ),
 
-    p(`FabEnglish · M4 · schema v${store.get().schemaVersion}`, 'small dim center'),
+    p(`FabEnglish · M5 · schema v${store.get().schemaVersion}`, 'small dim center'),
   );
 
   function reset() {
@@ -117,14 +119,73 @@ function fmtRate(r) {
   return `${Number(r).toFixed(1)}×`;
 }
 
-/** PWA 圖示待複習數（App Badging API），不支援就說清楚為什麼。 */
+/**
+ * 儲存空間（M5）。進度本來就存在這台手機的瀏覽器裡（localStorage），
+ * 這張卡片解決的是「iOS 會回收長期沒開的網站資料」這個真正的風險。
+ */
+function storageCard() {
+  const box = card();
+  const status = el('p', { class: 'small dim', text: '檢查中⋯' });
+  const detail = el('p', { class: 'small dim' });
+
+  const btn = el('button', {
+    class: 'block ghost',
+    onClick: async () => {
+      status.textContent = '要求中⋯';
+      await store.requestPersist();
+      await paint();
+    },
+  }, '要求長期保存');
+
+  box.append(
+    el('h3', { text: '進度存在哪裡' }),
+    p('全部進度都存在這台裝置的瀏覽器裡（localStorage），不會上傳、換裝置不會跟著走。', 'small dim'),
+    status,
+    detail,
+    btn,
+    p('iOS 會清掉「7 天沒開過」的網站資料。把 App 加到主畫面並每天開，被清掉的機率最低；'
+      + '真正保險的還是到「進度」頁定期匯出 JSON 備份。', 'small dim'),
+  );
+
+  paint();
+  return box;
+
+  async function paint() {
+    if (!store.isWritable()) {
+      status.className = 'small warn-text';
+      status.textContent = '⚠️ 無法寫入（無痕模式？），這次的進度不會被保存。';
+      btn.disabled = true;
+      return;
+    }
+    status.className = 'small dim';
+
+    const persisted = await store.isPersisted();
+    if (persisted === null) {
+      status.textContent = '狀態：正常（這個瀏覽器不支援查詢長期保存）';
+      btn.disabled = !store.persistSupported();
+    } else if (persisted) {
+      status.textContent = '狀態：正常　·　已標記為長期保存 ✓';
+      btn.disabled = true;
+    } else {
+      status.textContent = '狀態：正常　·　尚未標記為長期保存';
+      btn.disabled = false;
+    }
+
+    const est = await store.estimate();
+    detail.textContent = est?.usage != null
+      ? `目前用掉 ${(est.usage / 1024).toFixed(0)} KB`
+      : '';
+  }
+}
+
+/** PWA 圖示上的今日未完成任務數（App Badging API），不支援就說清楚為什麼。 */
 function badgeCard() {
   const s = store.settings();
   const box = card();
 
   if (!badge.supported()) {
     box.append(
-      el('h3', { text: '待複習數字提醒' }),
+      el('h3', { text: '未完成任務數字提醒' }),
       p('這個瀏覽器不支援在 App 圖示上顯示數字。iOS 需要 16.4 以上，而且要先把網站「加到主畫面」再從圖示開啟。', 'small dim'),
     );
     return box;
@@ -149,7 +210,7 @@ function badgeCard() {
   box.append(
     el('label', { class: 'field', style: 'display:flex;align-items:center;gap:10px;margin-bottom:8px' },
       chk,
-      el('span', { style: 'margin:0', text: '在 App 圖示顯示今日待複習數' }),
+      el('span', { style: 'margin:0', text: '在 App 圖示顯示今日未完成任務數' }),
     ),
     status,
     el('button', {
@@ -168,6 +229,6 @@ function badgeCard() {
     if (!store.settings().badge) return '已關閉。';
     if (perm === 'denied') return '⚠️ 通知權限被拒絕，iOS 上圖示數字不會出現。請到「設定 > 通知」允許。';
     if (perm === 'default') return '尚未取得通知權限，第一次開啟時系統會詢問。';
-    return '已開啟。數字＝今日待複習＋新字的總數。';
+    return '已開啟。數字＝今日還沒完成的任務數（做完就消失）。';
   }
 }

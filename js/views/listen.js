@@ -213,11 +213,13 @@ function renderDialogue(root, item, ctx) {
   function finishQuiz(host) {
     const correct = item.questions.reduce((n, q, i) => n + (quizAnswers.get(i) === q.answer ? 1 : 0), 0);
     const ratio = correct / item.questions.length;
+    // 每日任務算「這段第一次答完理解題」
+    const firstTime = store.get().listening[item.id]?.quiz == null;
     store.update(s => {
       const prev = s.listening[item.id] || {};
       s.listening[item.id] = { ...prev, quiz: Math.max(prev.quiz ?? 0, ratio) };
     });
-    touchToday();
+    touchToday(firstTime ? 'listen' : null);
     host.append(
       p(`答對 ${correct} / ${item.questions.length}`, 'small dim center'),
       el('button', { class: 'block primary', onClick: () => { step = 2; paint(); } }, '開字幕重聽'),
@@ -283,8 +285,8 @@ function renderDialogue(root, item, ctx) {
     ));
   }
 
-  function touchToday() {
-    import('../srs.js').then(srs => store.touchDay(srs.today(), srs.addDays(srs.today(), -1)));
+  function touchToday(kind) {
+    import('../srs.js').then(srs => store.touchDay(srs.today(), srs.addDays(srs.today(), -1), kind));
   }
 }
 

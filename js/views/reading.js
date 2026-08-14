@@ -161,12 +161,14 @@ function renderArticle(root, item, ctx) {
   function finish() {
     const correct = item.questions.reduce((n, q, i) => n + (answers.get(i) === q.answer ? 1 : 0), 0);
     const score = correct / item.questions.length;
+    const firstTime = !store.get().readings[item.id]?.done;
     store.update(s => {
       const prev = s.readings[item.id] || {};
       s.readings[item.id] = { done: true, score: Math.max(prev.score ?? 0, score), attempts: (prev.attempts || 0) + 1 };
     });
-    // streak：閱讀也算今天有練
-    import('../srs.js').then(srs => store.touchDay(srs.today(), srs.addDays(srs.today(), -1)));
+    // streak＋每日任務：閱讀也算今天有練；重做舊文章不重複計入今日任務
+    import('../srs.js').then(srs =>
+      store.touchDay(srs.today(), srs.addDays(srs.today(), -1), firstTime ? 'reading' : null));
     resultHost.replaceChildren(card(
       el('h3', { text: `答對 ${correct} / ${item.questions.length}` }),
       p(score === 1 ? '全對，這篇的句型可以直接拿去用。' : '看一下解說，再把關鍵句型讀一次。', 'small dim'),

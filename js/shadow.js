@@ -151,12 +151,18 @@ export function createShadow(text, opts = {}) {
     lastScore = result.score;
     paintTarget(result);
 
-    if (id) {
-      store.update(s => {
-        const prev = s.shadow[id]?.best ?? 0;
-        s.shadow[id] = { best: Math.max(prev, result.score), last: result.score };
-      });
-    }
+    // 每日任務：一句只算一次（同一句重唸不會把「跟讀 5 句」灌滿）
+    import('./srs.js').then(srs => {
+      const day = srs.today();
+      const firstToday = !id || store.get().shadow[id]?.day !== day;
+      if (id) {
+        store.update(s => {
+          const prev = s.shadow[id]?.best ?? 0;
+          s.shadow[id] = { best: Math.max(prev, result.score), last: result.score, day };
+        });
+      }
+      store.touchDay(day, srs.addDays(day, -1), firstToday ? 'shadow' : null);
+    });
     onScore?.(result.score);
 
     // 不顯示分數：語音辨識（尤其非母語腔調）誤差大，數字會誤導。

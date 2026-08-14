@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.js",
-    "test": "node scripts/test-scoring.mjs",
+    "test": "node scripts/test-scoring.mjs && node scripts/test-daily.mjs",
     "icons": "node scripts/make-icons.mjs",
     "serve": "node scripts/serve.mjs",
     "smoke": "node scripts/smoke.mjs"

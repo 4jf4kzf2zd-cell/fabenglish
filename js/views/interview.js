@@ -265,11 +265,13 @@ function renderMock(root, items, ctx) {
       );
 
       function rate(good) {
+        // 每日任務算「這題今天第一次自評」，同一題改來改去不重複計
+        const firstToday = store.get().interview[item.id]?.day !== srs.today();
         store.update(s => {
           const prev = s.interview[item.id] || {};
-          s.interview[item.id] = { ok: good, tries: (prev.tries || 0) + 1 };
+          s.interview[item.id] = { ok: good, tries: (prev.tries || 0) + 1, day: srs.today() };
         });
-        store.touchDay(srs.today(), srs.addDays(srs.today(), -1));
+        store.touchDay(srs.today(), srs.addDays(srs.today(), -1), firstToday ? 'interview' : null);
         ok.classList.toggle('primary', good);
         no.classList.toggle('primary', !good);
         if (!answerHost.firstChild) reveal();

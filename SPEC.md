@@ -43,7 +43,9 @@ fabenglish/
 │   ├── scoring.js        # 跟讀評分（token 對齊）＋數字聽寫比對；純函式，可用 node 測
 │   ├── shadow.js         # 跟讀 UI 元件（單字例句／簡報句型／簡報模式共用）
 │   ├── weakness.js       # 弱點清單 → markdown（M3）
-│   ├── badge.js          # PWA 圖示待複習數（App Badging API，不支援時靜默）
+│   ├── daily.js          # 每日任務：今天要做哪三件事、完成度（M5）
+│   ├── wake.js           # 循環聽的背景播放嘗試：無聲音軌＋MediaSession＋wakeLock（M5）
+│   ├── badge.js          # PWA 圖示未完成任務數（App Badging API，不支援時靜默）
 │   ├── content.js        # content/*.json 載入與快取
 │   ├── dom.js            # 極簡 DOM 建構工具（避免 innerHTML 拼字串）
 │   └── views/            # 每個模組一個 view 檔（home / vocab / reading / email / present / listen / interview / loop / progress / settings）
@@ -58,6 +60,7 @@ fabenglish/
 ├── scripts/
 │   ├── validate.js       # node 腳本：驗證 content/*.json 符合 schema（commit 前必跑）
 │   ├── test-scoring.mjs  # scoring.js 單元測試（純 node，無依賴）
+│   ├── test-daily.mjs    # daily.js / store.js 單元測試（純 node，無依賴）
 │   ├── serve.mjs         # 本機靜態伺服器（ES modules 不能用 file:// 開）
 │   ├── smoke.mjs         # 無頭瀏覽器煙霧測試（選用，需外部 puppeteer）
 │   └── make-icons.mjs    # 產生 icons/（純 Node 手寫 PNG，零依賴）
@@ -197,8 +200,8 @@ fabenglish/
 
 ### 4.0 Shell / 路由 / 首頁
 
-- Hash routing：`#/home` `#/vocab` `#/reading` `#/email` `#/present` `#/listen` `#/interview` `#/progress` `#/settings`。底部 tab bar（手機優先）。
-- 首頁 = 今日待辦：今日 SRS 到期字數、建議行程（週一單字+聽力、週三 email、週五跟讀⋯可硬編碼）、連續天數 streak。
+- Hash routing：`#/home` `#/vocab` `#/reading` `#/email` `#/present` `#/listen` `#/interview` `#/loop` `#/progress` `#/settings`。底部 tab bar（手機優先）。
+- 首頁 = **今日任務**（M5 起，見 §4.10）：三項任務、完成度、連續天數、最近 14 天、模組入口。
 
 ### 4.1 單字 SRS（Leitner 5 盒）
 
@@ -236,7 +239,19 @@ fabenglish/
 - 句源可切換：簡報句型 / Email 常用句 / 面試關鍵句（`key_phrases` ＋ `core`）/ 單字例句（優先只放學過的字）/ 全部混合。
 - 參數：每句重複 1–3 次、句間停頓 0–3 秒、顯示或隱藏中文、照順序或隨機；重複次數與停頓存進 settings。
 - 控制：▶/⏸、⏮ 上一句、⏭ 下一句；播到最後一句自動回到第一句，直到手動停止。
-- 有 `navigator.wakeLock` 就用，沒有就算了；頁面提示 iPhone 鎖屏會停止朗讀。
+- 有 `navigator.wakeLock` 就用，沒有就算了。
+
+**背景播放（M5，`js/wake.js`）**：`speechSynthesis` 在 iOS 被隱藏時會暫停，Safari 沒有正式支援網頁背景朗讀。
+`wake.js` 用兩個手段拉高成功率，但**不保證**：
+
+1. 播一段程式產生的幾乎無聲循環音軌（8-bit / 8kHz / 振幅 1 LSB 的 WAV，data URI，不是外部檔案），
+   讓 iOS 把這個頁面當成「正在播放音訊」，audio session 才不會被收掉。
+2. 掛 `navigator.mediaSession`：鎖定畫面與控制中心會出現播放／上一句／下一句控制。
+
+設定 `loopBackground`（預設開）可以關掉。回到前景時若偵測到 `playing && !speech.speaking()`，
+視為被系統中斷，顯示提示並從當前句接著播。
+**若實機證明 iOS 不吃這套，唯一的替代方案是改放預先產生的音檔（`<audio>` 播放），
+那會動到「零依賴」與 App 體積，屬於另一個里程碑，不要順手做。**
 
 ### 4.6 跟讀評分引擎（`scoring.js` + `speech.js`）
 
@@ -254,13 +269,14 @@ localStorage key：`fabenglish.v1`，單一 JSON：
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "srs": {"v001": {"box": 3, "due": "2026-08-15", "lapses": 1}},
   "readings": {"r001": {"done": true, "score": 0.75}},
   "cloze": {"e001": {"passed": true}},
-  "shadow": {"p001": {"best": 86}},
+  "shadow": {"p001": {"best": 86, "day": "2026-08-14"}},
   "listening": {"l001": {"quiz": 0.8, "dictation": 0.5}},
-  "interview": {"i001": {"ok": true, "tries": 2}},
+  "interview": {"i001": {"ok": true, "tries": 2, "day": "2026-08-14"}},
+  "daily": {"2026-08-14": {"vocab": 10, "shadow": 8, "loopSec": 300}},
   "streak": {"current": 4, "best": 12, "lastDay": "2026-08-13"},
   "settings": {"newPerDay": 10, "voice": "auto", "rate": 1.0}
 }
@@ -268,12 +284,23 @@ localStorage key：`fabenglish.v1`，單一 JSON：
 
 - 進度頁：streak、各盒單字數量長條、各模組完成度、**匯出 JSON**（下載檔案）與**匯入 JSON**（檔案選擇器，匯入前確認覆蓋）。
 - 每次寫入 localStorage 前 try/catch，失敗時 banner 提醒使用者匯出備份。
+- `daily`（M5）：每天做了多少，給 §4.10 判斷任務完成度用。**只留最近 60 天**，超過的在寫入時自動清掉。
+- `migrate()` 會把舊備份（schema v1、沒有 `daily`）補齊欄位再吃進來，schema 只升不降。
+
+**進度存在哪裡（常見誤解）**：進度**本來就只存在使用者這台裝置的瀏覽器**，不上傳、換手機不會跟著走。
+真正的風險是 **iOS 會回收「7 天沒開過」的網站儲存空間**。M5 起：
+
+- 設定頁有「儲存」卡片，說明存放位置、目前用量、是否已標記長期保存。
+- 提供 `navigator.storage.persist()` 按鈕（Safari 不會跳詢問視窗，它自己依「有沒有加到主畫面」等訊號決定）。
+- 沒有任何瀏覽器 API 保證不被清除 —— **定期匯出 JSON 仍然是唯一可靠的備份**，文案必須這樣寫，不要給假的安全感。
 
 ### 4.8 設定
 
 - TTS voice 選擇（列出裝置上的 `en-*` voices，預設 auto）、語速、每日新字量、清除進度（雙重確認）。
 - `playBeforeShadow`（預設 false）：跟讀前要不要先播一次範讀。
 - `loopRepeat` / `loopGap`：循環聽的每句重複次數與句間停頓，由循環聽頁面直接寫入。
+- `loopBackground`（預設 true，M5）：循環聽要不要嘗試在螢幕關閉後繼續播（見 §4.5.1）。由循環聽頁面直接寫入。
+- 儲存卡片（M5）：進度存放位置說明、用量、長期保存要求按鈕（見 §4.7）。
 
 ### 4.9 面試常見問題
 
@@ -284,6 +311,33 @@ localStorage key：`fabenglish.v1`，單一 JSON：
   每題播問題 → 使用者出聲回答（App 不評分自由回答，SPEC §0 邊界）→ 自評「答得出來／卡住」→ 攤開範答並可跟讀核心句。
   最後顯示卡住的題目清單。自評結果寫進 `store.interview[id] = {ok: bool, tries: n}`。
 - 頁尾固定提示：「想練完整對答？用 SPEAKING.md 的場景在 Claude Project 語音練。」
+
+### 4.10 每日任務（M5，`js/daily.js`）
+
+目的是讓使用者**每天都會打開**：首頁一進去就是「今天要做的三件事」，做完就結束，不要有無限清單。
+
+- **一天固定三項**：第一項永遠是「清完今日單字」，另外兩項依星期輪替。
+  總量對準 SPEC §0 的 20–30 分鐘，**不要加到四項**。
+
+  | 星期 | 第二項 | 第三項 |
+  |---|---|---|
+  | 日 | 面試 3 題 | 循環聽 5 分鐘 |
+  | 一 | 聽 1 段對話 | 循環聽 5 分鐘 |
+  | 二 | 讀 1 篇文章 | 跟讀 5 句 |
+  | 三 | Email 填空 2 組 | 循環聽 5 分鐘 |
+  | 四 | 讀 1 篇文章 | 面試 2 題 |
+  | 五 | 跟讀 8 句 | 聽 1 段對話 |
+  | 六 | 聽 1 段對話 | 讀 1 篇文章 |
+
+- **完成度自動判定，不手動打勾**。各模組完成時呼叫 `store.touchDay(today, yesterday, kind)`，
+  kind ∈ `vocab / reading / cloze / shadow / listen / interview / loopSec`。
+  **重做已完成的東西不重複計**（重讀舊文章、重唸同一句、同一題改自評都不加），
+  否則「跟讀 5 句」按五次同一句就過了。
+- **單字任務的目標＝今天已做 ＋ 現在還到期**。這樣邊做邊看目標不會縮水，也不必另外存「今天原本有幾張」。
+  今天沒有到期單字時目標是 0，該項**直接算完成**（不能卡住整天）。
+- 首頁：完成度 `n / 3`、進度條、逐項 ✓／`x / y`、一顆「繼續」直接跳到第一個未完成的模組、最近 14 天有沒有練。
+- **PWA 圖示數字改成「今天還沒完成幾項」**（M4 以前是待複習卡數），做完就消失。
+- 不做成就、獎章、獎勵（附錄 B）。streak 的定義不變：**有任何學習動作**就算，不要求做完三項。
 
 ## 5. Web Speech API — iOS Safari 實作備忘（重要，全部集中在 `speech.js`）
 
@@ -350,6 +404,26 @@ localStorage key：`fabenglish.v1`，單一 JSON：
 
 > 邊界提醒（附錄 B 仍然有效）：App **不評分自由回答**。模擬面試只播題目、計時、讓使用者自評，
 > 真正的對答練習仍在 Claude Project 用語音做（`SPEAKING.md`）。
+
+### M5 — 每日任務、儲存防護、背景播放
+範圍：`js/daily.js`（每日任務）＋首頁改版、`store.js` schema v2（`daily` 每日紀錄、`persist()`）、
+`js/wake.js`（循環聽背景播放嘗試）、badge 改成未完成任務數。
+
+驗收：
+- [x] 首頁一進去就是今日任務，固定三項、第一項是單字　←　`scripts/smoke.mjs` [12] 自動驗證
+- [x] 完成任務後首頁完成度自動 +1，不需要手動打勾　←　smoke [12] 自動驗證
+- [x] 重做已完成的東西不會重複計入（重讀舊文章／重唸同句／同題改自評）　←　`scripts/test-daily.mjs`
+- [x] 今天沒有到期單字時單字任務自動完成，不會卡住整天　←　`test-daily.mjs` [4]
+- [x] 每日紀錄只留 60 天，且匯出／匯入帶得走；舊 schema v1 備份匯入後自動補欄位　←　`test-daily.mjs` [15][16][17]
+- [x] badge 數字＝今天還沒完成幾項，與首頁一致　←　smoke [12] 自動驗證
+- [x] 設定頁說明進度存在哪裡、可要求長期保存　←　smoke [12] 自動驗證
+- [x] 循環聽有「關螢幕繼續播」開關，切換會寫進設定　←　smoke [12] 自動驗證
+- [ ] iPhone 實機：鎖屏後循環聽是否繼續播、鎖定畫面是否出現播放控制　←　**待實機驗**（見下方備註）
+- [ ] iPhone 實機：加到主畫面後 7 天不開，進度是否還在　←　**待實機驗**（只能靠時間，無法自動化）
+
+> **背景播放是「盡力而為」，不是保證**（§4.5.1）。實機測出來若鎖屏還是會停，
+> 那是 iOS 的限制不是 bug；要真的做到必須改放預先產生的音檔，屬於另一個里程碑。
+> 驗收時要分清楚三種結果：①完全繼續播 ②鎖定畫面有控制但朗讀會停 ③什麼都沒有。
 
 ## 8. 測試清單（每個里程碑都要在 iPhone 實機過一遍）
 

@@ -1,20 +1,10 @@
-// views/home.js — 今日待辦
+// views/home.js — 今日任務（M5 起，首頁的主角是「今天要做的三件事」）
 
 import { el, div, card, h2, p, append } from '../dom.js';
 import * as store from '../store.js';
 import * as srs from '../srs.js';
 import * as content from '../content.js';
-
-// 建議行程（硬編碼，SPEC §4.0）
-const PLAN = {
-  1: { label: '單字 ＋ 聽力', hint: '週一開機日：先把到期單字清掉，再聽一段 con-call。' },
-  2: { label: '閱讀', hint: '挑一篇客戶信或 8D 報告，重點在 key patterns。' },
-  3: { label: 'Email 句型', hint: '練 cloze，寫一封真的信丟給 Claude 批改。' },
-  4: { label: '單字 ＋ 閱讀', hint: '複習量通常這天最高，先清 SRS。' },
-  5: { label: '跟讀 ＋ 簡報句型', hint: '週五練口說輸出，跟讀 10 句簡報用語。' },
-  6: { label: '聽力', hint: '週末聽一段長對話，做聽寫題練數字。' },
-  0: { label: '面試題 ＋ 弱點複習', hint: '跑一輪 6 題模擬面試，再把 lapses 最多的字補起來。' },
-};
+import * as daily from '../daily.js';
 
 export async function render(root, ctx) {
   const [vocabItems, readingItems, emailItems, presentItems, listenItems, interviewItems] = await Promise.all([
@@ -28,39 +18,17 @@ export async function render(root, ctx) {
 
   const st = store.get();
   const t = srs.today();
-  const counts = srs.todayCounts(vocabItems);
   const streak = st.streak.current || 0;
+  const plan = daily.today(vocabItems);
 
   // 連續天數：昨天沒練就顯示為「即將中斷」
   const alive = st.streak.lastDay === t || st.streak.lastDay === srs.addDays(t, -1);
   const shownStreak = alive ? streak : 0;
 
-  const plan = PLAN[srs.parseYmd(t).getDay()];
-
   append(root,
-    streakReminder(st, t, counts.total),
-    card(
-      div({ class: 'hero' },
-        el('span', { class: 'n', text: String(shownStreak) }),
-        el('span', { class: 'u', text: '天連續練習' }),
-      ),
-      p(`今天是 ${t}${st.streak.best ? `　最佳紀錄 ${st.streak.best} 天` : ''}`, 'small dim'),
-      div({ class: 'today-grid' },
-        stat(counts.due, '待複習'),
-        stat(counts.fresh, '新字'),
-        stat(doneCount(readingItems), '已讀文章'),
-      ),
-      counts.total > 0
-        ? el('a', { class: 'btn primary block', href: '#/vocab', style: 'margin-top:12px' },
-            `開始今天的 ${counts.total} 張卡`)
-        : el('p', { class: 'small dim center', style: 'margin:12px 0 0' },
-            vocabItems.length ? '今天的單字都清完了 👍' : '尚未載入單字內容'),
-    ),
-
-    card(
-      el('h3', { text: `今日建議：${plan.label}` }),
-      p(plan.hint, 'small dim'),
-    ),
+    streakReminder(st, t, plan),
+    todayCard(plan, shownStreak, t, st),
+    weekStrip(),
 
     h2('模組'),
     div({ class: 'card menu' },
@@ -81,8 +49,8 @@ export async function render(root, ctx) {
     ctx.isDev() ? devPanel(ctx) : null,
   );
 
-  // PWA 圖示上的待複習數字（SPEC §7 M3：streak 通知）
-  import('../badge.js').then(b => b.update(counts.total)).catch(() => {});
+  // PWA 圖示上的數字＝今天還沒完成幾項（SPEC §4.10）
+  import('../badge.js').then(b => b.update(plan.total - plan.doneCount)).catch(() => {});
 
   function doneCount(items) {
     return items.filter(r => st.readings[r.id]?.done).length;
@@ -93,9 +61,9 @@ export async function render(root, ctx) {
  * streak 提示（SPEC §7 M3）：
  * 今天還沒練且昨天有練 → 提醒別斷；已中斷 → 不責備，直接給一個小目標。
  */
-function streakReminder(st, today, dueTotal) {
+function streakReminder(st, today, plan) {
   const practisedToday = st.streak.lastDay === today;
-  if (practisedToday || dueTotal === 0) return null;
+  if (practisedToday || plan.allDone) return null;
 
   const yesterday = srs.addDays(today, -1);
   const atRisk = st.streak.lastDay === yesterday && (st.streak.current || 0) > 0;
@@ -103,7 +71,7 @@ function streakReminder(st, today, dueTotal) {
   if (atRisk) {
     return div({ class: 'card streak-alert' },
       el('div', { class: 'title', text: `🔥 ${st.streak.current} 天連續紀錄今天到期` }),
-      el('div', { class: 'small', text: `練完 ${dueTotal} 張卡就能延續，大約 ${Math.max(3, Math.round(dueTotal * 0.4))} 分鐘。` }),
+      el('div', { class: 'small', text: `做完今天的 ${plan.total} 項任務就能延續，大約 20 分鐘。` }),
     );
   }
   if (!st.streak.lastDay) return null;
@@ -111,19 +79,99 @@ function streakReminder(st, today, dueTotal) {
   const gap = srs.daysBetween(st.streak.lastDay, today);
   return div({ class: 'card streak-alert soft' },
     el('div', { class: 'title', text: `已經 ${gap} 天沒練了` }),
-    el('div', { class: 'small', text: `今天先清掉 ${Math.min(dueTotal, 10)} 張卡，連續紀錄從 1 重新開始就好。` }),
+    el('div', { class: 'small', text: '先做第一項就好，連續紀錄從 1 重新開始。' }),
   );
 }
+
+/* ---------- 今日任務 ---------- */
+
+function todayCard(plan, streak, today, st) {
+  const box = div({ class: 'card today' });
+
+  box.append(
+    div({ class: 'today-head' },
+      el('div', {},
+        el('div', { class: 'today-title', text: plan.allDone ? '今天做完了 ✓' : '今日任務' }),
+        el('div', { class: 'small dim', text: `${today}　·　連續 ${streak} 天` }),
+      ),
+      el('div', { class: 'today-count' },
+        el('b', { text: String(plan.doneCount) }),
+        el('span', { text: ` / ${plan.total}` }),
+      ),
+    ),
+    progressBar(plan.doneCount / Math.max(1, plan.total)),
+  );
+
+  const listEl = div({ class: 'task-list' });
+  for (const task of plan.tasks) listEl.append(taskRow(task));
+  box.append(listEl);
+
+  box.append(plan.allDone
+    ? p(streakLine(streak, st), 'small dim center')
+    : el('a', { class: 'btn primary block', href: plan.nextHref || '#/vocab' }, '繼續'));
+
+  return box;
+}
+
+function taskRow(task) {
+  const a = el('a', { class: 'task', href: task.href, 'data-done': task.complete ? '1' : '0' });
+  a.append(
+    el('span', { class: 'task-mark', text: task.complete ? '✓' : '' }),
+    div({ class: 'task-body' },
+      el('div', { class: 'task-label', text: task.label }),
+      el('div', { class: 'task-hint small dim', text: task.hint }),
+    ),
+    el('span', { class: 'task-n', text: task.complete ? '' : progressText(task) }),
+  );
+  return a;
+}
+
+function progressText(task) {
+  if (task.kind === 'loopSec') {
+    return `${Math.floor(task.done / 60)} / ${Math.round(task.target / 60)} 分`;
+  }
+  return `${task.done} / ${task.target}`;
+}
+
+function progressBar(ratio) {
+  const bar = div({ class: 'today-bar' });
+  bar.append(el('i', { style: `width:${Math.round(Math.min(1, ratio) * 100)}%` }));
+  return bar;
+}
+
+function streakLine(streak, st) {
+  if (streak >= 2) return `連續 ${streak} 天　·　最佳紀錄 ${st.streak.best || streak} 天`;
+  return '明天同一時間再來一次，連續紀錄就開始累積了。';
+}
+
+/* ---------- 最近 14 天 ---------- */
+
+function weekStrip() {
+  const days = daily.history([], 14);
+  const strip = div({ class: 'card streak-strip' });
+  const cells = div({ class: 'strip' });
+  for (const d of days) {
+    cells.append(el('i', {
+      class: 'cell',
+      'data-on': d.touched ? '1' : '0',
+      'data-today': d.isToday ? '1' : '0',
+      title: d.day,
+    }));
+  }
+  strip.append(
+    div({ class: 'kv' },
+      el('span', { class: 'small dim', text: '最近 14 天' }),
+      el('span', { class: 'small dim', text: `${days.filter(d => d.touched).length} 天有練` }),
+    ),
+    cells,
+  );
+  return strip;
+}
+
+/* ---------- 小工具 ---------- */
 
 function countBy(items, fn) {
   return items.filter(fn).length;
-}
-
-function stat(n, label) {
-  return div({},
-    el('span', { class: 'n', text: String(n) }),
-    el('span', { class: 'l', text: label }),
-  );
 }
 
 function menuItem(href, label, sub, disabled = false) {

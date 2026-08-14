@@ -152,11 +152,14 @@ function renderDrill(root, items, ctx) {
       });
 
       if (allRight) correct++;
+      // 每日任務只算「這組第一次通過」，重做已通過的不重複計
+      const firstPass = allRight && !store.get().cloze[item.id]?.passed;
       store.update(s => {
         const prev = s.cloze[item.id] || {};
         s.cloze[item.id] = { passed: prev.passed || allRight, attempts: (prev.attempts || 0) + 1 };
       });
-      import('../srs.js').then(srs => store.touchDay(srs.today(), srs.addDays(srs.today(), -1)));
+      import('../srs.js').then(srs =>
+        store.touchDay(srs.today(), srs.addDays(srs.today(), -1), firstPass ? 'cloze' : null));
 
       const play = speakerButton();
       speech.bindPlayButton(play, () => item.filled_example);

@@ -24,7 +24,7 @@ export async function requestPermission() {
 
 /**
  * 設定 badge 數字。0 或關閉時清掉。
- * @param {number} count 今日待練數
+ * @param {number} count 今日還沒完成的任務數（M5 起；M4 以前是待複習卡數）
  */
 export async function update(count) {
   if (!supported()) return false;
@@ -43,12 +43,12 @@ export async function clear() {
   try { await navigator.clearAppBadge(); } catch (_) { /* noop */ }
 }
 
-/** 從內容與進度算出今日待練數，然後更新 badge。 */
+/** 從內容與進度算出今日還沒完成的任務數，然後更新 badge。 */
 export async function refresh() {
   if (!supported() || !store.settings().badge) return;
   try {
-    const [{ vocab }, srs] = await Promise.all([import('./content.js'), import('./srs.js')]);
+    const [{ vocab }, daily] = await Promise.all([import('./content.js'), import('./daily.js')]);
     const items = await vocab();
-    await update(srs.todayCounts(items).total);
+    await update(daily.remaining(items));
   } catch (_) { /* 離線或內容載入失敗就不動 badge */ }
 }

@@ -71,8 +71,10 @@ try {
   await page.goto(`${BASE}/index.html#/home`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('#view .card', { timeout: 5000 });
   const homeText = await page.$eval('#view', n => n.innerText);
-  check('首頁顯示連續天數', homeText.includes('天連續練習'));
-  check('首頁顯示今日卡片數', /開始今天的 \d+ 張卡/.test(homeText), homeText.slice(0, 80));
+  check('首頁顯示今日任務', homeText.includes('今日任務'), homeText.slice(0, 80));
+  check('首頁顯示連續天數', /連續 \d+ 天/.test(homeText), homeText.slice(0, 80));
+  check('今日任務是三項', (await page.$$eval('#view .task', ns => ns.length)) === 3);
+  check('第一項是清單字', /清完今日單字 \d+ 張/.test(homeText), homeText.slice(0, 120));
   check('dev 模式在 localhost 自動開啟（時間旅行工具可見）', homeText.includes('時間旅行'));
   await page.screenshot({ path: join(SHOTS, '1-home.png') });
 
@@ -409,7 +411,7 @@ try {
   /* --- 11. 其他路由 --- */
   console.log('\n[11] 路由與設定');
   const ROUTES = [
-    ['#/home', '天連續練習'], ['#/vocab', ''], ['#/reading', '篇完成'],
+    ['#/home', '今日任務'], ['#/vocab', ''], ['#/reading', '篇完成'],
     ['#/progress', 'Leitner'], ['#/settings', '每日新字上限'],
     ['#/email', '填空練習'], ['#/present', '模擬簡報'], ['#/listen', '段完成'],
     ['#/interview', '模擬面試'], ['#/loop', '每句重複'],
@@ -430,8 +432,73 @@ try {
     ['單字 SRS', '閱讀', 'Email 填空', '簡報跟讀', '聽力', '面試題'].every(k => progText.includes(k)));
   await page.screenshot({ path: join(SHOTS, '5-progress.png') });
 
-  /* --- 12. console 錯誤 --- */
-  console.log('\n[12] Console');
+  /* --- 12. 每日任務 / 儲存 / 背景播放（M5） --- */
+  console.log('\n[12] 每日任務（M5）');
+
+  await page.goto(`${BASE}/index.html#/home`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.task');
+
+  const plan0 = await readPlan(page);
+  check('每日任務固定三項', plan0.total === 3, JSON.stringify(plan0.tasks.map(t => t.kind)));
+  check('任務種類不重複', new Set(plan0.tasks.map(t => t.kind)).size === 3);
+  check('第一項永遠是單字', plan0.tasks[0].kind === 'vocab');
+  check('每項都有 href 可以點過去', plan0.tasks.every(t => t.href?.startsWith('#/')));
+  check('最近 14 天有 14 格', (await page.$$eval('.streak-strip .cell', ns => ns.length)) === 14);
+
+  // 把第二項灌到達標 → 首頁的完成數要跟著加一
+  const target2 = plan0.tasks[1];
+  await page.evaluate(async (kind, n) => {
+    const [store, srs] = await Promise.all([import('/js/store.js'), import('/js/srs.js')]);
+    store.logDaily(srs.today(), kind, n);
+  }, target2.kind, target2.target);
+  await page.reload({ waitUntil: 'networkidle0' });
+  await page.waitForSelector('.task');
+
+  const plan1 = await readPlan(page);
+  check('完成一項後完成數 +1', plan1.doneCount === plan0.doneCount + 1,
+    `${plan0.doneCount} → ${plan1.doneCount}`);
+  check('完成的那項標成 done',
+    (await page.$$eval('.task', ns => ns.map(n => n.dataset.done)))[1] === '1');
+  check('未完成的項目顯示 x / y 進度',
+    /\d+ \/ \d+|\d+ \/ \d+ 分/.test(await page.$eval('#view', n => n.innerText)));
+
+  // badge 的數字＝還沒完成幾項（不是待複習卡數）
+  const remain = await page.evaluate(async () => {
+    const [daily, content] = await Promise.all([import('/js/daily.js'), import('/js/content.js')]);
+    return daily.remaining(await content.vocab());
+  });
+  check('badge 用的未完成數與首頁一致', remain === plan1.total - plan1.doneCount,
+    `remaining=${remain}`);
+
+  // 每日紀錄有寫進 localStorage，而且匯出備份帶得走
+  const raw = await readState(page);
+  check('每日紀錄寫進 localStorage', !!raw.daily && Object.keys(raw.daily).length > 0);
+  check('schema 已升到 v2', raw.schemaVersion === 2, `v${raw.schemaVersion}`);
+
+  // 循環聽的背景播放開關
+  await page.goto(`${BASE}/index.html#/loop`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.loop-stage');
+  const loopM5 = await page.$eval('#view', n => n.innerText);
+  check('循環聽有「關螢幕繼續播」開關', loopM5.includes('關螢幕繼續播'), loopM5.slice(0, 80));
+  await clickByText(page, 'button', '嘗試');
+  const bgOff = await page.evaluate(async () => (await import('/js/store.js')).settings().loopBackground);
+  check('關掉背景播放會寫進設定', bgOff === false, String(bgOff));
+  await clickByText(page, 'button', '不嘗試');
+  const bgOn = await page.evaluate(async () => (await import('/js/store.js')).settings().loopBackground);
+  check('再打開會寫回設定', bgOn === true, String(bgOn));
+
+  // 設定頁的儲存空間卡片
+  await page.goto(`${BASE}/index.html#/settings`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#view .card');
+  await sleep(300);
+  const setText = await page.$eval('#view', n => n.innerText);
+  check('設定頁說明進度存在哪裡', setText.includes('進度存在哪裡') && setText.includes('localStorage'));
+  check('設定頁有長期保存按鈕', setText.includes('要求長期保存'));
+  check('badge 說明已改成未完成任務數', setText.includes('未完成任務數'), '');
+  await page.screenshot({ path: join(SHOTS, '8-settings.png') });
+
+  /* --- 13. console 錯誤 --- */
+  console.log('\n[13] Console');
   const realErrors = consoleErrors.filter(e => !/favicon|speech|not-allowed/i.test(e));
   check('沒有 console 錯誤', realErrors.length === 0, realErrors.join(' | ').slice(0, 300));
 
@@ -462,6 +529,14 @@ async function clickByText(page, selector, text) {
 
 function readState(page) {
   return page.evaluate(() => JSON.parse(localStorage.getItem('fabenglish.v1') || '{}'));
+}
+
+/** 取得頁面算出來的今日任務（M5）。 */
+function readPlan(page) {
+  return page.evaluate(async () => {
+    const [daily, content] = await Promise.all([import('/js/daily.js'), import('/js/content.js')]);
+    return daily.today(await content.vocab());
+  });
 }
 
 /** 透過 store 模組改 dayOffset 再 reload——直接改 localStorage 會被模組的記憶體快取蓋掉。 */

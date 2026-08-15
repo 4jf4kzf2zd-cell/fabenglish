@@ -435,6 +435,13 @@ try {
   /* --- 12. 每日任務 / 儲存 / 背景播放（M5） --- */
   console.log('\n[12] 每日任務（M5）');
 
+  // 先清掉今天的練習紀錄。前面的章節已經練過閱讀與聽力，
+  // 星期一換今天的第二項就可能「本來就完成了」，+1 的斷言會變成看日曆過關。
+  await page.evaluate(async () => {
+    const store = await import('/js/store.js');
+    store.update(s => { s.daily = {}; });
+  });
+
   await page.goto(`${BASE}/index.html#/home`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.task');
 
@@ -473,7 +480,7 @@ try {
   // 每日紀錄有寫進 localStorage，而且匯出備份帶得走
   const raw = await readState(page);
   check('每日紀錄寫進 localStorage', !!raw.daily && Object.keys(raw.daily).length > 0);
-  check('schema 已升到 v2', raw.schemaVersion === 2, `v${raw.schemaVersion}`);
+  check('schema 已升到 v3', raw.schemaVersion === 3, `v${raw.schemaVersion}`);
 
   // 循環聽的背景播放開關
   await page.goto(`${BASE}/index.html#/loop`, { waitUntil: 'networkidle0' });
@@ -497,8 +504,71 @@ try {
   check('badge 說明已改成未完成任務數', setText.includes('未完成任務數'), '');
   await page.screenshot({ path: join(SHOTS, '8-settings.png') });
 
-  /* --- 13. console 錯誤 --- */
-  console.log('\n[13] Console');
+  /* --- 13. 面試衝刺（M6） --- */
+  console.log('\n[13] 面試衝刺（M6）');
+
+  await page.goto(`${BASE}/index.html#/sprint`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#view .card');
+  const idleText = await page.$eval('#view', n => n.innerText);
+  check('未啟動時顯示啟動說明', idleText.includes('六週面試衝刺'), idleText.slice(0, 60));
+  check('未啟動時有面試日期輸入', (await page.$$('#view input[type="date"]')).length === 1);
+  check('未啟動時就看得到六週地圖', (await page.$$eval('.sprint-week', ns => ns.length)) === 6);
+
+  // 用模組 API 啟動，日期才會跟著 dev 時間旅行走（直接點按鈕會吃到系統日期）
+  await page.evaluate(async () => {
+    const [store, srs] = await Promise.all([import('/js/store.js'), import('/js/srs.js')]);
+    store.startSprint(srs.today(), srs.addDays(srs.today(), 41));
+  });
+
+  await page.goto(`${BASE}/index.html#/home`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.task');
+  const sprintHome = await readPlan(page);
+  check('啟動後首頁帶出衝刺資訊', sprintHome.sprint?.dayIndex === 1, JSON.stringify(sprintHome.sprint || null));
+  check('衝刺期間仍然只有三項', sprintHome.total === 3);
+  check('第一項仍然是單字', sprintHome.tasks[0].kind === 'vocab');
+  check('任務改吃課表（第 1 天＝面試題＋跟讀）',
+    sprintHome.tasks.map(t => t.kind).join(',') === 'vocab,interview,shadow',
+    JSON.stringify(sprintHome.tasks.map(t => t.kind)));
+  check('首頁出現倒數列', (await page.$$('.sprint-bar')).length === 1);
+  const homeSprintText = await page.$eval('#view', n => n.innerText);
+  check('倒數列顯示剩餘天數', /距離面試 41 天/.test(homeSprintText), homeSprintText.slice(0, 60));
+  check('首頁沒有 null/undefined 漏字', !/\b(null|undefined)\b/.test(homeSprintText));
+
+  await page.goto(`${BASE}/index.html#/sprint`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.sprint-week');
+  const sprintText = await page.$eval('#view', n => n.innerText);
+  check('總覽頁標出今天在哪一週', (await page.$$eval('.sprint-week[data-now="1"]', ns => ns.length)) === 1);
+  check('總覽頁列出本週里程碑', sprintText.includes('里程碑'), sprintText.slice(0, 80));
+  check('總覽頁列出語音模擬日', sprintText.includes('S6') && sprintText.includes('S9'));
+  check('總覽頁顯示每週節奏（各主題同時進行）', sprintText.includes('每週固定節奏'));
+  check('節奏卡列出全部主題', (await page.$$eval('.rhythm-chip', ns => ns.length)) === 8,
+    await page.$$eval('.rhythm-chip', ns => ns.map(n => n.innerText.replace(/\s+/g, ''))).catch(() => ''));
+  check('總覽頁沒有 null/undefined 漏字', !/\b(null|undefined)\b/.test(sprintText));
+  await page.screenshot({ path: join(SHOTS, '9-sprint.png') });
+
+  // 第 6 天是模擬面試日：連結要指到 mock，而且用的還是 interview kind
+  await page.evaluate(async () => {
+    const [store, srs] = await Promise.all([import('/js/store.js'), import('/js/srs.js')]);
+    store.startSprint(srs.today(), srs.addDays(srs.today(), 36));   // 倒數 36 天 → 第 6 天
+  });
+  await page.goto(`${BASE}/index.html#/home`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.task');
+  const mockDay = await readPlan(page);
+  check('模擬面試日連到 #/interview/mock', mockDay.tasks[1].href === '#/interview/mock',
+    `${mockDay.sprint?.dayIndex} / ${mockDay.tasks[1].href}`);
+  check('模擬面試沿用 interview kind', mockDay.tasks[1].kind === 'interview');
+
+  // 結束衝刺 → 回到星期輪替
+  await page.evaluate(async () => (await import('/js/store.js')).endSprint());
+  // 已經在 #/home，goto 同一個網址只會被當成 hash 導覽、不會重繪 → 一定要 reload
+  await page.reload({ waitUntil: 'networkidle0' });
+  await page.waitForSelector('.task');
+  const afterSprint = await readPlan(page);
+  check('結束後回到星期輪替', afterSprint.sprint === null);
+  check('結束後首頁不再有倒數列', (await page.$$('.sprint-bar')).length === 0);
+
+  /* --- 14. console 錯誤 --- */
+  console.log('\n[14] Console');
   const realErrors = consoleErrors.filter(e => !/favicon|speech|not-allowed/i.test(e));
   check('沒有 console 錯誤', realErrors.length === 0, realErrors.join(' | ').slice(0, 300));
 

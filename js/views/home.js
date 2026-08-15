@@ -26,6 +26,8 @@ export async function render(root, ctx) {
   const shownStreak = alive ? streak : 0;
 
   append(root,
+    sprintBar(plan.sprint),
+    plan.sprint?.voice ? voiceReminder(plan.sprint.voice) : null,
     streakReminder(st, t, plan),
     todayCard(plan, shownStreak, t, st),
     weekStrip(),
@@ -43,6 +45,10 @@ export async function render(root, ctx) {
       menuItem('#/interview', '面試常見問題',
         `${countBy(interviewItems, i => st.interview[i.id])} / ${interviewItems.length} 題練過`),
       menuItem('#/loop', '循環聽', '常用句重複播放，通勤時開著'),
+      menuItem('#/sprint', '面試衝刺',
+        plan.sprint
+          ? `第 ${plan.sprint.dayIndex} / 42 天　·　${plan.sprint.week.title}`
+          : '把每日任務換成倒數 42 天的課表'),
       menuItem('#/progress', '進度與備份', ''),
     ),
 
@@ -55,6 +61,33 @@ export async function render(root, ctx) {
   function doneCount(items) {
     return items.filter(r => st.readings[r.id]?.done).length;
   }
+}
+
+/* ---------- 面試衝刺（M6） ---------- */
+
+/** 衝刺進行中才出現的一條倒數列，點進去是六週地圖。 */
+function sprintBar(sprint) {
+  if (!sprint) return null;
+  const left = sprint.isTargetDay ? '面試就是今天' : `距離面試 ${sprint.daysLeft} 天`;
+  return el('a', { class: 'card sprint-bar', href: '#/sprint' },
+    div({ class: 'kv' },
+      el('span', { class: 'sb-left', text: left }),
+      el('span', { class: 'small dim', text: `第 ${sprint.dayIndex} / 42 天` }),
+    ),
+    el('div', { class: 'small dim', text: `W${sprint.week.week}　${sprint.week.title}` }),
+  );
+}
+
+/**
+ * 語音模擬日提示。刻意**不做成第四項任務**：
+ * 它發生在 Claude 語音裡，App 無從自動判定，而每日任務不做手動打勾（SPEC §4.10）。
+ */
+function voiceReminder(voice) {
+  return div({ class: 'card streak-alert' },
+    el('div', { class: 'title', text: `🎙 今天排了語音模擬　${voice.code} ${voice.title}` }),
+    el('div', { class: 'small', text: voice.focus }),
+    el('div', { class: 'small', text: '用 Claude 語音模式跑 SPEAKING.md 的場景；這一項不算在今日任務裡。' }),
+  );
 }
 
 /**

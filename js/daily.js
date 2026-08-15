@@ -4,10 +4,14 @@
 
 import * as store from './store.js';
 import * as srs from './srs.js';
+import * as plan from './plan.js';
 
 /**
  * 每天固定一項「清單字」，再依星期加兩項。
  * 目標時間 20–30 分鐘（SPEC §0），所以一天最多三項，不要再加。
+ *
+ * 面試衝刺啟動時，這兩項改由 plan.js 的 42 天課表供給（SPEC §4.11）；
+ * 沒啟動時這張表的行為一字不變。
  */
 const ROUTINE = {
   0: [{ kind: 'interview', target: 3 }, { kind: 'loopSec', target: 300 }],
@@ -33,11 +37,14 @@ const META = {
  * 今天的任務清單。
  * @param {Array} vocabItems content/vocab.json 的 items（用來算還有幾張卡）
  * @param {string} [day] 預設 srs.today()
- * @returns {{day:string, tasks:Array, doneCount:number, total:number, allDone:boolean, nextHref:string|null}}
+ * @returns {{day:string, tasks:Array, doneCount:number, total:number, allDone:boolean,
+ *            nextHref:string|null, sprint:object|null}}
  */
 export function today(vocabItems = [], day = srs.today()) {
   const log = store.dayLog(day);
   const dow = srs.parseYmd(day).getDay();
+  const sprint = plan.status(day);
+  const inSprint = !!sprint && !sprint.finished;
 
   // 單字的目標＝今天已經做掉的 ＋ 現在還到期的。
   // 這樣使用者邊做邊看，目標不會因為卡片被清掉而縮水，也不必另外存「今天原本有幾張」。
@@ -46,16 +53,18 @@ export function today(vocabItems = [], day = srs.today()) {
   const remain = srs.todayCounts(vocabItems).total;
   const vocabTarget = doneVocab + remain;
 
-  const specs = [{ kind: 'vocab', target: vocabTarget }, ...(ROUTINE[dow] || [])];
+  const rest = inSprint ? plan.specs(sprint.dayIndex) : (ROUTINE[dow] || []);
+  const specs = [{ kind: 'vocab', target: vocabTarget }, ...rest];
 
   const tasks = specs.map(spec => {
     const done = Math.min(log[spec.kind] || 0, spec.target);
     const meta = META[spec.kind];
     return {
       kind: spec.kind,
-      href: meta.href,
-      label: meta.label(spec.target),
-      hint: meta.hint,
+      // 課表可以覆寫連結與文案（例如模擬面試指到 #/interview/mock）
+      href: spec.href || meta.href,
+      label: spec.label || meta.label(spec.target),
+      hint: spec.hint || meta.hint,
       unit: meta.unit,
       done,
       target: spec.target,
@@ -74,6 +83,8 @@ export function today(vocabItems = [], day = srs.today()) {
     total: tasks.length,
     allDone: doneCount === tasks.length,
     nextHref: next ? next.href : null,
+    // 衝刺狀態一起帶出去，首頁才不用再問一次 plan.js（過了面試日就是 null）
+    sprint: inSprint ? sprint : null,
   };
 }
 

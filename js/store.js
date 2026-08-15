@@ -2,7 +2,7 @@
 // 全 App 只有這裡碰 localStorage。
 
 const KEY = 'fabenglish.v1';
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 /** 每日紀錄只留這麼多天，避免 localStorage 無限長大。 */
 const DAILY_KEEP = 60;
@@ -29,6 +29,7 @@ function blank() {
     listening: {},  // l001: {quiz:0.8, dictation:0.5}    （M2）
     interview: {},  // i001: {ok:true, tries:2}            （M4）
     daily: {},      // 'YYYY-MM-DD': {vocab:12, reading:1, cloze:2, shadow:5, listen:1, interview:2, loopSec:300}（M5）
+    sprint: null,   // {start:'YYYY-MM-DD', target:'YYYY-MM-DD'} 面試衝刺（M6）；null = 沒啟動
     streak: { current: 0, best: 0, lastDay: null },
     settings: { ...DEFAULT_SETTINGS },
     dev: { dayOffset: 0 },   // 時間旅行（僅 dev 模式，見 SPEC §7 M1 驗收）
@@ -46,6 +47,7 @@ function migrate(raw) {
     if (raw[k] && typeof raw[k] === 'object') s[k] = raw[k];
   }
   pruneDaily(s);
+  s.sprint = normalizeSprint(raw.sprint);   // 舊 schema v2 沒這欄位 → null
   if (raw.streak) Object.assign(s.streak, raw.streak);
   if (raw.settings) Object.assign(s.settings, raw.settings);
   if (raw.dev) Object.assign(s.dev, raw.dev);
@@ -157,6 +159,46 @@ export function logDaily(day, kind, n = 1) {
 /** 某天做了多少（沒紀錄回空物件）。 */
 export function dayLog(day) {
   return get().daily[day] || {};
+}
+
+/* ---------- 面試衝刺（M6） ---------- */
+
+const YMD = /^\d{4}-\d{2}-\d{2}$/;
+
+/** 壞掉或缺欄位的 sprint 一律當成沒啟動，不要讓首頁炸掉。 */
+function normalizeSprint(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const { start, target } = raw;
+  if (!YMD.test(start || '') || !YMD.test(target || '')) return null;
+  if (target < start) return null;
+  return { start, target };
+}
+
+/** 目前的衝刺設定；沒啟動回 null。日期換算在 plan.js，這裡只負責存取。 */
+export function sprint() {
+  return get().sprint;
+}
+
+/**
+ * 啟動衝刺。start / target 都由呼叫端算好（store.js 不 import srs.js，避免循環相依）。
+ * @returns {object|null} 寫進去的設定；日期不合法回 null 且不改狀態
+ */
+export function startSprint(start, target) {
+  const sp = normalizeSprint({ start, target });
+  if (!sp) return null;
+  update(s => { s.sprint = sp; });
+  return sp;
+}
+
+/** 只改面試日期（衝刺沒啟動時不做事）。 */
+export function setSprintTarget(target) {
+  const cur = sprint();
+  if (!cur) return null;
+  return startSprint(cur.start, target);
+}
+
+export function endSprint() {
+  update(s => { s.sprint = null; });
 }
 
 /* ---------- streak ---------- */

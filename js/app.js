@@ -13,6 +13,7 @@ import * as present from './views/present.js';
 import * as listen from './views/listen.js';
 import * as interview from './views/interview.js';
 import * as loop from './views/loop.js';
+import * as sprint from './views/sprint.js';
 
 const routes = {
   '/home':     { view: home,     title: 'FabEnglish' },
@@ -23,6 +24,7 @@ const routes = {
   '/listen':   { view: listen,   title: '聽力' },
   '/loop':     { view: loop,     title: '循環聽' },
   '/interview':{ view: interview, title: '面試常見問題' },
+  '/sprint':   { view: sprint,   title: '面試衝刺' },
   '/progress': { view: progress, title: '進度' },
   '/settings': { view: settings, title: '設定' },
 };

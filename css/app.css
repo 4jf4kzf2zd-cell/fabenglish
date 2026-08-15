@@ -543,4 +543,56 @@ input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent);
 .streak-strip .cell[data-on="1"] { background: var(--accent); }
 .streak-strip .cell[data-today="1"] { border-color: var(--text-dim); }
 
+/* ---------- 面試衝刺（M6） ---------- */
+
+.sprint-bar {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-left: 3px solid var(--accent);
+}
+.sprint-bar .kv { border: none; padding: 0 0 2px; }
+.sprint-bar .sb-left {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.rhythm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+}
+.rhythm-chip {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+.rhythm-chip .rc-n { font-size: 13px; }
+.rhythm-chip .rc-x {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.sprint-map { padding: 0; overflow: hidden; }
+.sprint-week {
+  padding: 12px 14px;
+  border-top: 1px solid var(--line);
+}
+.sprint-week:first-child { border-top: none; }
+.sprint-week .kv { border: none; padding: 0 0 4px; }
+.sprint-week .sw-n {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+}
+.sprint-week .sw-t { font-weight: 600; margin-bottom: 2px; }
+.sprint-week[data-now="1"] { background: var(--accent-2); }
+.sprint-week[data-now="1"] .sw-n { color: var(--accent); }
+
 .hidden { display: none !important; }

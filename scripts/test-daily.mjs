@@ -242,7 +242,27 @@ for (const w of sprintPlan.WEEKS) {
   // 自我介紹每週都要滾一次：該週第一個面試日的提示要提到它
   ok(/自我介紹/.test(sprintPlan.specs(w.from)[0].hint || ''),
     `[24] 第 ${w.week} 週從自我介紹開始`);
+
+  // 前三週的面試格一律是對話練習，第 4 週起才展開其他類別
+  const ivSlots = week.filter(s => s.kind === 'interview' && s.href !== '#/interview/mock');
+  const allTalk = ivSlots.every(s => s.href === '#/interview/talk');
+  const noneTalk = ivSlots.every(s => s.href !== '#/interview/talk');
+  ok(w.talkWeek ? allTalk : noneTalk,
+    `[24] 第 ${w.week} 週的面試格${w.talkWeek ? '全部是對話練習' : '不是對話練習'}`);
 }
+is(sprintPlan.WEEKS.filter(w => w.talkWeek).map(w => w.week), [1, 2, 3],
+  '[24] 對話練習週＝前三週');
+
+// 對話練習沿用 interview kind，只換連結與文案（跟模擬面試同一條規則）
+const talkDay = daily.today([], '2026-08-15');            // D1
+is(talkDay.tasks[1].kind, 'interview', '[24] 對話練習沿用 interview kind');
+is(talkDay.tasks[1].href, '#/interview/talk', '[24] 對話練習連到 #/interview/talk');
+is(talkDay.tasks[1].target, 3, '[24] 對話練習目標 3 題');
+is(talkDay.tasks[1].label, '對話練習 3 題', '[24] 對話練習文案被課表覆寫');
+
+const week4Day = daily.today([], '2026-09-05');           // D22
+is(week4Day.sprint.dayIndex, 22, '[24] 2026-09-05 是第 22 天');
+is(week4Day.tasks[1].href, '#/interview', '[24] 第 4 週起回到一般面試題');
 
 // 語音模擬日只是提示，不進任務
 const voiceDay = daily.today([], '2026-08-21');   // 第 7 天

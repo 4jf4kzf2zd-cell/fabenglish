@@ -18,9 +18,9 @@
 ```bash
 npm run serve      # http://localhost:8080（localhost 會自動進 dev 模式）
 npm run validate   # 驗證 content/*.json
-npm test           # scoring.js + daily.js/store.js/plan.js 單元測試（48 + 122 項）
+npm test           # scoring.js + daily.js/store.js/plan.js 單元測試（48 + 135 項）
 npm run icons      # 重新產生 icons/（改圖案時才需要）
-PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 134 項無頭測試（選用）
+PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 148 項無頭測試（選用）
 ```
 
 > ES modules 與 fetch 不能用 `file://` 開，一定要走 http。
@@ -37,8 +37,9 @@ PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 134 項無頭測
 - M5：每日任務（`js/daily.js`＋首頁改版）、schema v2（`daily` 每日紀錄）、儲存空間持久化、
   循環聽背景播放嘗試（`js/wake.js`）、badge 改成未完成任務數
 - M6：面試衝刺（`js/plan.js` 42 天課表＋`#/sprint` 六週地圖）、schema v3（`sprint`）、
-  `SPEAKING.md` 面試場景 S6–S9、interview 題庫補到 62 題
-- 內容：vocab **600**（A200/B250/C150）／readings **30**／email **30**／presentation **40**／listening **15**／interview **62**
+  **對話練習 `#/interview/talk`**（抽 3 題自我介紹／經歷，每題追問三層）、
+  `SPEAKING.md` 面試場景 S6–S9、interview 題庫補到 67 題
+- 內容：vocab **600**（A200/B250/C150）／readings **30**／email **30**／presentation **40**／listening **15**／interview **67**
 
 往後主要是加內容與微調，不要再擴功能（附錄 B 的邊界仍然有效）。
 M6 是**唯一一次**破例擴功能——因為有明確目標日期的排程是星期輪替做不到的事；再有新想法先回頭看附錄 B。
@@ -60,7 +61,12 @@ M6 是**唯一一次**破例擴功能——因為有明確目標日期的排程�
    而每日任務不做手動打勾——只能是提示。
 11. **各主題同時進行**：衝刺課表是「一張每週都一樣的七天骨架 × 每週參數」（`PATTERN` + `WEEKS`），
    每週都涵蓋面試／閱讀／聽力／Email／跟讀／循環聽，自我介紹每週都滾一次。
-   不要改回「第 1 週只做自我介紹、第 3 週才碰技術」那種分段式——Jerry 已經否決過一次。
+   不要把閱讀或聽力整週抽掉——Jerry 已經否決過一次分段式。
+12. **前三週的面試格是對話練習**（`WEEKS[].talkWeek`），只練自我介紹／自我經歷／工作經歷；
+   第 4 週起才展開動機、技術、行為、薪資反問。這是 Jerry 指定的優先順序，
+   代價是技術題與行為題只剩兩週，不要當成排程失誤「修好」。
+13. 對話練習的追問是**題庫裡預錄的**，不是即時生成（App 沒有 LLM）。
+   文案不准寫成「和 AI 對話」；真的雙向對話一律導到 `SPEAKING.md`。
 
 ## 邊界（附錄 B）
 

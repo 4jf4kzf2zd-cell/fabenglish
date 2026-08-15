@@ -18,7 +18,9 @@
         {"en": "I'm now looking for a role where I can ...", "zh": "我現在想找一個能⋯的職位"}
       ],
       "follow_ups": [
-        {"en": "What made you choose yield analysis?", "zh": "你為什麼選良率分析這條路？"}
+        {"en": "What made you choose yield analysis?", "zh": "你為什麼選良率分析這條路？", "tip_zh": "講一個具體的轉折點，不要講「因為我對半導體有興趣」。"},
+        {"en": "Which part of that work do you actually enjoy?", "zh": "這份工作你真正享受的是哪一部分？", "tip_zh": "挑一件小而具體的事（例如看 bitmap 找 pattern），比「我喜歡解決問題」可信。"},
+        {"en": "So why leave a job you enjoy?", "zh": "那你為什麼要離開一份你享受的工作？", "tip_zh": "把理由接回剛才講的興趣——想做更貼近客戶的那一段，不要批評現在的公司。"}
       ],
       "dont": {"en": "I was born in Taichung and I graduated from a national university in 2015...", "why_zh": "從出生講起會用掉全部時間；面試的自我介紹只講與這份工作有關的事。"},
       "shadow": true
@@ -40,7 +42,9 @@
         {"en": "which is why this role interests me", "zh": "這也是我對這個職位有興趣的原因"}
       ],
       "follow_ups": [
-        {"en": "Why did you leave the process side?", "zh": "你為什麼離開製程端？"}
+        {"en": "Why did you leave the process side?", "zh": "你為什麼離開製程那邊？", "tip_zh": "講「往哪裡去」，不要講「從哪裡逃」。"},
+        {"en": "Is there a gap between those two roles?", "zh": "這兩份工作之間有空窗嗎？", "tip_zh": "有就直說那段時間做了什麼；沒有就講兩份工作怎麼銜接。"},
+        {"en": "Which of these roles taught you the most?", "zh": "哪一份工作讓你學到最多？", "tip_zh": "挑一個，並說出「學到什麼、現在還在用」。"}
       ],
       "dont": {"en": "Then I changed to another department, and then I changed again.", "why_zh": "只講換過什麼、不講為什麼換，會被讀成待不住。"},
       "shadow": true
@@ -61,7 +65,9 @@
         {"en": "I'm the contact window for ...", "zh": "我是⋯的對外窗口"}
       ],
       "follow_ups": [
-        {"en": "How much of that is your own decision?", "zh": "其中有多少是你自己能決定的？"}
+        {"en": "How much of that is your own decision?", "zh": "其中有多少是你自己決定的？", "tip_zh": "給一個你自己拍板的例子，含你當時承擔的風險。"},
+        {"en": "Who do you go to when you are stuck?", "zh": "你卡住的時候會找誰？", "tip_zh": "展示你知道怎麼借力，不是硬撐。"},
+        {"en": "What would break if you left tomorrow?", "zh": "如果你明天離職，什麼會出問題？", "tip_zh": "誠實講一兩件，順便帶出你有在留文件與交接。"}
       ],
       "dont": {"en": "I just do what my manager assigns to me.", "why_zh": "把自己講成純執行者，面試官會認為你沒有 ownership。"},
       "shadow": true
@@ -82,7 +88,9 @@
         {"en": "My colleagues say I'm easy to work with, because ...", "zh": "同事說我很好合作，因為⋯"}
       ],
       "follow_ups": [
-        {"en": "And what would they say you need to improve?", "zh": "那他們會說你需要改進什麼？"}
+        {"en": "And what would they say you need to improve?", "zh": "那他們會說你哪裡需要改進？", "tip_zh": "講真的缺點＋你正在做的補救，不要講「我太追求完美」。"},
+        {"en": "Can you give me an example of that?", "zh": "可以舉個例子嗎？", "tip_zh": "一個具體場景，不要用抽象形容詞帶過。"},
+        {"en": "Has anyone ever found you difficult to work with?", "zh": "有人覺得跟你合作很難嗎？", "tip_zh": "承認一次摩擦並說你怎麼調整，比否認可信得多。"}
       ],
       "dont": {"en": "They say I am hard-working and responsible.", "why_zh": "每個人都這樣講等於沒講；要給行為證據。"},
       "shadow": true
@@ -104,7 +112,9 @@
         {"en": "The fix is now part of the standard control plan.", "zh": "這個對策已經納入標準管制計畫。"}
       ],
       "follow_ups": [
-        {"en": "What would you do differently if it happened again?", "zh": "如果再發生一次，你會怎麼做不一樣？"}
+        {"en": "What would you do differently if it happened again?", "zh": "如果再來一次你會做什麼不一樣的？", "tip_zh": "講一個你真的改掉的做法，不是「我會更小心」。"},
+        {"en": "What was the hardest decision you had to make in it?", "zh": "那件事裡你做過最難的決定是什麼？", "tip_zh": "講取捨（時間 vs 樣本數、放行 vs 擋貨），不要講技術細節。"},
+        {"en": "How do you know the result was because of you?", "zh": "你怎麼知道那個成果是因為你？", "tip_zh": "給可歸因的證據：你做了什麼動作、之後數字怎麼變。"}
       ],
       "dont": {"en": "I did many projects, all of them are important.", "why_zh": "不挑一個講細節，面試官無法判斷你的深度。"},
       "shadow": true
@@ -126,7 +136,9 @@
         {"en": "The root cause was a slow drift in ...", "zh": "根因是⋯的緩慢飄移。"}
       ],
       "follow_ups": [
-        {"en": "How did you keep the team patient for four months?", "zh": "四個月裡你怎麼維持團隊的耐心？"}
+        {"en": "How did you keep the team patient for four months?", "zh": "四個月你怎麼讓團隊保持耐心？", "tip_zh": "講你怎麼讓進度可見（每週一個小結論），不是「大家都很配合」。"},
+        {"en": "At what point did you think you might not solve it?", "zh": "你哪個時間點覺得可能解不掉？", "tip_zh": "誠實講最低點，再講你當時改了什麼做法。"},
+        {"en": "What would you have done if you never found the root cause?", "zh": "如果最後找不到根因，你會怎麼辦？", "tip_zh": "講 containment，以及怎麼和客戶溝通「查不到但控制得住」。"}
       ],
       "dont": {"en": "It was difficult because many people were involved.", "why_zh": "人多不是技術難度；面試官要聽的是資料與推理上的困難。"},
       "shadow": true
@@ -147,7 +159,9 @@
         {"en": "I owned the 8D report and presented it to the customer.", "zh": "8D 報告由我負責，也是我對客戶簡報。"}
       ],
       "follow_ups": [
-        {"en": "What part could you not have done alone?", "zh": "哪一部分是你一個人做不到的？"}
+        {"en": "What part could you not have done alone?", "zh": "哪一部分你自己一個人做不到？", "tip_zh": "承認需要別人，反而顯得你清楚邊界。"},
+        {"en": "What would have happened without you?", "zh": "如果沒有你，結果會怎樣？", "tip_zh": "用「本來會怎樣」對比，比自誇有效。"},
+        {"en": "Who else deserves credit, and for what?", "zh": "還有誰該被記上一功？為什麼？", "tip_zh": "具名給功勞會讓你的貢獻更可信，不是更少。"}
       ],
       "dont": {"en": "We did everything together as a team.", "why_zh": "全部推給團隊，面試官會認為你沒有可驗證的個人能力。"},
       "shadow": true
@@ -168,7 +182,9 @@
         {"en": "I send a status update every week until the report is closed.", "zh": "我每週發進度更新直到報告結案。"}
       ],
       "follow_ups": [
-        {"en": "What if you still have no root cause after four weeks?", "zh": "如果四週後還找不到根因呢？"}
+        {"en": "What if you still have no root cause after four weeks?", "zh": "如果四週後還是沒有根因呢？", "tip_zh": "講你怎麼分階段回覆，而不是等到有答案才開口。"},
+        {"en": "How do you decide what to tell the customer and what to hold?", "zh": "你怎麼決定哪些告訴客戶、哪些先不講？", "tip_zh": "原則是「已知、未知、下一步」；還沒驗證的事不要承諾。"},
+        {"en": "Has a customer ever escalated over your head?", "zh": "有客戶越過你直接告狀嗎？", "tip_zh": "有就講你怎麼收；沒有就講你怎麼提前避免。"}
       ],
       "dont": {"en": "I wait until I find the root cause, then I reply to the customer.", "why_zh": "客戶要的是先看到控制動作；等你破案，客訴早就升級了。"},
       "shadow": true
@@ -189,7 +205,9 @@
         {"en": "We closed the qualification two weeks before the deadline.", "zh": "我們提前兩週完成認證。"}
       ],
       "follow_ups": [
-        {"en": "Who was the hardest to align, and why?", "zh": "誰最難拉齊？為什麼？"}
+        {"en": "Who was the hardest to align, and why?", "zh": "最難對齊的是誰？為什麼？", "tip_zh": "對事不對人，講清楚對方的立場合理在哪。"},
+        {"en": "What did you change about how you asked?", "zh": "你改變了自己要求的方式嗎？", "tip_zh": "重點在你調整了什麼，不是對方多難搞。"},
+        {"en": "Would that person work with you again?", "zh": "那個人還會願意跟你合作嗎？", "tip_zh": "用一個後續事實佐證（例如他後來主動找你）。"}
       ],
       "dont": {"en": "I sent many emails to push everyone.", "why_zh": "發信不是方法；面試官想看的是你設計了什麼流程。"},
       "shadow": true
@@ -210,7 +228,9 @@
         {"en": "clear owners and dates on every action item", "zh": "每個行動項都有負責人與日期"}
       ],
       "follow_ups": [
-        {"en": "What did you do when someone missed a date?", "zh": "有人沒趕上日期時你怎麼處理？"}
+        {"en": "What did you do when someone missed a date?", "zh": "有人沒趕上日期時你怎麼做？", "tip_zh": "先問卡在哪、再談新日期，不要先追責。"},
+        {"en": "How did you get authority you did not have?", "zh": "你沒有職權，怎麼推得動？", "tip_zh": "講資訊透明、把決定變成大家的、必要時請主管背書。"},
+        {"en": "Would you want to be a manager?", "zh": "你想當主管嗎？", "tip_zh": "給明確方向，不要含糊說「都可以」。"}
       ],
       "dont": {"en": "No, I am not a manager, so I never led anything.", "why_zh": "把 leadership 等同職稱，等於自己放棄這一題。"},
       "shadow": true
@@ -231,7 +251,9 @@
         {"en": "For repeated analysis I write Python scripts.", "zh": "重複性的分析我寫 Python 腳本。"}
       ],
       "follow_ups": [
-        {"en": "How would you find a correlation in that data?", "zh": "你會怎麼在那些資料裡找相關性？"}
+        {"en": "How would you find a correlation in that data?", "zh": "你會怎麼在那些資料裡找相關性？", "tip_zh": "講步驟，順便說你怎麼避免看到假訊號。"},
+        {"en": "What would you automate if you had two weeks?", "zh": "如果給你兩週，你會自動化什麼？", "tip_zh": "挑一個你真的被煩到的重複工作。"},
+        {"en": "How do you check that your script is not lying to you?", "zh": "你怎麼確認自己的程式沒有騙你？", "tip_zh": "講驗算方式：抽樣手算、和舊結果對照。"}
       ],
       "dont": {"en": "I know Python, Java, C++, R, and machine learning.", "why_zh": "列一長串會被逐一追問，講不出深度反而扣分。"},
       "shadow": true
@@ -252,7 +274,9 @@
         {"en": "whether a correlation can be explained physically", "zh": "這個相關性在物理上是否解釋得通"}
       ],
       "follow_ups": [
-        {"en": "How did you tell your manager about it?", "zh": "你怎麼跟主管說這件事？"}
+        {"en": "How did you tell your manager about it?", "zh": "你怎麼跟主管講這件事？", "tip_zh": "講你多快講、以及開口的第一句話。"},
+        {"en": "What did it cost the team?", "zh": "這件事讓團隊付出什麼代價？", "tip_zh": "講具體代價（幾天、幾批）；承認代價比淡化可信。"},
+        {"en": "What do you do differently now?", "zh": "你現在會怎麼做？", "tip_zh": "講一個你之後固定執行的檢查動作。"}
       ],
       "dont": {"en": "I cannot remember any analysis that was wrong.", "why_zh": "沒有人沒錯過；這樣答只會被讀成不誠實或沒在反省。"},
       "shadow": true
@@ -861,8 +885,9 @@
         {"en": "The hard part was the Q and A, not the talking.", "zh": "最難的是問答，不是講的部分"}
       ],
       "follow_ups": [
-        {"en": "What would you do differently next time?", "zh": "下次你會做什麼不一樣的？"},
-        {"en": "How often do you use English at work now?", "zh": "你現在工作上多常用英文？"}
+        {"en": "What would you do differently next time?", "zh": "下次你會做什麼不一樣的？", "tip_zh": "講一個具體改動，例如先寫每張圖的一句話重點。"},
+        {"en": "How often do you use English at work now?", "zh": "你現在工作上多常用英文？", "tip_zh": "給頻率與場合，不要只說「常常」。"},
+        {"en": "What do you do when you cannot find the word?", "zh": "想不到單字的時候你怎麼辦？", "tip_zh": "示範你的救援句：Let me put it another way ..."}
       ],
       "dont": {"en": "My English is not good, so I usually let my manager present.", "why_zh": "自己先把門關上。可以承認不完美，但要講你怎麼補。"},
       "shadow": true
@@ -883,7 +908,9 @@
         {"en": "I keep the scope small on purpose.", "zh": "我刻意把範圍切小"}
       ],
       "follow_ups": [
-        {"en": "What did you do when someone missed an action?", "zh": "有人沒做到 action 的時候你怎麼辦？"}
+        {"en": "What did you do when someone missed an action?", "zh": "有人沒做到 action 的時候你怎麼辦？", "tip_zh": "講你怎麼讓延遲及早浮現，而不是到期才發現。"},
+        {"en": "How did you track it all without a project tool?", "zh": "沒有專案工具你怎麼追？", "tip_zh": "講你的最小可行做法（一張共用表＋一次週會）。"},
+        {"en": "What is the biggest team you would be comfortable leading?", "zh": "你能帶的最大團隊是多大？", "tip_zh": "給一個數字與理由，展現你知道自己的邊界。"}
       ],
       "dont": {"en": "It was a very big project, very important.", "why_zh": "沒有數字就等於沒有規模。人數、地點、時間長度講出來就好。"},
       "shadow": true
@@ -1307,6 +1334,121 @@
         {"en": "What would you want to achieve in the first quarter?", "zh": "第一季你想達成什麼？"}
       ],
       "dont": {"en": "Nothing, I can figure everything out by myself.", "why_zh": "聽起來不是自信，是不打算和團隊合作。"},
+      "shadow": true
+    },
+    {
+      "id": "i063",
+      "category": "self_intro",
+      "category_zh": "自我介紹",
+      "q": "Give me the thirty-second version.",
+      "q_zh": "用三十秒講一次就好。",
+      "intent_zh": "面試官時間不夠，或在測你能不能壓縮。三十秒版本要能單獨活著，不是把一分鐘版本講快一點。",
+      "outline_zh": ["一句定位：職稱＋年資＋領域", "一個代表作＋一個數字", "一句「為什麼坐在這裡」"],
+      "answer": "Device engineer, six years, NAND flash yield analysis. I find why wafers fail at sort and close the issue with the fab. Last year I led the root cause analysis on a program disturb excursion worth three points of yield. I want a role that puts me closer to the customer.",
+      "answer_zh": "元件工程師，六年，NAND flash 良率分析。我負責找出晶圓在 sort 失效的原因，並和廠端一起把問題收掉。去年我主導了一次 program disturb 異常的根因分析，那次值三個百分點的良率。我想找一個離客戶更近的職位。",
+      "core": "I find why wafers fail at sort and close the issue with the fab.",
+      "key_phrases": [
+        {"en": "Device engineer, six years, NAND flash yield analysis.", "zh": "名詞開場，省掉主詞動詞——三十秒版本的省字法"},
+        {"en": "I want a role that puts me closer to ...", "zh": "我想找一個離⋯更近的職位"}
+      ],
+      "follow_ups": [
+        {"en": "Now give me the two-minute version.", "zh": "那再給我兩分鐘的版本。", "tip_zh": "同一個骨架加細節，不要換一套講法——面試官在對兩個版本一不一致。"},
+        {"en": "Which of those two versions is the real you?", "zh": "這兩個版本哪一個才是真的你？", "tip_zh": "回答「都是」，並說明為什麼在不同場合要有不同長度。"},
+        {"en": "What did you leave out just now?", "zh": "你剛剛省略了什麼？", "tip_zh": "誠實說你砍掉了什麼、為什麼那部分優先度低。"}
+      ],
+      "dont": {"en": "Sure — so I was born in Taichung, and after graduation I joined...", "why_zh": "三十秒版本一講到出身就已經超時了。"},
+      "shadow": true
+    },
+    {
+      "id": "i064",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "Walk me through your last three years.",
+      "q_zh": "講一下你最近三年。",
+      "intent_zh": "在對時間線。要能一段一段講清楚「什麼時候、做什麼、為什麼移動」，中間不能有講不清楚的空白。",
+      "outline_zh": ["每一段一句話：時間＋角色＋負責什麼", "段與段之間講清楚為什麼移動", "收在現在，接到為什麼想換"],
+      "answer": "Three years ago I moved from process integration to the device team. The first year I ran routine sort analysis and learned the test flow. In the second year I took over the customer return cases, which is when I started joining customer calls. This past year I led two excursions end to end, and that is when I realised I want the customer-facing part to be a bigger share of my job.",
+      "answer_zh": "三年前我從製程整合轉到元件團隊。第一年我做例行的 sort 分析，把測試流程摸熟。第二年我接手客訴退回案件，也是那時候開始參加客戶會議。過去這一年我從頭到尾主導了兩次 excursion，也是那時候我發現，我希望面對客戶的那部分在工作裡佔更大比重。",
+      "core": "In the second year I took over the customer return cases",
+      "key_phrases": [
+        {"en": "Three years ago I moved from ... to ...", "zh": "三年前我從⋯轉到⋯"},
+        {"en": "This past year I led two excursions end to end.", "zh": "過去這一年我從頭到尾主導了兩次 excursion"}
+      ],
+      "follow_ups": [
+        {"en": "Why did you move off process integration?", "zh": "你為什麼離開製程整合？", "tip_zh": "講你要往哪去，不要講你在逃什麼。"},
+        {"en": "Which of those three years was the hardest?", "zh": "這三年哪一年最難？", "tip_zh": "挑一年並說出難在哪、你怎麼撐過去。"},
+        {"en": "Is there anything on your resume you would explain differently?", "zh": "履歷上有什麼是你想另外說明的嗎？", "tip_zh": "有短期任職或空窗就主動講；被追問到才講會像在藏。"}
+      ],
+      "dont": {"en": "I have been doing yield analysis for three years.", "why_zh": "這是履歷第一行，不是時間線。對方要的是每一段的移動理由。"},
+      "shadow": true
+    },
+    {
+      "id": "i065",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "Why did you change jobs at that point?",
+      "q_zh": "你當時為什麼換工作？",
+      "intent_zh": "在找不穩定或逃避的訊號。理由要一致、要往前看，而且要和履歷上的時間對得起來。",
+      "outline_zh": ["當時的推力（陳述事實，不抱怨）", "當時的拉力（你想要什麼）", "後來證明這個決定是對的"],
+      "answer": "The process team was moving to a new site, and I would have spent most of my week on the road. At the same time the device team needed someone who could read sort data, which was the part of the job I liked most. So I moved. Two years later I was leading the analysis for our largest customer, so I think the move was right.",
+      "answer_zh": "當時製程團隊要搬到新廠區，我一週大部分時間會花在路上。同一時間，元件團隊需要一個看得懂 sort 資料的人，而那正是我最喜歡的部分。所以我就轉了。兩年後我在負責我們最大客戶的分析，所以我認為那個決定是對的。",
+      "core": "the device team needed someone who could read sort data",
+      "key_phrases": [
+        {"en": "At the same time ... needed someone who could ...", "zh": "同一時間⋯需要一個能⋯的人"},
+        {"en": "so I think the move was right", "zh": "所以我認為那個決定是對的"}
+      ],
+      "follow_ups": [
+        {"en": "Would you have stayed if the site had not moved?", "zh": "如果廠沒有搬，你會留下嗎？", "tip_zh": "誠實回答，但要接回「拉力」——你本來就想做這一塊。"},
+        {"en": "How do I know you will not leave us in two years?", "zh": "我怎麼知道你兩年後不會又走？", "tip_zh": "講你這次要的是什麼、以及什麼條件下你會留很久，不要空口保證。"},
+        {"en": "What would make you stay somewhere for five years?", "zh": "什麼會讓你在一個地方待五年？", "tip_zh": "給具體條件（能一直接觸新的失效模式、有客戶接觸面），不要說「好的公司文化」。"}
+      ],
+      "dont": {"en": "My manager and I did not get along.", "why_zh": "就算是真的，這句話會讓面試官假設你和下一個主管也處不來。"},
+      "shadow": true
+    },
+    {
+      "id": "i066",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "What have you learned in this role that you did not know two years ago?",
+      "q_zh": "這個職位上你學到什麼是兩年前不知道的？",
+      "intent_zh": "在看你有沒有真的成長，還是只是把同一年的經驗重複了三次。",
+      "outline_zh": ["一個技術面的成長", "一個工作方式的成長", "誠實講你現在還在補的那一塊"],
+      "answer": "Two things. On the technical side, I learned to design the split before I run it, instead of collecting data and hoping the answer shows up. On the working side, I learned that a short update on day three is worth more than a perfect report on day fourteen. What I am still bad at is saying no early enough.",
+      "answer_zh": "兩件事。技術上，我學會在跑之前就把 split 設計好，而不是先收一堆資料、期待答案自己浮出來。工作方式上，我學到第三天的一封簡短更新，價值高過第十四天的一份完美報告。我到現在還不夠好的是——沒辦法夠早說不。",
+      "core": "I learned to design the split before I run it",
+      "key_phrases": [
+        {"en": "instead of collecting data and hoping the answer shows up", "zh": "而不是先收一堆資料、期待答案自己浮出來"},
+        {"en": "What I am still bad at is ...", "zh": "我到現在還不夠好的是⋯"}
+      ],
+      "follow_ups": [
+        {"en": "Who taught you that?", "zh": "這是誰教你的？", "tip_zh": "給名字或角色（一位資深同事、一次失敗），比「自己領悟的」可信。"},
+        {"en": "Give me an example where the old way failed you.", "zh": "舉一個舊做法害到你的例子。", "tip_zh": "講一次具體的白費工，這一題答得出來才證明你真的學到了。"},
+        {"en": "What do you want to learn in the next two years?", "zh": "接下來兩年你想學什麼？", "tip_zh": "講一個和這個職位有關的，順勢說明為什麼是這裡。"}
+      ],
+      "dont": {"en": "I learned a lot about NAND.", "why_zh": "沒有資訊量。對方要的是「你現在做事跟以前有什麼不同」。"},
+      "shadow": true
+    },
+    {
+      "id": "i067",
+      "category": "experience",
+      "category_zh": "經歷與專案",
+      "q": "Tell me about a typical week in your current job.",
+      "q_zh": "你現在的工作，典型的一週長什麼樣？",
+      "intent_zh": "在對你的實際工作內容和履歷寫的一不一致，也在看你把時間花在哪、怎麼吸收突發狀況。",
+      "outline_zh": ["固定的節奏（會議、報告）", "花掉最多時間的那件事", "不可預期的部分怎麼吸收"],
+      "answer": "Monday is the yield review, so I spend Friday preparing the numbers. Most of the week goes to open cases: pulling sort data, talking to the fab, and writing updates. I have two customer calls a month, usually late at night. The rest is whatever breaks. If an excursion comes in, everything else moves and I tell my manager what I am dropping.",
+      "answer_zh": "週一是良率回顧會議，所以我週五就在準備數字。一週大部分時間花在手上的案子：拉 sort 資料、和廠端溝通、寫進度更新。一個月有兩場客戶會議，通常在深夜。剩下的就是臨時爆掉的事。如果來了一個 excursion，其他都往後移，而我會告訴主管我要放掉哪一件。",
+      "core": "Most of the week goes to open cases",
+      "key_phrases": [
+        {"en": "Monday is the yield review, so I spend Friday preparing the numbers.", "zh": "週一是良率回顧，所以我週五就在準備數字"},
+        {"en": "everything else moves and I tell my manager what I am dropping", "zh": "其他都往後移，而我會告訴主管我要放掉哪一件"}
+      ],
+      "follow_ups": [
+        {"en": "How many cases do you carry at once?", "zh": "你同時手上有幾個案子？", "tip_zh": "給數字，並說你怎麼決定先做哪一個。"},
+        {"en": "What takes more time than it should?", "zh": "什麼事花的時間比應該的多？", "tip_zh": "講一件真的低效率的事，順便講你試過怎麼改。"},
+        {"en": "How much of that week is in English?", "zh": "那一週裡有多少是用英文？", "tip_zh": "誠實給比例與場合；這題常常是在探你的實際英文使用量。"}
+      ],
+      "dont": {"en": "It depends, every week is different.", "why_zh": "對方要的是你怎麼安排時間，不是「我很忙」。"},
       "shadow": true
     }
   ]

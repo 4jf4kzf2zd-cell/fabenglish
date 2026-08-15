@@ -54,6 +54,10 @@ Claude 扮演美系客戶的 Quality Engineer（口氣專業但步步進逼）�
 
 **啟動語**：`S6, I'm ready for the interview.`
 
+> 衝刺課表把 S6 排三次（D7 / D14 / D21），對應前三週的焦點：
+> 第一次重自我介紹、第二次讓對方挑一個專案往下挖三層、第三次盤工作經歷時間線。
+> 開場時直接告訴 Claude 這次要偏哪一塊。
+
 Claude 扮演外商的 hiring manager（友善但會追問），30 分鐘：
 `Tell me about yourself.` → 兩題經歷題（挑我答案裡提到的專案往下追）→ 一題動機題 → 讓我反問。
 

@@ -30,6 +30,15 @@ const mock = () => ({
   hint: '一口氣跑完不要中斷；答不出來也先撐過去，最後再一起看範答。',
 });
 
+/** 對話練習（M6）：抽 3 題自我介紹／經歷，每題被追問三層。同樣沿用 interview kind。 */
+const talk = hint => ({
+  kind: 'interview',
+  target: 3,
+  href: '#/interview/talk',
+  label: '對話練習 3 題',
+  hint,
+});
+
 /* ------------------------------ 六個階段 ------------------------------ */
 
 /**
@@ -50,63 +59,70 @@ const PATTERN = [
 ];
 
 /**
- * 每週的參數。`ivOpen` 是該週第一個面試日的提示——**每週都從自我介紹開始**，
- * 所以自我介紹不是第 1 週的作業，是六週都在滾的東西。
+ * 每週的參數。
+ *
+ * **前三週的面試格全部是「對話練習」**（`talkWeek: true`）——只練自我介紹、自我經歷、
+ * 工作經歷，而且每題都被追問三層。第 4 週起才展開動機、技術、行為、薪資與反問。
+ *
+ * `ivOpen` 是該週第一個面試日的提示（每週都從自我介紹開始）；
  * `extraMock` 是要把該週第幾格（PATTERN 的索引）的面試題換成模擬面試。
  */
 export const WEEKS = [
   {
     week: 1, from: 1, to: 7,
-    title: '自我介紹與經歷',
-    focus: '把「我是誰、做過什麼」講成 60 秒的固定版本，不要每次重編。',
-    milestone: '60 秒自我介紹的英文逐字稿定稿 ＋ 2 個經歷故事。',
-    ivOpen: '先重講一次自我介紹，再做 2 題經歷題。',
-    ivMain: '經歷題。每題先自己答一次再攤開範答。',
+    title: '自我介紹',
+    focus: '先把「我是誰」講到不用想。三十秒版與六十秒版都要能單獨活著。',
+    milestone: '60 秒與 30 秒兩個版本的自我介紹逐字稿都定稿。',
+    talkWeek: true,
+    ivOpen: '從自我介紹開始。每題答完會被追問三層，不要停下來查字。',
+    ivMain: '自我介紹的各種問法：完整版、三十秒版、同事怎麼形容你。',
     shadowN: 5, loopMin: 5, extraMock: [],
   },
   {
     week: 2, from: 8, to: 14,
-    title: '動機與職涯',
-    focus: '回答「為什麼離開、為什麼是這個職位」，同時開始把專案整理成故事。',
-    milestone: '動機答案定稿 ＋ 3 個 STAR 故事的骨架（S/T/A/R 各一句）。',
-    ivOpen: '自我介紹換一個例子再講一次，再做 2 題動機題。',
-    ivMain: '動機題：為什麼離開、為什麼是這個職位。',
+    title: '自我經歷',
+    focus: '把過去的專案講成故事——有起點、有你做的動作、有可量化的結果。',
+    milestone: '3 個經歷故事寫成完整段落，每個都有一個數字。',
+    talkWeek: true,
+    ivOpen: '先重講一次自我介紹，再進經歷題。',
+    ivMain: '經歷題：最自豪的專案、最難的問題、你到底做了哪一部分。',
     shadowN: 6, loopMin: 5, extraMock: [],
   },
   {
     week: 3, from: 15, to: 21,
-    title: '技術深挖',
-    focus: '技術題不是背名詞，是能用英文把一次分析從頭講到尾。',
-    milestone: '三條技術主線不看稿講 90 秒：怎麼跑 root cause、講一次 excursion、怎麼和客戶收掉 8D。',
-    ivOpen: '自我介紹重講一次，再做 2 題技術題。',
-    ivMain: '技術題：講得出流程比講得出名詞重要。',
+    title: '工作經歷與時間線',
+    focus: '整條職涯講得順：每一段做什麼、為什麼移動、現在為什麼想換。',
+    milestone: '三年時間線一口氣講完不打結，換工作理由前後一致。',
+    talkWeek: true,
+    ivOpen: '自我介紹再滾一次，再進工作經歷與時間線。',
+    ivMain: '工作經歷：時間線、換工作理由、典型的一週、學到什麼。',
     shadowN: 6, loopMin: 7, extraMock: [],
   },
   {
     week: 4, from: 22, to: 28,
-    title: '行為題 STAR',
-    focus: '衝突、失敗、跨部門——這些題答不好，技術再強也會被扣分。',
-    milestone: '6 個 STAR 故事寫成完整句子。',
-    ivOpen: '自我介紹重講一次，再做 2 題行為題。',
-    ivMain: '行為題一律用 STAR：情境、任務、我做了什麼、結果。',
+    title: '動機與職涯',
+    focus: '前三週的故事已經在了，這週把它接到「為什麼是這個職位」。',
+    milestone: '動機答案定稿，而且和第 3 週講的換工作理由對得起來。',
+    ivOpen: '自我介紹重講一次，再做 2 題動機題。',
+    ivMain: '動機題：為什麼離開、為什麼是這個職位。',
     shadowN: 8, loopMin: 7, extraMock: [],
   },
   {
     week: 5, from: 29, to: 35,
-    title: '薪資、反問與加壓',
-    focus: '補上最後兩類題，並把模擬面試加到一週兩場。',
-    milestone: '薪資回答的一句話版本 ＋ 反問清單 5 題。',
-    ivOpen: '自我介紹重講一次，再做 2 題薪資或反問題。',
-    ivMain: '薪資與反問：數字先想好區間，反問要問得像內行人。',
+    title: '技術與行為題',
+    focus: '補上前三週沒碰的兩塊。時間被壓縮了，所以只求講得出流程與 STAR 骨架。',
+    milestone: '三條技術主線各講 90 秒 ＋ 4 個 STAR 故事成句。',
+    ivOpen: '自我介紹重講一次，再做 2 題技術或行為題。',
+    ivMain: '技術題講流程不講名詞；行為題一律 STAR。',
     shadowN: 8, loopMin: 7, extraMock: [2],
   },
   {
     week: 6, from: 36, to: 42,
-    title: '收斂與減量',
-    focus: '不塞新東西。只修卡住的題、保持口腔熱度，最後兩天刻意減量。',
-    milestone: '模擬面試 6 題全部自評「答得出來」，且每題 60 秒內講完。',
+    title: '薪資反問與收斂',
+    focus: '補完薪資與反問，其餘只修卡住的題。最後兩天刻意減量。',
+    milestone: '薪資一句話版 ＋ 反問清單 5 題；模擬面試 6 題全部「答得出來」。',
     ivOpen: '自我介紹最後一次定稿，之後不要再改。',
-    ivMain: '只挑自評卡住過的題目重答。',
+    ivMain: '薪資與反問，其餘挑自評卡住過的題重答。',
     shadowN: 6, loopMin: 5, extraMock: [2],
   },
 ];
@@ -123,7 +139,11 @@ const TAPER = {
 /** 把骨架的一格展開成任務 spec。 */
 function slotSpec(slot, w, posInWeek) {
   switch (slot) {
-    case 'interview': return iv(3, posInWeek === 0 ? w.ivOpen : w.ivMain);
+    // 前三週的面試格一律走對話練習（自我介紹／自我經歷／工作經歷，每題追問三層）
+    case 'interview': {
+      const hint = posInWeek === 0 ? w.ivOpen : w.ivMain;
+      return w.talkWeek ? talk(hint) : iv(3, hint);
+    }
     case 'mock':      return mock();
     case 'reading':   return rd(1);
     case 'listen':    return li(1);
@@ -155,13 +175,13 @@ const DAYS = Array.from({ length: LENGTH }, (_, i) => {
 // 只顯示提示，不進今日任務、不打勾、不影響完成度。
 
 const VOICE = {
-  7:  { code: 'S6', title: '一般面試官', focus: '自我介紹＋經歷，練把準備好的答案真的講出來。' },
-  14: { code: 'S6', title: '一般面試官', focus: '同樣的題目換例子再講一次，不要照稿唸。' },
-  21: { code: 'S7', title: '技術追問', focus: '被連續追問技術細節不崩，聽不懂就請對方換句話說。' },
-  28: { code: 'S8', title: '壓力面試', focus: '被質疑、被打斷、答不出來時怎麼接住。' },
-  32: { code: 'S8', title: '壓力面試', focus: '這次加薪資與離職原因的刁鑽問法。' },
-  35: { code: 'S9', title: '全真整場', focus: '45 分鐘完整流程，含反問與薪資，中途不喊停。' },
-  38: { code: 'S9', title: '全真整場', focus: '第二場全真。目標是全程不切回中文。' },
+  7:  { code: 'S6', title: '一般面試官', focus: '自我介紹講完後讓 Claude 一路追問，練被問下去不斷線。' },
+  14: { code: 'S6', title: '一般面試官', focus: '這次把重點放在經歷：讓對方挑一個專案往下挖三層。' },
+  21: { code: 'S6', title: '一般面試官', focus: '工作經歷時間線：每一段為什麼進、做了什麼、為什麼離開。' },
+  28: { code: 'S8', title: '壓力面試', focus: '離職原因與動機的刁鑽問法，被質疑時怎麼接住。' },
+  32: { code: 'S7', title: '技術追問', focus: '被連續追問技術細節不崩，聽不懂就請對方換句話說。' },
+  35: { code: 'S8', title: '壓力面試', focus: '行為題被打斷、被追問「那是你做的還是團隊做的」。' },
+  38: { code: 'S9', title: '全真整場', focus: '45 分鐘完整流程，含反問與薪資，中途不喊停。' },
   40: { code: 'S9', title: '全真整場', focus: '最後一場全真，刻意排在面試前兩天。結束後只修最致命的兩個問題。' },
 };
 

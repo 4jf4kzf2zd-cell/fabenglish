@@ -162,7 +162,7 @@ const SCHEMAS = {
 
   interview: {
     idPrefix: 'i',
-    target: { M4: 40 },
+    target: { M4: 40, M6: 67 },
     check(it) {
       req(it, 'category', oneOf(['self_intro', 'experience', 'technical', 'behavioral', 'motivation', 'salary_logistics', 'ask_them']), '不在枚舉內');
       req(it, 'category_zh', str, '必須是非空字串');
@@ -180,7 +180,18 @@ const SCHEMAS = {
       req(it, 'follow_ups', v => Array.isArray(v) && v.length > 0, '至少一個追問');
       (it.follow_ups || []).forEach((f, i) => {
         if (!str(f.en) || !str(f.zh)) bad(`follow_ups[${i}] 需要 en 與 zh`);
+        if (f.tip_zh !== undefined && !str(f.tip_zh)) bad(`follow_ups[${i}].tip_zh 必須是非空字串`);
       });
+
+      // 對話練習（M6，#/interview/talk）只抽這兩類，而且要一路追問下去，
+      // 所以追問必須有三層、每層都要有回答方向；缺了就會出現「答完沒東西看」的空畫面。
+      if (it.category === 'self_intro' || it.category === 'experience') {
+        const fu = it.follow_ups || [];
+        if (fu.length < 3) bad(`對話練習用的題目需要至少 3 個追問（目前 ${fu.length}）`);
+        fu.forEach((f, i) => {
+          if (!str(f.tip_zh)) bad(`follow_ups[${i}] 缺 tip_zh（對話練習要顯示回答方向）`);
+        });
+      }
       req(it, 'dont', v => v && str(v.en) && str(v.why_zh), '需要 {en, why_zh}');
       req(it, 'shadow', v => typeof v === 'boolean', '必須是 boolean');
 

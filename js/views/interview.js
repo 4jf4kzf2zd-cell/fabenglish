@@ -24,6 +24,11 @@ const MOCK_RECIPE = [
   ['self_intro', 1], ['experience', 2], ['technical', 1], ['behavioral', 1], ['motivation', 1],
 ];
 
+// 對話練習（M6，SPEC §4.9.1）：只抽自我介紹與經歷，每題一路追問下去。
+const TALK_RECIPE = [['self_intro', 1], ['experience', 2]];
+/** 第一輪 60 秒，之後每一層追問 45 秒。 */
+const TALK_SECONDS = [60, 45, 45, 45, 45];
+
 let openShadow = null;
 let timer = null;
 
@@ -46,6 +51,11 @@ export async function render(root, ctx) {
     renderMock(root, items, ctx);
     return;
   }
+  if (ctx.params[0] === 'talk') {
+    ctx.setTitle('對話練習');
+    renderTalk(root, items, ctx);
+    return;
+  }
   renderList(root, items, ctx);
 }
 
@@ -57,6 +67,11 @@ function renderList(root, items, ctx) {
   const stuck = items.filter(i => st.interview[i.id]?.ok === false).length;
 
   append(root,
+    card(
+      el('h3', { text: '對話練習' }),
+      p('抽 3 題自我介紹與經歷，每題答完會被追問三層——像真的被問下去，而不是一題一題跳過。', 'small dim'),
+      el('a', { class: 'btn primary block', href: '#/interview/talk' }, '開始對話練習'),
+    ),
     card(
       el('h3', { text: '模擬面試' }),
       p('抽 6 題：先聽題目、自己出聲答一次，再攤開範答。App 不評分自由回答，只讓你自評卡在哪。', 'small dim'),
@@ -149,6 +164,7 @@ function detailNodes(item) {
       el('span', { style: 'flex:1' },
         el('div', { text: f.en }),
         el('div', { class: 'small dim', text: f.zh }),
+        f.tip_zh ? el('div', { class: 'fu-tip small', text: `↳ ${f.tip_zh}` }) : null,
       ),
     ))),
   ];
@@ -175,6 +191,205 @@ function toggleShadow(item, host, btn) {
 
 function footerHint() {
   return p('想練完整對答？用 SPEAKING.md 的場景在 Claude Project 開語音模式，讓 Claude 當面試官。', 'small dim center');
+}
+
+/* ----------------------------- 對話練習（M6） ----------------------------- */
+
+/**
+ * 抽 3 題自我介紹／經歷，每題一路追問三層（SPEC §4.9.1）。
+ *
+ * ⚠ App 不能真的接你的話（附錄 B 沒有 LLM）。追問是題庫裡預錄的，
+ *   練的是「被問下去不斷線」，不是即興應答。真的雙向對話走 SPEAKING.md 的語音場景。
+ */
+function renderTalk(root, items, ctx) {
+  const deck = buildTalkDeck(items);
+  if (!deck.length) {
+    append(root, card(p('題庫裡沒有可用於對話練習的題目（需要自我介紹／經歷類，且有三層追問）。', 'small dim')));
+    return;
+  }
+
+  let idx = 0;
+  const host = div({});
+  append(root, host,
+    el('a', { class: 'btn block ghost', href: '#/interview', style: 'margin-top:16px' }, '← 回題目列表'));
+  intro();
+
+  function clear() {
+    openShadow?.destroy();
+    openShadow = null;
+    clearInterval(timer);
+    timer = null;
+    speech.cancel();
+    host.replaceChildren();
+  }
+
+  function intro() {
+    clear();
+    host.append(card(
+      el('h3', { text: '對話練習' }),
+      p(`${deck.length} 題自我介紹與經歷，每題答完會被追問三層。`, 'small'),
+      p('規則只有一條：出聲講，不要用想的。答不出來也先講一句撐住，事後再看回答方向。', 'small dim'),
+      el('button', { class: 'btn primary block', onClick: () => { idx = 0; turn(); } }, '開始'),
+    ));
+  }
+
+  /** 一題＝一串輪次：主問題 → 追問 1 → 追問 2 → 追問 3 → 收尾。 */
+  function turn() {
+    clear();
+    if (idx >= deck.length) { summary(); return; }
+
+    const item = deck[idx];
+    const chain = [
+      { q: item.q, zh: item.q_zh, tip: null },
+      ...(item.follow_ups || []).map(f => ({ q: f.en, zh: f.zh, tip: f.tip_zh })),
+    ];
+    let round = 0;
+
+    const bar = div({ class: 'qbar' }, el('i', {}));
+    const head = p('', 'small dim center');
+    const qEl = el('div', { class: 'iv-q big' });
+    const zhEl = el('div', { class: 'small dim' });
+    const timerEl = div({ class: 'iv-timer small dim' });
+    const nextBtn = el('button', { class: 'block primary', onClick: advance }, '');
+    const replay = el('button', { class: 'block ghost' }, '🔊 再聽一次');
+    const tipBox = div({ class: 'talk-tip hidden' });
+    const tipBtn = el('button', { class: 'block ghost', onClick: toggleTip }, '偷看回答方向');
+
+    speech.bindPlayButton(replay, () => chain[round].q);
+
+    host.append(bar, head, card(qEl, zhEl, timerEl, nextBtn, replay, tipBtn, tipBox));
+    enter(0);
+
+    /** 進入第 n 輪。一定在點擊事件裡呼叫，speak 才吃得到 iOS 的解鎖（SPEC §5-1）。 */
+    function enter(n) {
+      round = n;
+      const turnItem = chain[n];
+      const secs = TALK_SECONDS[Math.min(n, TALK_SECONDS.length - 1)];
+
+      bar.firstChild.style.width = `${Math.round((idx + n / chain.length) / deck.length * 100)}%`;
+      head.textContent = n === 0
+        ? `第 ${idx + 1} / ${deck.length} 題　·　${CATEGORY_ZH[item.category]}`
+        : `第 ${idx + 1} / ${deck.length} 題　·　追問 ${n} / ${chain.length - 1}`;
+      qEl.textContent = turnItem.q;
+      zhEl.textContent = turnItem.zh;
+      nextBtn.textContent = n === chain.length - 1 ? '答完了，看範答 →' : '答完了，繼續追問 →';
+
+      tipBox.replaceChildren();
+      tipBox.classList.add('hidden');
+      tipBtn.textContent = '偷看回答方向';
+      tipBtn.hidden = !turnItem.tip;
+      if (turnItem.tip) tipBox.append(el('div', { class: 'small', text: turnItem.tip }));
+
+      speech.speak(turnItem.q);
+      runTimer(secs);
+    }
+
+    function advance() {
+      clearInterval(timer);
+      timer = null;
+      speech.cancel();
+      if (round < chain.length - 1) { enter(round + 1); return; }
+      finish();
+    }
+
+    function toggleTip() {
+      const showing = !tipBox.classList.toggle('hidden');
+      tipBtn.textContent = showing ? '收起' : '偷看回答方向';
+    }
+
+    function runTimer(secs) {
+      clearInterval(timer);
+      let left = secs;
+      const tick = () => {
+        timerEl.textContent = left > 0
+          ? `⏱ ${left} 秒　·　現在出聲回答`
+          : '⏱ 時間到。答得順就繼續，卡住也繼續——面試不會等你。';
+        if (left <= 0) { clearInterval(timer); timer = null; return; }
+        left--;
+      };
+      tick();
+      timer = setInterval(tick, 1000);
+    }
+
+    /** 一題結束：自評 → 範答＋每一層追問的回答方向。 */
+    function finish() {
+      clear();
+      const rec = store.get().interview[item.id];
+      const ok = el('button', { onClick: () => rate(true) }, '👍 接得住');
+      const no = el('button', { onClick: () => rate(false) }, '🤔 中間斷掉了');
+      if (rec?.ok === true) ok.classList.add('primary');
+      if (rec?.ok === false) no.classList.add('primary');
+
+      host.append(
+        card(
+          el('div', { class: 'small dim', text: `第 ${idx + 1} / ${deck.length} 題` }),
+          el('div', { class: 'iv-q', text: item.q }),
+          p('這一串你接得住嗎？（會進弱點清單）', 'small dim center'),
+          div({ class: 'row' }, ok, no),
+        ),
+        card(...detailNodes(item)),
+        el('button', {
+          class: 'btn primary block',
+          onClick: () => { idx++; turn(); },
+        }, idx === deck.length - 1 ? '看結果' : '下一題 →'),
+      );
+
+      function rate(good) {
+        // 和模擬面試同一條規則：同一題今天第一次自評才算一次每日任務
+        const firstToday = store.get().interview[item.id]?.day !== srs.today();
+        store.update(s => {
+          const prev = s.interview[item.id] || {};
+          s.interview[item.id] = { ok: good, tries: (prev.tries || 0) + 1, day: srs.today() };
+        });
+        store.touchDay(srs.today(), srs.addDays(srs.today(), -1), firstToday ? 'interview' : null);
+        ok.classList.toggle('primary', good);
+        no.classList.toggle('primary', !good);
+      }
+    }
+  }
+
+  function summary() {
+    clear();
+    const st = store.get();
+    const stuck = deck.filter(i => st.interview[i.id]?.ok === false);
+
+    host.append(
+      card(
+        el('h3', { text: '對話練習完成' }),
+        div({ class: 'today-grid' },
+          statBox(deck.length - stuck.length, '接得住'),
+          statBox(stuck.length, '斷掉'),
+          statBox(deck.reduce((a, i) => a + 1 + (i.follow_ups || []).length, 0), '總輪數'),
+        ),
+        stuck.length
+          ? div({ style: 'margin-top:12px' },
+              el('div', { class: 'small dim', text: '斷掉的題目：' }),
+              ...stuck.map(i => div({ class: 'kv' }, el('span', { style: 'flex:1', text: i.q }))),
+              p('這些已經進弱點清單。到「進度」頁匯出後貼給 Claude，讓它針對這幾串追問陪你練。', 'small dim'),
+            )
+          : p('三串都接得住。明天換一組題目，同樣的故事換個講法再來一次。', 'small dim center'),
+      ),
+      el('button', { class: 'block primary', onClick: () => { idx = 0; turn(); } }, '再來一輪'),
+      footerHint(),
+    );
+  }
+}
+
+/** 只抽自我介紹與經歷，而且要有三層追問才進得來（validate.js 會保證有）。 */
+function buildTalkDeck(items) {
+  const seed = hash(srs.today());
+  const deck = [];
+  TALK_RECIPE.forEach(([cat, n], gi) => {
+    const pool = items.filter(i => i.category === cat && (i.follow_ups || []).length >= 3);
+    if (!pool.length) return;
+    for (let k = 0; k < n; k++) {
+      for (let tryIdx = 0; tryIdx < pool.length; tryIdx++) {
+        const pick = pool[(seed + gi * 5 + k * 3 + tryIdx) % pool.length];
+        if (!deck.includes(pick)) { deck.push(pick); break; }
+      }
+    }
+  });
+  return deck;
 }
 
 /* ----------------------------- 模擬面試 ----------------------------- */

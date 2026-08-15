@@ -557,6 +557,19 @@ input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 
+/* 對話練習：追問的回答方向 */
+.talk-tip {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-2);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.fu-tip {
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
 .rhythm {
   display: flex;
   flex-wrap: wrap;

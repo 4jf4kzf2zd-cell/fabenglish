@@ -558,10 +558,70 @@ try {
     `${mockDay.sprint?.dayIndex} / ${mockDay.tasks[1].href}`);
   check('模擬面試沿用 interview kind', mockDay.tasks[1].kind === 'interview');
 
+  // 對話練習：主問題 ＋ 三層追問 ＋ 自評 ＋ 範答（M6，SPEC §4.9.1）
+  await page.goto(`${BASE}/index.html#/interview`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#view .card');
+  check('題目列表有對話練習入口',
+    (await page.$$eval('a[href="#/interview/talk"]', ns => ns.length)) === 1);
+
+  // 前面章節已經自評過同一批題目，interview[id].day 還留著今天 →
+  // 「今天第一次自評才計入」會讓 +1 的斷言看起來壞掉。先把兩邊一起清乾淨。
+  await page.evaluate(async () => {
+    const store = await import('/js/store.js');
+    store.update(s => { s.interview = {}; s.daily = {}; });
+  });
+
+  await page.goto(`${BASE}/index.html#/interview/talk`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('#view .card');
+  await clickByText(page, 'button', '開始');
+  await page.waitForSelector('.iv-q.big');
+
+  const rounds = [];
+  for (let r = 0; r < 4; r++) {
+    rounds.push(await page.$eval('.iv-q.big', n => n.textContent.trim()));
+    const label = await page.$eval('#view button.primary', n => n.textContent.trim());
+    if (r === 0) check('對話練習第一輪有計時提示', /現在出聲回答/.test(await page.$eval('.iv-timer', n => n.textContent)));
+    if (r === 1) {
+      check('追問輪可以偷看回答方向',
+        (await page.$$eval('#view button', ns => ns.some(n => n.textContent.trim() === '偷看回答方向'))));
+      await clickByText(page, 'button', '偷看回答方向');
+      check('回答方向會展開', !(await page.$eval('.talk-tip', n => n.classList.contains('hidden'))));
+    }
+    check(`第 ${r + 1} 輪的主按鈕文案正確`,
+      label === (r === 3 ? '答完了，看範答 →' : '答完了，繼續追問 →'), label);
+    await clickByText(page, 'button', label);
+    if (r < 3) await page.waitForSelector('.iv-q.big');
+  }
+  check('四輪的題目各不相同（主問題＋三層追問）', new Set(rounds).size === 4, rounds.join(' | '));
+
+  await page.waitForSelector('#view .row button');
+  const finishText = await page.$eval('#view', n => n.innerText);
+  check('一串跑完才自評', finishText.includes('接得住') && finishText.includes('中間斷掉了'));
+  check('自評後面就是範答', finishText.includes('範答') && finishText.includes('可能的追問'));
+  check('追問底下有回答方向', /↳/.test(finishText), finishText.slice(0, 60));
+
+  const before = await page.evaluate(async () => {
+    const [store, srs] = await Promise.all([import('/js/store.js'), import('/js/srs.js')]);
+    return store.dayLog(srs.today()).interview || 0;
+  });
+  await clickByText(page, 'button', '👍 接得住');
+  const after = await page.evaluate(async () => {
+    const [store, srs] = await Promise.all([import('/js/store.js'), import('/js/srs.js')]);
+    return store.dayLog(srs.today()).interview || 0;
+  });
+  check('自評後每日任務的面試數 +1', after === before + 1, `${before} → ${after}`);
+  await clickByText(page, 'button', '👍 接得住');
+  const again = await page.evaluate(async () => {
+    const [store, srs] = await Promise.all([import('/js/store.js'), import('/js/srs.js')]);
+    return store.dayLog(srs.today()).interview || 0;
+  });
+  check('同一題改自評不重複計入', again === after, `${after} → ${again}`);
+  await page.screenshot({ path: join(SHOTS, '10-talk.png') });
+
   // 結束衝刺 → 回到星期輪替
   await page.evaluate(async () => (await import('/js/store.js')).endSprint());
-  // 已經在 #/home，goto 同一個網址只會被當成 hash 導覽、不會重繪 → 一定要 reload
-  await page.reload({ waitUntil: 'networkidle0' });
+  await page.goto(`${BASE}/index.html#/home`, { waitUntil: 'networkidle0' });
+  await page.reload({ waitUntil: 'networkidle0' });   // hash 導覽不重繪，補一次 reload
   await page.waitForSelector('.task');
   const afterSprint = await readPlan(page);
   check('結束後回到星期輪替', afterSprint.sprint === null);

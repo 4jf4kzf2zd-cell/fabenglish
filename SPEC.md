@@ -45,6 +45,9 @@ fabenglish/
 │   ├── weakness.js       # 弱點清單 → markdown（M3）
 │   ├── daily.js          # 每日任務：今天要做哪三件事、完成度（M5）
 │   ├── plan.js           # 面試衝刺：42 天課表、倒數第幾天、每週里程碑（M6）
+│   ├── merge.js          # 兩份進度的逐欄合併；純函式，可用 node 測（M7）
+│   ├── sync.js           # 多裝置同步：登入、pull/merge/push、狀態事件（M7）
+│   ├── config.js         # 部署設定（同步後端網址、Google 用戶端 ID；都是公開資訊）
 │   ├── wake.js           # 循環聽的背景播放嘗試：無聲音軌＋MediaSession＋wakeLock（M5）
 │   ├── badge.js          # PWA 圖示未完成任務數（App Badging API，不支援時靜默）
 │   ├── content.js        # content/*.json 載入與快取
@@ -62,9 +65,16 @@ fabenglish/
 │   ├── validate.js       # node 腳本：驗證 content/*.json 符合 schema（commit 前必跑）
 │   ├── test-scoring.mjs  # scoring.js 單元測試（純 node，無依賴）
 │   ├── test-daily.mjs    # daily.js / store.js 單元測試（純 node，無依賴）
+│   ├── test-merge.mjs    # merge.js 合併規則單元測試（純 node，無依賴）
+│   ├── test-sync-e2e.mjs # 兩台裝置真實同步測試（需網路＋外部 puppeteer）
 │   ├── serve.mjs         # 本機靜態伺服器（ES modules 不能用 file:// 開）
 │   ├── smoke.mjs         # 無頭瀏覽器煙霧測試（選用，需外部 puppeteer）
 │   └── make-icons.mjs    # 產生 icons/（純 Node 手寫 PNG，零依賴）
+├── worker/               # 同步後端（Cloudflare Worker + D1，M7）；前端零依賴的規矩不受影響
+│   ├── src/index.js      # 只存一包進度 JSON：帳號、session、pull/push、配對碼
+│   ├── schema.sql
+│   ├── wrangler.toml
+│   └── README.md         # 含 Google OAuth 用戶端 ID 的申請步驟
 ├── package.json          # 只放 npm scripts 與 "type":"module"，dependencies 永遠是空的
 ├── SPEC.md
 ├── CLAUDE.md
@@ -433,6 +443,68 @@ App 不做自由對話（附錄 B），所以真正的對答練習排在 `SPEAKI
   **不新增 kind、不新增 daily 欄位**，舊備份不受影響。
 - 衝刺期間單字負擔會壓縮練面試的時間，`#/sprint` 會建議把「每日新字」調低（**只建議，不自動改設定**）。
 
+### 4.12 帳號與多裝置同步（M7）
+
+目標只有一句：**在手機練的進度，換電腦打開就在**。不是雲端存檔、不是多使用者、不是社群。
+這一節破了附錄 B 的三條界線（後端／帳號／雲端同步），界線改寫在附錄 B，動這一節前先看那張表。
+
+**架構**
+
+```
+瀏覽器 localStorage（唯一真相）
+      │  merge.js 逐欄合併
+      ▼
+sync.js ── pull → merge → 有變化才 push ──▶ Cloudflare Worker + D1
+                                             （只存一包進度 JSON）
+```
+
+- 合併規則放在**前端**：只有前端知道 schema 的語意，而且離線時要能先合併、連上再上傳。
+- 後端不看內容、不做計算，就是一個帶版本號的 key-value。程式在 `worker/`。
+- 沒登入／沒網路／後端掛掉 → 行為和 M6 之前完全一樣。**不准出現「要先登入才能用」的畫面。**
+
+**登入方式**
+
+| 方式 | 用途 |
+|---|---|
+| Google 登入 | 主要路徑。所有裝置清空也找得回來 |
+| 配對碼 | 不用 Google 也能同步；也是 iOS PWA 裡 Google 彈窗失敗時的退路 |
+
+配對碼流程：第一台建立帳號 → 產生 8 碼（15 分鐘、用完即失效）→ 第二台輸入即綁定。
+用配對碼建立的帳號**之後可以再綁 Google**，進度不會消失（後端會把 `google_sub` 補到既有帳號上）。
+
+**合併規則**（`js/merge.js`，每條都有單元測試）
+
+| 欄位 | 規則 |
+|---|---|
+| `srs[id]` | 選「最後複習日晚 → reps 多 → due 晚 → box 大」的那筆**整包**採用；`reps`／`lapses` 取 max、`first` 取較早 |
+| `readings` / `listening` / `shadow` | 分數取 max；`done` 取 OR |
+| `cloze` | `passed` 取 OR |
+| `interview[id]` | `ok` 取日期晚的那次，`tries` 取 max |
+| `daily[日期][kind]` | 取 max |
+| `streak` | 不合併，從合併後的 `daily` 重算；`best` 另與舊值取 max |
+| `settings` / `sprint` | 這兩個沒得逐欄合併 → 比 `stamps` 的寫入時間，晚的贏 |
+| `settings.dev` / `dev.dayOffset` | 永遠留在本機，不同步 |
+
+三個性質必須成立，改規則時要一起維持：**交換律**（誰先上傳結果一樣）、**冪等**（重複同步不累加）、
+**只前進不倒退**（合併不會讓任何一邊的進度變少）。
+
+> ⚠ 唯一的取捨：`daily` 取 max 而不是相加，所以同一天在兩台各做一半，計數不會加總。
+> 要能加總就得把 store 從「狀態快照」改成「事件流」，那是另一個量級的改動，目前刻意不做。
+
+**同步時機**
+
+- 開 App、回到前景（最多每分鐘一次）、網路恢復 → pull + merge
+- `store.save()` 會發 `fab:changed` → debounce 3 秒後 push
+- 頁面要關掉 → `fetch(keepalive)` 補送一次
+- 版本號對不上 → 後端回 **200 + `conflict:true`** 與雲端現況（**不是 409**：兩台同時開著本來就會撞，
+  回 4xx 會在 console 印紅字，害「console 零錯誤」這條驗收失去意義）→ 前端合併後重送一次
+
+**schema v4**
+
+- 新增 `stamps: {settings, sprint}`（毫秒時戳，給上面兩個 last-write-wins 的欄位用）
+- 登入狀態存在**另一支 key** `fabenglish.auth.v1`：匯出的備份不可以夾帶 session token
+- 舊備份沒有 `stamps` → 補 0（同步時讓給對方，不會反過來把新設定蓋掉）
+
 ## 5. Web Speech API — iOS Safari 實作備忘（重要，全部集中在 `speech.js`）
 
 1. **TTS 需要 user gesture 解鎖**：首次 `speechSynthesis.speak()` 必須發生在點擊事件的同步呼叫鏈內。App 啟動後第一次播放一律綁在按鈕上；可在首次點擊時 speak 一個空白 utterance 完成解鎖。
@@ -542,6 +614,27 @@ App 不做自由對話（附錄 B），所以真正的對答練習排在 `SPEAKI
 - [x] 舊 schema v2 備份匯入後 `sprint` 為 null，不會壞　←　`test-daily.mjs`
 - [ ] iPhone 實機：衝刺卡片與六週地圖在 390px 寬不破版　←　**待實機驗**
 
+### M7 — 帳號與多裝置同步
+範圍：`js/merge.js`（合併引擎）、`js/sync.js`（同步層）、`js/config.js`、`js/views/account.js`（`#/account`）、
+`store.js` schema v4（`stamps` ＋獨立的 auth key）、設定頁入口、`worker/`（Cloudflare Worker + D1）。
+
+驗收：
+- [x] 沒登入時 App 行為與 M6 完全一樣，不會發出任何請求　←　`scripts/smoke.mjs` [14]
+- [x] 合併是逐欄取較好的，不是後蓋前；交換律、冪等、只前進不倒退　←　`scripts/test-merge.mjs`
+- [x] `streak` 由合併後的 `daily` 重算，不是取其中一邊　←　`test-merge.mjs` [21]–[25]
+- [x] `settings` / `sprint` 用時戳決勝負，「關掉衝刺」也同步得過去　←　`test-merge.mjs` [26]–[32]
+- [x] 開發者模式與時間旅行位移不會被同步傳染到別台　←　`test-merge.mjs` [27][39]
+- [x] 匯出的備份不含 session token　←　`test-daily.mjs` [29]、`test-sync-e2e.mjs` [1]
+- [x] 兩台裝置雙向同步：各自練的東西都會出現在對方，且都沒有被覆蓋　←　`test-sync-e2e.mjs` [2][3]
+- [x] 全新裝置加入後拿到完整進度　←　`test-sync-e2e.mjs` [5]
+- [x] 兩台同時上傳撞到版本號時會合併後重送，最後收斂到同一份　←　`test-sync-e2e.mjs` [4]
+- [x] 同步過程 console 零錯誤（版本衝突不算錯誤）　←　`test-sync-e2e.mjs` [7]
+- [x] 中斷同步只斷這台，本機進度原封不動　←　`test-sync-e2e.mjs` [6]
+- [x] 舊 schema v3 備份匯入後補上 `stamps: 0`，不會壞　←　`test-daily.mjs` [17]
+- [ ] Google 登入實際跑得通　←　**待 Jerry 建 OAuth 用戶端 ID**（步驟見 `worker/README.md`）
+- [ ] iPhone 實機：PWA（加到主畫面）裡的 Google 登入彈窗會不會被 iOS 擋掉　←　**待實機驗**
+      擋掉的話走配對碼，功能不受影響
+
 ## 8. 測試清單（每個里程碑都要在 iPhone 實機過一遍）
 
 Safari 分頁 + 主畫面 PWA 兩種模式各測：TTS 首次播放、voices 載入、STT 權限流程、離線行為、localStorage 在無痕模式的 fallback（顯示警告即可）、直向/橫向。
@@ -561,7 +654,23 @@ vocab 分三批生成（A 層專業字 → B 層商務字 → C 層片語）；r
 
 ## 附錄 B — 不做的事（防止 scope creep）
 
-後端、帳號、雲端同步、LLM API 對話（Phase 3 另議）、真人音檔、多使用者、成就系統、社群功能。Claude Code 若建議加這些，一律先拒絕。
+LLM API 對話（Phase 3 另議）、真人音檔、多使用者、成就系統、社群功能。Claude Code 若建議加這些，一律先拒絕。
+
+**已破例兩次，都由 Jerry 指定，不要再往下延伸：**
+
+| 破例 | 為什麼准 | 界線在哪 |
+|---|---|---|
+| M6 面試衝刺 | 有明確目標日期的排程是星期輪替做不到的事 | 不加新的任務 kind、一天仍然三項 |
+| M7 帳號與同步 | 「手機練的電腦要看得到」用匯出／匯入解不了 | 見下面五條 |
+
+M7 開了「後端／帳號／雲端同步」三扇門，界線是：
+
+1. 後端**只存一包進度 JSON**。不存內容、不存錄音、不做任何計算。
+2. **localStorage 永遠是唯一真相**，雲端是備份與傳遞管道。沒登入、沒網路、後端掛掉，
+   App 的行為必須和 M6 之前完全一樣——這條是硬性的，任何「要先登入才能用」的設計一律退回。
+3. **不做多使用者**。一個人多台裝置而已，沒有分享、沒有排行、沒有別人的資料。
+4. 合併規則寫在前端 `js/merge.js`，不寫在後端（只有前端知道 schema 的語意）。
+5. 不因為「反正有後端了」而往下加功能。要加就回頭看這張表。
 
 ## 附錄 C — CLAUDE.md 範本
 

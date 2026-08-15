@@ -154,11 +154,12 @@ is(store.dayLog('2026-08-11').cloze, 2, '[16] 匯入備份後每日紀錄回來'
 // 舊版（schema v1、沒有 daily 欄位）的備份也要吃得下去
 const old = { schemaVersion: 1, srs: { v001: { box: 2, due: '2026-08-20', lapses: 0 } }, streak: { current: 3, best: 5, lastDay: '2026-08-10' } };
 const migrated = store.parseBackup(JSON.stringify(old));
-is(migrated.schemaVersion, 3, '[17] 舊備份會升級到 schema v3');
+is(migrated.schemaVersion, 4, '[17] 舊備份會升級到 schema v4');
 is(migrated.daily, {}, '[17] 補上空的 daily 欄位');
 is(migrated.streak.current, 3, '[17] 舊 streak 保留');
 is(migrated.settings.loopBackground, true, '[17] 補上 M5 新增的設定預設值');
 is(migrated.sprint, null, '[17] 舊備份沒有 sprint 欄位 → null，不會壞');
+is(migrated.stamps, { settings: 0, sprint: 0 }, '[17] 舊備份沒有 stamps → 補 0（同步時讓給對方）');
 
 /* ---------- 面試衝刺（M6，SPEC §4.11） ---------- */
 
@@ -285,6 +286,40 @@ is(store.sprint(), null, '[27] 壞掉的日期一律當成沒啟動');
 is(store.startSprint('2026-09-25', '2026-08-15'), null, '[27] target 早於 start 會被擋下');
 store.endSprint();
 is(store.sprint(), null, '[27] 結束衝刺後回到 null');
+
+/* ---------- 雲端同步用的 store 欄位（M7，SPEC §4.12） ---------- */
+
+reset();
+is(store.get().stamps, { settings: 0, sprint: 0 }, '[28] 新裝置的 stamps 是 0');
+
+store.setSetting('newPerDay', 15);
+ok(store.get().stamps.settings > 0, '[28] 改設定會蓋 settings stamp');
+
+const beforeSprintStamp = store.get().stamps.sprint;
+store.startSprint('2026-08-15', '2026-09-25');
+ok(store.get().stamps.sprint > beforeSprintStamp, '[28] 開衝刺會蓋 sprint stamp');
+const openedAt = store.get().stamps.sprint;
+store.endSprint();
+ok(store.get().stamps.sprint >= openedAt, '[28] 結束衝刺也要蓋 stamp（否則會被別台的舊設定復活）');
+
+// 登入狀態放在另一支 key：匯出的備份不可以夾帶 session token
+reset();
+is(store.auth(), null, '[29] 沒登入時 auth() 是 null');
+store.setAuth({ token: 'tok_test', email: 'a@b.c', accountId: 'u1', rev: 3 });
+is(store.auth().token, 'tok_test', '[29] setAuth 存得起來');
+store.setAuth({ rev: 4 });
+is(store.auth().email, 'a@b.c', '[29] setAuth 是合併不是覆蓋');
+is(store.auth().rev, 4, '[29] rev 更新得了');
+
+const exported = JSON.parse(await new Response(store.exportBlob()).text());
+ok(!JSON.stringify(exported).includes('tok_test'), '[29] 匯出的備份不含 session token');
+ok(!('dev' in store.syncPayload()), '[29] 上傳的內容不含本機的時間旅行位移');
+ok('srs' in store.syncPayload() && 'daily' in store.syncPayload(), '[29] 上傳的內容含所有進度欄位');
+
+store.clearAuth();
+is(store.auth(), null, '[29] 登出後 auth 清掉');
+store.resetAll();
+is(store.get().srs, {}, '[29] 清除進度不影響上面的斷言');
 
 /* ---------- 結果 ---------- */
 

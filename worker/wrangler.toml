@@ -1,0 +1,20 @@
+name = "fabenglish-sync"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+workers_dev = true
+
+[vars]
+# Google Cloud Console 建的 OAuth 2.0 用戶端 ID（公開資訊，不是密鑰）。
+# 空字串 = Google 登入停用，其他同步功能照常。設定步驟見 worker/README.md。
+GOOGLE_CLIENT_ID = ""
+
+# 只有這些網域的網頁可以呼叫這支 Worker
+ALLOWED_ORIGINS = "https://4jf4kzf2zd-cell.github.io,http://localhost:8080,http://127.0.0.1:8080"
+
+# 擋隨機掃網址的機器人用（前端明碼帶著，不是安全機制；真正的授權靠 session token）
+APP_KEY = "25cc6a1438dc3a9dd1291b48c7f74697"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "fabenglish"
+database_id = "2e766f6e-04e9-40d2-bbc5-065351b375a7"

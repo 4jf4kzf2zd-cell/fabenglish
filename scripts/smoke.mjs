@@ -480,7 +480,7 @@ try {
   // 每日紀錄有寫進 localStorage，而且匯出備份帶得走
   const raw = await readState(page);
   check('每日紀錄寫進 localStorage', !!raw.daily && Object.keys(raw.daily).length > 0);
-  check('schema 已升到 v3', raw.schemaVersion === 3, `v${raw.schemaVersion}`);
+  check('schema 已升到 v4', raw.schemaVersion === 4, `v${raw.schemaVersion}`);
 
   // 循環聽的背景播放開關
   await page.goto(`${BASE}/index.html#/loop`, { waitUntil: 'networkidle0' });
@@ -627,8 +627,26 @@ try {
   check('結束後回到星期輪替', afterSprint.sprint === null);
   check('結束後首頁不再有倒數列', (await page.$$('.sprint-bar')).length === 0);
 
-  /* --- 14. console 錯誤 --- */
-  console.log('\n[14] Console');
+  /* --- 14. 帳號與同步（M7；沒登入的狀態，真正的兩裝置同步在 test-sync-e2e.mjs） --- */
+  console.log('\n[14] 帳號與同步');
+  await page.goto(`${BASE}/index.html#/account`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.card');
+  const acct = await page.evaluate(() => document.getElementById('view').textContent);
+  check('未登入時說清楚進度只在這台', acct.includes('只存在這台裝置'));
+  check('有 Google 登入區塊', acct.includes('用 Google 帳號登入'));
+  check('有不用 Google 的路', acct.includes('用配對碼加入'));
+  check('說明合併不是覆蓋', acct.includes('取比較好的那個'));
+  check('沒登入時不會自己送出請求', (await page.evaluate(
+    () => JSON.parse(localStorage.getItem('fabenglish.auth.v1') || 'null'))) === null);
+
+  await page.goto(`${BASE}/index.html#/settings`, { waitUntil: 'networkidle0' });
+  await page.waitForSelector('.card');
+  const setTxt = await page.evaluate(() => document.getElementById('view').textContent);
+  check('設定頁有同步入口', setTxt.includes('尚未同步') && setTxt.includes('設定同步'));
+  check('設定頁 schema 標示更新', setTxt.includes('schema v4'));
+
+  /* --- 15. console 錯誤 --- */
+  console.log('\n[15] Console');
   const realErrors = consoleErrors.filter(e => !/favicon|speech|not-allowed/i.test(e));
   check('沒有 console 錯誤', realErrors.length === 0, realErrors.join(' | ').slice(0, 300));
 

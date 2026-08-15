@@ -4,6 +4,7 @@ import { el, div, card, h2, p, confirmDialog, speakerButton, append } from '../d
 import * as store from '../store.js';
 import * as speech from '../speech.js';
 import * as badge from '../badge.js';
+import * as sync from '../sync.js';
 
 const SAMPLE = 'Sort yield trended up by 2.3 points after the fix was implemented in WW32.';
 
@@ -57,6 +58,9 @@ export async function render(root, ctx) {
   });
 
   append(root,
+    h2('帳號'),
+    accountCard(ctx),
+
     h2('語音'),
     card(
       speech.ttsSupported ? null : p('⚠️ 這個瀏覽器不支援語音合成，播放按鈕會停用。', 'small'),
@@ -104,7 +108,7 @@ export async function render(root, ctx) {
       el('button', { class: 'block danger', onClick: reset }, '清除所有進度'),
     ),
 
-    p(`FabEnglish · M5 · schema v${store.get().schemaVersion}`, 'small dim center'),
+    p(`FabEnglish · M7 · schema v${store.get().schemaVersion}`, 'small dim center'),
   );
 
   function reset() {
@@ -117,6 +121,28 @@ export async function render(root, ctx) {
 
 function fmtRate(r) {
   return `${Number(r).toFixed(1)}×`;
+}
+
+/** 多裝置同步的入口（M7）；細節都在 #/account，這裡只給狀態與一顆按鈕。 */
+function accountCard(ctx) {
+  const a = store.auth();
+  const box = card();
+  box.append(el('h3', { text: a ? (a.email || '已連線（未綁 Google）') : '尚未同步' }));
+
+  if (!sync.enabled()) {
+    box.append(p('這個版本沒有設定同步伺服器，進度只存在這台裝置。', 'small dim'));
+    return box;
+  }
+
+  box.append(
+    p(a
+      ? '換裝置打開就是同一份進度。合併規則是逐項取比較好的那個，不會互相覆蓋。'
+      : '登入後手機、電腦打開都是同一份進度。不登入也完全可以用，只是換裝置得靠匯出／匯入。',
+      'small dim'),
+    el('button', { class: 'block ghost', onClick: () => ctx.navigate('#/account') },
+      a ? '帳號與同步' : '設定同步'),
+  );
+  return box;
 }
 
 /**
@@ -139,7 +165,9 @@ function storageCard() {
 
   box.append(
     el('h3', { text: '進度存在哪裡' }),
-    p('全部進度都存在這台裝置的瀏覽器裡（localStorage），不會上傳、換裝置不會跟著走。', 'small dim'),
+    p(store.auth()
+      ? '進度存在這台裝置的瀏覽器裡（localStorage），並同步到雲端一份備份。本機這份永遠是主要的。'
+      : '全部進度都存在這台裝置的瀏覽器裡（localStorage），不會上傳、換裝置不會跟著走。', 'small dim'),
     status,
     detail,
     btn,

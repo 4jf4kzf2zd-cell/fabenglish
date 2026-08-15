@@ -18,16 +18,20 @@
 ```bash
 npm run serve      # http://localhost:8080（localhost 會自動進 dev 模式）
 npm run validate   # 驗證 content/*.json
-npm test           # scoring.js + daily.js/store.js/plan.js 單元測試（48 + 135 項）
+npm test           # scoring.js + daily.js/store.js/plan.js + merge.js（48 + 149 + 40 項）
 npm run icons      # 重新產生 icons/（改圖案時才需要）
-PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 148 項無頭測試（選用）
+PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs         # 155 項無頭測試（選用）
+PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/test-sync-e2e.mjs # 19 項兩裝置同步（需網路）
+
+npm run worker:deploy   # 部署同步後端（worker/，Cloudflare Worker + D1）
 ```
 
 > ES modules 與 fetch 不能用 `file://` 開，一定要走 http。
 
 ## 目前進度
 
-**M1 / M2 / M3 / M4 / M5 / M6 全部完成**，SPEC 第 7 節的自動化驗收項目都已打勾，只剩需要 iPhone 實機的項目。
+**M1 / M2 / M3 / M4 / M5 / M6 / M7 全部完成**，SPEC 第 7 節的自動化驗收項目都已打勾，只剩需要 iPhone 實機的項目
+（以及 M7 的 Google OAuth 用戶端 ID，要 Jerry 在 Google Cloud Console 建一組，步驟見 `worker/README.md`）。
 
 - M1：Shell/路由/首頁、單字 SRS、閱讀、進度＋匯出匯入、TTS、設定、PWA
 - M2：跟讀（`js/scoring.js` ＋ `js/shadow.js`）、Email 句型（cloze）、簡報句型（含簡報模式）、聽力（四階段＋數字聽寫）
@@ -39,10 +43,12 @@ PUPPETEER_DIR=E:/ClaudeCode/print2ai node scripts/smoke.mjs   # 148 項無頭測
 - M6：面試衝刺（`js/plan.js` 42 天課表＋`#/sprint` 六週地圖）、schema v3（`sprint`）、
   **對話練習 `#/interview/talk`**（抽 3 題自我介紹／經歷，每題追問三層）、
   `SPEAKING.md` 面試場景 S6–S9、interview 題庫補到 67 題
+- M7：多裝置同步（`js/merge.js` 逐欄合併＋`js/sync.js`＋`#/account`）、schema v4（`stamps`）、
+  同步後端 `worker/`（Cloudflare Worker + D1，網址 `fabenglish-sync.jerrywu0800.workers.dev`）
 - 內容：vocab **600**（A200/B250/C150）／readings **30**／email **30**／presentation **40**／listening **15**／interview **67**
 
-往後主要是加內容與微調，不要再擴功能（附錄 B 的邊界仍然有效）。
-M6 是**唯一一次**破例擴功能——因為有明確目標日期的排程是星期輪替做不到的事；再有新想法先回頭看附錄 B。
+往後主要是加內容與微調，不要再擴功能。附錄 B 已經破例兩次（M6 衝刺、M7 同步），都由 Jerry 指定；
+那張表寫了界線在哪，再有新想法先回頭看。
 
 ## 關鍵不變條件
 
@@ -67,8 +73,19 @@ M6 是**唯一一次**破例擴功能——因為有明確目標日期的排程�
    代價是技術題與行為題只剩兩週，不要當成排程失誤「修好」。
 13. 對話練習的追問是**題庫裡預錄的**，不是即時生成（App 沒有 LLM）。
    文案不准寫成「和 AI 對話」；真的雙向對話一律導到 `SPEAKING.md`。
+14. **localStorage 永遠是唯一真相**，雲端只是備份與傳遞管道。
+   不准出現「要先登入才能用」的畫面；同步失敗一律只更新狀態列，不擋任何練習流程。
+15. 同步是**合併不是覆蓋**。改 `merge.js` 一定要同時維持三個性質：交換律（誰先上傳結果一樣）、
+   冪等（重複同步不累加）、只前進不倒退。每條規則都要有 `test-merge.mjs` 的測試——
+   合併寫錯會靜默吃掉進度，使用者只會發現昨天練的不見了。
+16. 版本衝突回 **200 + `conflict:true`**，不要改回 409。兩台同時開著本來就會撞，
+   回 4xx 會讓瀏覽器在 console 印紅字，「console 零錯誤」這條驗收就失去意義了。
+17. session token 存在 `fabenglish.auth.v1`，**不准併進進度 blob**——匯出的備份會外流身分。
 
 ## 邊界（附錄 B）
 
-不做：後端、帳號、雲端同步、LLM API 對話、真人音檔、多使用者、成就系統、社群功能。
+不做：LLM API 對話、真人音檔、多使用者、成就系統、社群功能。
 自由對話式口說不在 App 內，用 `SPEAKING.md` 的場景在 Claude Project 語音練。
+
+後端／帳號／雲端同步已在 M7 破例，但**只用來搬一包進度 JSON**：
+後端不看內容、不做計算、沒有第二個使用者。不要因為「反正有後端了」就往下加功能。

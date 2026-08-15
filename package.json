@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.js",
-    "test": "node scripts/test-scoring.mjs && node scripts/test-daily.mjs",
+    "test": "node scripts/test-scoring.mjs && node scripts/test-daily.mjs && node scripts/test-merge.mjs",
+    "worker:deploy": "wrangler deploy --config worker/wrangler.toml",
+    "worker:schema": "wrangler d1 execute fabenglish --remote --config worker/wrangler.toml --file worker/schema.sql",
+    "worker:tail": "wrangler tail --config worker/wrangler.toml",
     "icons": "node scripts/make-icons.mjs",
     "serve": "node scripts/serve.mjs",
     "smoke": "node scripts/smoke.mjs"

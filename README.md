@@ -14,8 +14,11 @@ NAND Flash 原廠工程師的商用英文練習 PWA。每天 20–30 分鐘，�
 | M2 | 跟讀評分、簡報句型（含簡報模式）、Email 句型（cloze）、聽力（含數字聽寫） | ✅ 已完成 |
 | M3 | 內容補滿、streak 提示（首頁＋PWA 圖示數字）、弱點清單匯出 markdown | ✅ 已完成 |
 | M4 | 面試常見問題（含模擬面試）、循環聽、跟讀改直接錄音且不顯示分數、可回上一題 | ✅ 已完成 |
+| M5 | 每日任務（一天三項、自動判定）、進度長期保存、循環聽背景播放嘗試 | ✅ 已完成 |
+| M6 | 面試衝刺 42 天課表（`#/sprint`）、對話練習（`#/interview/talk`）、口說場景 S6–S9 | ✅ 已完成 |
+| M7 | 帳號與多裝置同步（`#/account`）、進度合併引擎、Cloudflare Worker + D1 後端 | ✅ 已完成 |
 
-內容現況：vocab **600**（A200/B250/C150）、readings **30**、email **30**、presentation **40**、listening **15**、interview **40**。
+內容現況：vocab **600**（A200/B250/C150）、readings **30**、email **30**、presentation **40**、listening **15**、interview **67**。
 
 面試模組：40 題分七類（自我介紹／經歷專案／技術深挖／行為問題／動機職涯／薪資條件／反問面試官），
 每題有「面試官在問什麼 → 回答骨架 → 範答 → 核心句跟讀 → 關鍵句型 → 別這樣答 → 可能的追問」。
@@ -27,6 +30,10 @@ NAND Flash 原廠工程師的商用英文練習 PWA。每天 20–30 分鐘，�
 
 弱點清單：進度頁可把「記不住的單字、唸不好的句子、讀不懂的文章、聽不清楚的對話、寫不出來的句型」
 整理成一份 Markdown 下載或複製，貼回 Claude Project 就能生成加強教材（檔尾附了現成的指令）。
+
+多裝置同步（`#/account`）：手機練的進度，電腦打開就在。可以用 Google 登入，也可以用配對碼把兩台裝置綁在一起。
+合併是**逐項取比較好的那個**，不是後上傳的蓋掉先上傳的。
+**不登入也完全可以用**——進度本來就存在本機，雲端只是備份與傳遞管道。
 
 ## 本機開發
 
@@ -89,7 +96,13 @@ js/weakness.js      弱點清單 → markdown（含面試卡住的題目）
 js/badge.js         PWA 圖示待複習數（不支援時靜默）
 js/content.js       content/*.json 載入與快取
 js/dom.js           極簡 DOM 建構工具
+js/daily.js         每日任務（一天三項）
+js/plan.js          面試衝刺 42 天課表
+js/merge.js         兩份進度的逐欄合併（純函式）
+js/sync.js          多裝置同步：pull → merge → push
+js/config.js        部署設定（同步後端網址、Google 用戶端 ID；都是公開資訊）
 js/views/           每個模組一個 view
 content/*.json      學習內容
-scripts/            validate / serve / smoke / make-icons
+scripts/            validate / serve / smoke / test-* / make-icons
+worker/             同步後端（Cloudflare Worker + D1）；前端零依賴的規矩不受影響
 ```

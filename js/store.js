@@ -2,7 +2,9 @@
 // 全 App 只有這裡碰 localStorage。
 
 const KEY = 'fabenglish.v1';
-const SCHEMA_VERSION = 3;
+/** 雲端同步的登入狀態另外存一支 key：匯出備份不該把 session token 一起帶出去。 */
+const AUTH_KEY = 'fabenglish.auth.v1';
+const SCHEMA_VERSION = 4;
 
 /** 每日紀錄只留這麼多天，避免 localStorage 無限長大。 */
 const DAILY_KEEP = 60;
@@ -32,6 +34,8 @@ function blank() {
     sprint: null,   // {start:'YYYY-MM-DD', target:'YYYY-MM-DD'} 面試衝刺（M6）；null = 沒啟動
     streak: { current: 0, best: 0, lastDay: null },
     settings: { ...DEFAULT_SETTINGS },
+    // 這兩個欄位沒辦法逐項合併（是單一物件），同步時只能比誰比較晚改 → 記下寫入時間（M7）
+    stamps: { settings: 0, sprint: 0 },
     dev: { dayOffset: 0 },   // 時間旅行（僅 dev 模式，見 SPEC §7 M1 驗收）
   };
 }
@@ -50,6 +54,7 @@ function migrate(raw) {
   s.sprint = normalizeSprint(raw.sprint);   // 舊 schema v2 沒這欄位 → null
   if (raw.streak) Object.assign(s.streak, raw.streak);
   if (raw.settings) Object.assign(s.settings, raw.settings);
+  if (raw.stamps) Object.assign(s.stamps, raw.stamps);   // v3 以前沒這欄位 → 留 0（同步時讓給對方）
   if (raw.dev) Object.assign(s.dev, raw.dev);
   s.schemaVersion = SCHEMA_VERSION;
   return s;
@@ -86,6 +91,8 @@ export function save() {
   const s = get();
   try {
     localStorage.setItem(KEY, JSON.stringify(s));
+    // 同步層靠這個事件知道「有東西變了、該排一次上傳」（sync.js 會 debounce）
+    window.dispatchEvent(new CustomEvent('fab:changed'));
     if (!writable) { writable = true; emitStorageProblem(null); }
   } catch (err) {
     console.warn('[store] 寫入失敗', err);
@@ -131,7 +138,10 @@ function emitStorageProblem(message) {
 export function settings() { return get().settings; }
 
 export function setSetting(key, value) {
-  update(s => { s.settings[key] = value; });
+  update(s => {
+    s.settings[key] = value;
+    s.stamps.settings = Date.now();   // 同步時比這個決定誰的設定算數
+  });
 }
 
 /* ---------- 每日紀錄（M5 每日任務用） ---------- */
@@ -186,7 +196,7 @@ export function sprint() {
 export function startSprint(start, target) {
   const sp = normalizeSprint({ start, target });
   if (!sp) return null;
-  update(s => { s.sprint = sp; });
+  update(s => { s.sprint = sp; s.stamps.sprint = Date.now(); });
   return sp;
 }
 
@@ -198,7 +208,8 @@ export function setSprintTarget(target) {
 }
 
 export function endSprint() {
-  update(s => { s.sprint = null; });
+  // 「關掉衝刺」也是一次寫入，要蓋 stamp，否則同步時會被另一台的舊設定復活
+  update(s => { s.sprint = null; s.stamps.sprint = Date.now(); });
 }
 
 /* ---------- streak ---------- */
@@ -218,6 +229,37 @@ export function touchDay(today, yesterday, kind, n = 1) {
     k.lastDay = today;
   });
   return get().streak;
+}
+
+/* ---------- 雲端同步的登入狀態（M7） ---------- */
+// 存在 AUTH_KEY，不在進度 blob 裡：
+//   1. 匯出的備份不會夾帶 session token（給別人看也不怕）
+//   2. 同步下來的進度不會把「這台裝置登入的是誰」蓋掉
+
+/** @returns {{token:string, email:string|null, accountId:string, rev:number, lastSyncAt:number}|null} */
+export function auth() {
+  try {
+    const txt = localStorage.getItem(AUTH_KEY);
+    if (!txt) return null;
+    const a = JSON.parse(txt);
+    return a && a.token ? a : null;
+  } catch (_) { return null; }
+}
+
+export function setAuth(patch) {
+  const next = { ...(auth() || {}), ...patch };
+  try { localStorage.setItem(AUTH_KEY, JSON.stringify(next)); } catch (_) {}
+  return next;
+}
+
+export function clearAuth() {
+  try { localStorage.removeItem(AUTH_KEY); } catch (_) {}
+}
+
+/** 要上傳的內容：本機專屬欄位不送上雲（dev 時間旅行是這台裝置的除錯狀態）。 */
+export function syncPayload() {
+  const { dev, ...rest } = get();
+  return rest;
 }
 
 /* ---------- 匯出 / 匯入 ---------- */

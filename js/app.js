@@ -14,6 +14,7 @@ import * as listen from './views/listen.js';
 import * as interview from './views/interview.js';
 import * as loop from './views/loop.js';
 import * as sprint from './views/sprint.js';
+import * as account from './views/account.js';
 
 const routes = {
   '/home':     { view: home,     title: 'FabEnglish' },
@@ -26,6 +27,7 @@ const routes = {
   '/interview':{ view: interview, title: '面試常見問題' },
   '/sprint':   { view: sprint,   title: '面試衝刺' },
   '/progress': { view: progress, title: '進度' },
+  '/account':  { view: account,  title: '帳號與同步' },
   '/settings': { view: settings, title: '設定' },
 };
 
@@ -145,6 +147,9 @@ speech.ready().catch(() => {});
 
 // PWA 圖示上的待複習數字（不支援就安靜略過）
 import('./badge.js').then(b => b.refresh()).catch(() => {});
+
+// 多裝置同步（M7）。沒登入就只是掛個監聽，不會發任何請求；失敗一律不影響練習流程。
+import('./sync.js').then(s => s.init()).catch(err => console.warn('[app] 同步模組載入失敗', err));
 
 if (!location.hash) location.hash = '#/home';
 render();

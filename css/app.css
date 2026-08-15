@@ -608,4 +608,28 @@ input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent);
 .sprint-week[data-now="1"] { background: var(--accent-2); }
 .sprint-week[data-now="1"] .sw-n { color: var(--accent); }
 
+/* ---------- 帳號與同步（M7） ---------- */
+
+.big-line {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 2px 0 2px;
+  word-break: break-all;   /* 長信箱不要撐破卡片 */
+}
+
+/* 配對碼：要能一眼唸給另一台裝置抄，字大、等寬、字距拉開 */
+.code-out {
+  margin: 12px 0 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-align: center;
+  user-select: all;
+}
+
 .hidden { display: none !important; }
